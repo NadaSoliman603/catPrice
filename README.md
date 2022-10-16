@@ -1,1 +1,1 @@
-# catPrice
+# catalytic-price-react-native-application
