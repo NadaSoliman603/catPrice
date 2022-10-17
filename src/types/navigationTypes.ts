@@ -11,6 +11,10 @@ export type RootStack = {
     Privacy: undefined;
     OrderList:undefined;
     TermsAndConditions:undefined;
+    Login:undefined;
+    Register:undefined;
+    ForgetPassword:undefined;
+    OTPVeritfication:undefined;
 };
 
 export type NavigationType = NativeStackNavigationProp<RootStack>

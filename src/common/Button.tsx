@@ -6,16 +6,20 @@ import Colors from './../styles/colors';
 type Props = {
     title: string;
     onPress: any;
+    style:{}[];
+    textStyle :   {}[];
 }
-const Button = ({ title, onPress }: Props) => {
+const Button = ({ title, onPress , style , textStyle }: Props) => {
     return (
         <Pressable  style={({pressed})=>[
             {
                 backgroundColor : pressed ? Colors.bg : "#fff"
             },
-            styles.conatiner
+            styles.conatiner,
+            ...style
+           
         ]} onPress={onPress} >
-            <Text style={styles.text}>{title}</Text>
+            <Text style={[styles.text ,  ...textStyle]}>{title}</Text>
 
         </Pressable>
     );
@@ -26,14 +30,15 @@ const styles = StyleSheet.create({
         margin: 5,
         // backgroundColor: Colors.bg,
         padding: 8,
-        borderRadius: 10,
+        borderRadius: 5,
         flexDirection: "row",
         // justifyContent:"center",
-        alignItems:"center"
+        // alignItems:"center"
     },
     text: {
         fontSize:18,
-        paddingHorizontal:5
+        paddingHorizontal:5,
+        // textAlign:"center"
     }
 });
 

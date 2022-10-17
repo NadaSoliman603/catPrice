@@ -6,5 +6,5 @@ export default {
     font16: responsiveFont(14), /// 18
     font18: responsiveFont(15.5), /// 20
     font20: responsiveFont(17), /// 22
-    font22: responsiveFont(17) /// 22
+    font22: responsiveFont(20) /// 24.5
 }

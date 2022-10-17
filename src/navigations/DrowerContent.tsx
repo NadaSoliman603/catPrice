@@ -46,7 +46,7 @@ const DrowerContent = ({ props }: Props) => {
                 <IconButton icon={<Feather color={Colors.primary} name='alert-circle' size={fontSizes.font20} />} onPress={() => { navigation.navigate("About") }} title="About" />
                 <IconButton icon={<Feather  color={Colors.primary} name='file-text' size={fontSizes.font20} />} onPress={() => { navigation.navigate("TermsAndConditions") }} title="Terms And Conditions" />
                 <IconButton icon={<Octicons color={Colors.primary} name='shield-check' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Privacy") }} title="Privacy" />
-                <IconButton icon={<MaterialIcons color={Colors.primary} name='logout' size={fontSizes.font20} />} onPress={() => { console.log("Log Out") }} title="Log Out" />
+                <IconButton icon={<MaterialIcons color={Colors.primary} name='logout' size={fontSizes.font20} />} onPress={() => navigation.navigate("Login")} title="Log Out" />
             </View>
         </ScrollView>
     );
