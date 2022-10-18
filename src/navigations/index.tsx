@@ -21,43 +21,43 @@ import Login from '../modular/Auth/screens/Login';
 import Register from '../modular/Auth/screens/Register';
 import ForgetPassword from '../modular/Auth/screens/ForgetPassword';
 import OTPVeritfication from '../modular/Auth/screens/OTPVeritfication';
+import DrowerNav from './DrowerNav';
 const RootStackType = createNativeStackNavigator<RootStack>();
 
 const Drawer = createDrawerNavigator();
+const Stack = createNativeStackNavigator();
+
+const AuthStack = () => {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+            <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
+            <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPassword} />
+            <Stack.Screen options={{ headerShown: false }} name="OTPVeritfication" component={OTPVeritfication} />
+            <Stack.Screen options={{ title: "Home", headerTitleAlign: "center" }} name="Home" component={Home} />
+        </Stack.Navigator>
+    )
+}
 
 function MainNavigation() {
+
     return (
-        <NavigationContainer>
-            <Drawer.Navigator
-                screenOptions={{
-                    headerRight: () => {
-                        const navigation = useNavigation<NavigationType>()
-                        return (
-                            <Pressable style={{ paddingHorizontal: 20 }} onPress={() => navigation.navigate("OrderList")} >
-                                <Feather color={Colors.primary} name='shopping-cart' size={fontSizes.font20} />
-                            </Pressable>
-                        )
-                    },
+        <NavigationContainer  >
+            <Stack.Navigator>
+                {/* <Stack.Screen
+                    name="AuthNav"
+                    component={AuthStack}
+                    options={{ headerShown: false }}
+                /> */}
 
-                }}
-                drawerContent={(props) => <DrowerContent props={props} />}
-                initialRouteName="Login">
-                <Drawer.Screen  options={{headerShown: false}} name="Login" component={Login} />
-                <Drawer.Screen options={{headerShown: false}} name="Register" component={Register} />
-                <Drawer.Screen options={{headerShown: false}} name="ForgetPassword" component={ForgetPassword} />
-                <Drawer.Screen options={{headerShown: false}} name="OTPVeritfication" component={OTPVeritfication} />
+                <Stack.Screen
+                    name="DrowerNav"
+                    component={DrowerNav}
+                    options={{ headerShown: false }}
+                />
 
-              
-              
-                <Drawer.Screen options={{ title: "Home", headerTitleAlign: "center" }} name="Home" component={Home} />
-                <Drawer.Screen options={{ title: "History", headerTitleAlign: "center" }} name="History" component={History} />
-                <Drawer.Screen options={{ title: "Favourites", headerTitleAlign: "center" }} name="Favourites" component={Favourites} />
-                <Drawer.Screen options={{ title: "Contact Us", headerTitleAlign: "center" }} name="Contact" component={Contact} />
-                <Drawer.Screen options={{ title: "About", headerTitleAlign: "center" }} name="About" component={About} />
-                <Drawer.Screen options={{ title: "Terms And Conditions", headerTitleAlign: "center" }} name="TermsAndConditions" component={TermsAndConditions} />
-                <Drawer.Screen options={{ title: "Privacy", headerTitleAlign: "center" }} name="Privacy" component={Privacy} />
-                <Drawer.Screen options={{ title: "Order List", headerTitleAlign: "center" }} name="OrderList" component={OrderList} />
-            </Drawer.Navigator>
+                
+            </Stack.Navigator>
         </NavigationContainer>
     );
 }

@@ -18,7 +18,7 @@ const PickCountryCode = ({setCountryCode , setShow,show}:Props) => {
                 // when picker button press you will get the country object with dial code
                 pickerButtonOnPress={(item) => {
                     setCountryCode(item.dial_code);
-                    console.log(item)
+                    
                     setShow(false);
                 }}
                 lang='en'

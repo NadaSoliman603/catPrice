@@ -15,6 +15,7 @@ export type RootStack = {
     Register:undefined;
     ForgetPassword:undefined;
     OTPVeritfication:undefined;
+    AuthNav:undefined
 };
 
 export type NavigationType = NativeStackNavigationProp<RootStack>

@@ -84,10 +84,19 @@ shadowOpacity: 0.25,
 shadowRadius: 30.84,
 
 elevation: 5,
+  },
+  circle:{
+    borderRadius:50
+  },
+  p_2:{
+    padding:2
+  },
+  py_2:{
+    paddingVertical:2,
+  },
+  text_Bold:{
+    fontWeight:"bold"
   }
-  // font_Bold:{
-  //   font
-  // }
 
 });
 

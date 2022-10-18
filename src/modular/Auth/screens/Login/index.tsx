@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image, Pressable } from 'react-native';
 import imgs from '../../../../assets/images';
 import Button from '../../../../common/Button';
 import CustomTextInput from '../../../../common/CustomTextInput';
@@ -12,19 +12,45 @@ import gStyles, { hp, wp } from '../../../../styles/globalStyle';
 import { NavigationType } from '../../../../types/navigationTypes';
 import Feather from 'react-native-vector-icons/Feather';
 import PickCountryCode from '../../../../common/CountryPicker';
-// import PickCountryCode from '../../../../common/CountryPicker';
+import Entypo from 'react-native-vector-icons/Entypo';
+import { loginApi } from '../../../../Api/Auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector, useDispatch } from 'react-redux'
+import { login } from '../../../../Redux/reducers/AuthReducer';
+
 type Props = {}
 
 const Login = (props: Props) => {
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm();
     const navigation = useNavigation<NavigationType>()
+    const dispatch = useDispatch()
 
     const [show, setShow] = React.useState(false);
-    const [countryCode, setCountryCode] = React.useState('+61');
+    const [mobileCode, setMobileCode] = React.useState('+61');
+
+
     //Submit Login Data
-    const onSubmit = (data: object) => {
-        console.log(data)
-        navigation.navigate('Home')
+    const onSubmit  = async (authData:any)  => {
+
+        const loginData = {
+            username: authData.username,
+            password: authData.password,
+            mobileCode: mobileCode.substring(1),
+        }
+        console.log(loginData)
+    
+        navigation.navigate("Home")
+
+        // try {
+        //     const res = await loginApi(loginData)
+        //     const user = res.data.body
+        //     AsyncStorage.setItem('user' , JSON.stringify(user))
+        //     console.log(user)
+        //     dispatch(login(user))
+
+        // } catch (error) {
+        //     console.log("error" ,error )
+        // }
     }
 
     return (
@@ -33,27 +59,43 @@ const Login = (props: Props) => {
                 <Image source={imgs.logo} style={styles.logoImg} />
                 <Text style={[gStyles.alignCenter, gStyles.text_Primary, gStyles.h1]}>Login</Text>
 
-                <PickCountryCode 
-                    setCountryCode={setCountryCode}
+                <PickCountryCode
+                    setCountryCode={setMobileCode}
                     setShow={setShow}
                     show={show}
                 />
                 <CustomTextInput
+                    secureTextEntry = {false}
+                    keyboard={"number-pad"}
                     label='Phone Number'
                     control={control}
                     error={errors.phone}
-                    name="phone"
+                    name="username"
                     icon={() => <Feather name='phone' size={fontSizes.font20} />}
-                    rightIcon={() => <Button textStyle={[]} style={[]} onPress={() => {setShow(true) }} title={countryCode} />}
+                    rightIcon={() => <Pressable onPress={() => { setShow(true) }} style={({pressed}) => [{ backgroundColor: pressed ? Colors.bg : "#fff" }, gStyles.py_2, gStyles.row_Center ]}>
+                        <Text style={[gStyles.text_Primary, gStyles.h6 ,  gStyles.selfCenter]}>{mobileCode}</Text>
+                        <Entypo color={Colors.primary} name='chevron-small-down' size={fontSizes.font10} />
+                    </Pressable>}
+                    rules = {{ 
+                        required :true,
+                        // minLength:10,
+                        // maxLength:10,
+                     }}
                 />
 
                 <CustomTextInput
+                secureTextEntry={true}
+                    keyboard={"default"}
                     label='Password'
                     control={control}
                     error={errors.phone}
                     name="password"
                     icon={() => <Feather name='eye' size={fontSizes.font20} />}
                     rightIcon={false}
+                    rules = {{ 
+                        required :true,
+                        // minLength : 4
+                    }}
                 />
 
                 <View style={[gStyles.center]}>
