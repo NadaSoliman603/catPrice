@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-const BASE_END_POINT = 'http://floridatrading.online:8010/apis/v1/user/login'
+import { BASE_END_POINT } from '../Config';
 
 
 export const loginApi = (data:any) => {
@@ -11,4 +11,5 @@ export const loginApi = (data:any) => {
         },
       })
   };
+
 

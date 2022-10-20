@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { StyleSheet, View, Text, Image, Pressable } from 'react-native';
 import imgs from '../../../../assets/images';
@@ -24,34 +24,48 @@ const Login = (props: Props) => {
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm();
     const navigation = useNavigation<NavigationType>()
     const dispatch = useDispatch()
+    const [show, setShow] = useState(false);
+    const [mobileCode, setMobileCode] = useState('+61');
+    // const [mount , setMount] = useState<boolean>(true)
 
-    const [show, setShow] = React.useState(false);
-    const [mobileCode, setMobileCode] = React.useState('+61');
+
+    useEffect(() => {
+        const checkLogin = async () => {
+            const userinfo = await AsyncStorage.getItem("user")
+            if (userinfo) {
+                // navigation.reset({
+                //     index: 0,
+                //     routes: [{ name: 'Home' }],
+                // })
+                console.log(JSON.parse(userinfo))
+            }
+        }
+        checkLogin()
+        return () => { };
+    }, []);
 
 
     //Submit Login Data
-    const onSubmit  = async (authData:any)  => {
-
+    const onSubmit = async (authData: any) => {
         const loginData = {
             username: authData.username,
             password: authData.password,
             mobileCode: mobileCode.substring(1),
         }
-        console.log(loginData)
-    
-        navigation.navigate("Home")
+        try {
+            const res = await loginApi(loginData)
+            const user = res.data.body
+            console.log(user)
+            AsyncStorage.setItem('user', JSON.stringify(user))
 
-        // try {
-        //     const res = await loginApi(loginData)
-        //     const user = res.data.body
-        //     AsyncStorage.setItem('user' , JSON.stringify(user))
-        //     console.log(user)
-        //     dispatch(login(user))
+            dispatch(login(user))
+            // navigation.navigate("Home")
 
-        // } catch (error) {
-        //     console.log("error" ,error )
-        // }
+        } catch (error) {
+            console.log("error", error)
+        }
     }
+
 
     return (
         <MainView>
@@ -65,26 +79,26 @@ const Login = (props: Props) => {
                     show={show}
                 />
                 <CustomTextInput
-                    secureTextEntry = {false}
+                    secureTextEntry={false}
                     keyboard={"number-pad"}
                     label='Phone Number'
                     control={control}
                     error={errors.phone}
                     name="username"
                     icon={() => <Feather name='phone' size={fontSizes.font20} />}
-                    rightIcon={() => <Pressable onPress={() => { setShow(true) }} style={({pressed}) => [{ backgroundColor: pressed ? Colors.bg : "#fff" }, gStyles.py_2, gStyles.row_Center ]}>
-                        <Text style={[gStyles.text_Primary, gStyles.h6 ,  gStyles.selfCenter]}>{mobileCode}</Text>
+                    rightIcon={() => <Pressable onPress={() => { setShow(true) }} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.bg : "#fff" }, gStyles.py_2, gStyles.row_Center]}>
+                        <Text style={[gStyles.text_Primary, gStyles.h6, gStyles.selfCenter]}>{mobileCode}</Text>
                         <Entypo color={Colors.primary} name='chevron-small-down' size={fontSizes.font10} />
                     </Pressable>}
-                    rules = {{ 
-                        required :true,
+                    rules={{
+                        required: true,
                         // minLength:10,
                         // maxLength:10,
-                     }}
+                    }}
                 />
 
                 <CustomTextInput
-                secureTextEntry={true}
+                    secureTextEntry={true}
                     keyboard={"default"}
                     label='Password'
                     control={control}
@@ -92,8 +106,8 @@ const Login = (props: Props) => {
                     name="password"
                     icon={() => <Feather name='eye' size={fontSizes.font20} />}
                     rightIcon={false}
-                    rules = {{ 
-                        required :true,
+                    rules={{
+                        required: true,
                         // minLength : 4
                     }}
                 />

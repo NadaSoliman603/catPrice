@@ -18,5 +18,7 @@ export type RootStack = {
     AuthNav:undefined
 };
 
+
+
 export type NavigationType = NativeStackNavigationProp<RootStack>
 

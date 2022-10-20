@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { StyleSheet, View, Text, Image, Pressable, } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Colors from './../styles/colors';
@@ -18,21 +18,42 @@ import Octicons  from 'react-native-vector-icons/Octicons';
 import MaterialIcons  from 'react-native-vector-icons/MaterialIcons';
 import fontSizes from '../styles/fontSizes';
 import { hp } from '../styles/globalStyle';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 type Props = {
     props: any;
 };
 type NavigationType = NativeStackNavigationProp<RootStack>
 const DrowerContent = ({ props }: Props) => {
-    const [menueParent, setMenueParent] = useState<string>("");
-    const [menueChild, setMenueChild] = useState("");
+    const [login , setLogin] = useState<any>(false)
     const navigation = useNavigation<NavigationType>()
+
+    const onLogout = async()=>{
+        await AsyncStorage.removeItem("user")
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+        })
+    }
+
+    const onLogin = ()=>{
+        navigation.navigate('Login')
+    }
+
+    useEffect(()=>{
+        checkLogin()
+        return()=>{}
+    },[login])
+
+    const checkLogin = async () => {
+        const user = await AsyncStorage.getItem('user')
+        setLogin(user)
+    }
 
     return (
         <ScrollView>
             <View style={styles.screen}>
                 <Pressable onPress={() => { navigation.navigate("Home") }}>
                     <View style={styles.Logo} {...props}>
-                        {/* <Image source={imgs.log} style={styles.img} /> */}
                        <View style={styles.userImag}>
                        <Feather  name='user' size={50}/>
                        </View>
@@ -40,13 +61,14 @@ const DrowerContent = ({ props }: Props) => {
                 </Pressable>
 
                 <IconButton  icon={<Feather color={Colors.primary} name='home' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Home") }} title="Home" />
-                <IconButton icon={<Octicons color={Colors.primary} name='history' size={fontSizes.font20} />} onPress={() => { navigation.navigate("History") }} title="History" />
+                <IconButton icon={<Octicons color={Colors.primary} name='history' size={fontSizes.font20} />} onPress={() => {  navigation.navigate("History") }} title="History" />
                 <IconButton icon={<AntDesign color={Colors.primary} name='hearto' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Favourites") }} title="Favourites" />
                 <IconButton icon={<AntDesign color={Colors.primary} name='message1' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Contact") }} title="Contact Us" />
                 <IconButton icon={<Feather color={Colors.primary} name='alert-circle' size={fontSizes.font20} />} onPress={() => { navigation.navigate("About") }} title="About" />
                 <IconButton icon={<Feather  color={Colors.primary} name='file-text' size={fontSizes.font20} />} onPress={() => { navigation.navigate("TermsAndConditions") }} title="Terms And Conditions" />
                 <IconButton icon={<Octicons color={Colors.primary} name='shield-check' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Privacy") }} title="Privacy" />
-                <IconButton icon={<MaterialIcons color={Colors.primary} name='logout' size={fontSizes.font20} />} onPress={() => navigation.navigate("Login")} title="Log Out" />
+                {login && <IconButton icon={<MaterialIcons color={Colors.primary} name='logout' size={fontSizes.font20} />} onPress={onLogout} title="Log Out" />}
+                {!login && <IconButton icon={<MaterialIcons color={Colors.primary} name='login' size={fontSizes.font20} />} onPress={onLogin} title="Login" />}
             </View>
         </ScrollView>
     );

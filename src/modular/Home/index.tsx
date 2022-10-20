@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 type Props = {}
