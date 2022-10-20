@@ -1,6 +1,7 @@
 import { Dimensions, RegisteredStyle, StyleSheet } from 'react-native';
 import Colors from './colors';
 import fontSizes from './fontSizes';
+import { moderateScale } from './ResponsiveDimentions';
 
 const { height, width } = Dimensions.get('window');
 
@@ -75,29 +76,42 @@ const gStyles = StyleSheet.create({
     textAlign: "justify"
   },
   shadow: {
-    shadowColor: "#000",
-shadowOffset: {
-	width: 0,
-	height: 2,
-},
-shadowOpacity: 0.25,
-shadowRadius: 30.84,
+    shadowColor: "#ccc",
+    shadowOffset: {
+      width: 0,
+      height: 0.5,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
 
-elevation: 5,
+    elevation: 5,
   },
-  circle:{
-    borderRadius:50
+  circle: {
+    borderRadius: 50
   },
-  p_2:{
-    padding:2
+  p_2: {
+    padding: 2
   },
-  py_2:{
-    paddingVertical:2,
+  py_2: {
+    paddingVertical: 2,
   },
-  text_Bold:{
-    fontWeight:"bold"
-  }
-
+  text_Bold: {
+    fontWeight: "bold"
+  },
+  bg_white: {
+    backgroundColor: "#fff"
+  },
+  p_6: { padding: moderateScale(6), },
+  text_black: { color: "#000" },
+  mh_15: { marginHorizontal: moderateScale(15) },
+  text_darkGray: { color: Colors.darkGray },
+  pt_10: { paddingTop: moderateScale(10) },
+  pv_6: { paddingVertical: moderateScale(6) },
+  space_around: { justifyContent: "space-around" },
+  self_End:{alignSelf:"flex-end"},
+  space_between:{justifyContent:"space-between"},
+  ph_4:{paddingHorizontal:moderateScale(4)},
+  pt_6:{paddingTop:moderateScale(6)}
 });
 
 export default gStyles;

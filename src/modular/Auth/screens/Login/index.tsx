@@ -83,7 +83,7 @@ const Login = (props: Props) => {
                     keyboard={"number-pad"}
                     label='Phone Number'
                     control={control}
-                    error={errors.phone}
+                    error={errors.username}
                     name="username"
                     icon={() => <Feather name='phone' size={fontSizes.font20} />}
                     rightIcon={() => <Pressable onPress={() => { setShow(true) }} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.bg : "#fff" }, gStyles.py_2, gStyles.row_Center]}>
@@ -102,7 +102,7 @@ const Login = (props: Props) => {
                     keyboard={"default"}
                     label='Password'
                     control={control}
-                    error={errors.phone}
+                    error={errors.password}
                     name="password"
                     icon={() => <Feather name='eye' size={fontSizes.font20} />}
                     rightIcon={false}

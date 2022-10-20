@@ -15,7 +15,8 @@ export type RootStack = {
     Register:undefined;
     ForgetPassword:undefined;
     OTPVeritfication:undefined;
-    AuthNav:undefined
+    AuthNav:undefined,
+    Search:undefined
 };
 
 

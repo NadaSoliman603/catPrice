@@ -23,6 +23,8 @@ import About from '../modular/About';
 import TermsAndConditions from '../modular/TermsAndConditions';
 import Privacy from '../modular/Privacy';
 import OrderList from '../modular/Cart/screens/OrderList';
+import fontSizes from '../styles/fontSizes';
+import Search from '../modular/Search';
 const Tab = createBottomTabNavigator();
 
 
@@ -38,17 +40,17 @@ function BottomTab() {
                     let icon
 
                     if (route.name === 'Home') {
-                        icon = <Feather color={focused ? Colors.primary : Colors.darkGray} name='home' size={20} />
+                        icon = <Feather color={focused ? Colors.primary : Colors.darkGray} name='home' size={fontSizes.font20} />
                     } else if (route.name === 'Explore') {
-                        icon = <Feather color={focused ? Colors.primary : Colors.darkGray} name='search' size={20} />
+                        icon = <Feather color={focused ? Colors.primary : Colors.darkGray} name='search' size={fontSizes.font20} />
                     }
                     else if (route.name === 'Brand') {
-                        icon = <MaterialIcons color={focused ? Colors.primary : Colors.darkGray} name='directions-car' size={20} />
+                        icon = <MaterialIcons color={focused ? Colors.primary : Colors.darkGray} name='directions-car' size={fontSizes.font20} />
                     }
                     else if (route.name === 'Credits') {
-                        icon = <AntDesign color={focused ? Colors.primary : Colors.darkGray} name='creditcard' size={20} />
+                        icon = <AntDesign color={focused ? Colors.primary : Colors.darkGray} name='creditcard' size={fontSizes.font20} />
                     }
-                    else if (route.name === 'Profile') { icon = <AntDesign color={focused ? Colors.primary : Colors.darkGray} name='user' size={20} /> }
+                    else if (route.name === 'Profile') { icon = <AntDesign color={focused ? Colors.primary : Colors.darkGray} name='user' size={fontSizes.font20} /> }
                     return icon;
                 },
 
@@ -58,10 +60,10 @@ function BottomTab() {
                 tabBarInactiveTintColor: 'gray',
                 tabBarStyle: {
                     position: 'absolute',
-                    height: wp(12),
-                    paddingTop: moderateScale(3),
+                    height: wp(13),
+                    paddingTop: moderateScale(4),
                 },
-                tabBarLabelStyle: { fontWeight: '600', paddingBottom: 2 },
+                tabBarLabelStyle: { fontWeight: '600', paddingBottom: moderateScale(2) ,},
             })}
         >
             <Tab.Screen name="Home" component={AppStack} />
@@ -85,6 +87,7 @@ const AppStack = ()=>{
             <Stack.Screen options={{ headerShown: false }} name="TermsAndConditions" component={TermsAndConditions} />
             <Stack.Screen options={{ headerShown: false }} name="Privacy" component={Privacy} />
             <Stack.Screen options={{ headerShown: false }} name="OrderList" component={OrderList} />
+            <Stack.Screen options={{ headerShown: false }} name="Search" component={Search} />
         </Stack.Navigator>
     )
 }
