@@ -25,6 +25,7 @@ import Privacy from '../modular/Privacy';
 import OrderList from '../modular/Cart/screens/OrderList';
 import fontSizes from '../styles/fontSizes';
 import Search from '../modular/Search';
+import BrandsCats from '../modular/Brand/BrandsCats';
 const Tab = createBottomTabNavigator();
 
 
@@ -63,12 +64,12 @@ function BottomTab() {
                     height: wp(13),
                     paddingTop: moderateScale(4),
                 },
-                tabBarLabelStyle: { fontWeight: '600', paddingBottom: moderateScale(2) ,},
+                tabBarLabelStyle: { fontWeight: '600', paddingBottom: moderateScale(2), },
             })}
         >
             <Tab.Screen name="Home" component={AppStack} />
             <Tab.Screen name="Explore" component={Explore} />
-            <Tab.Screen name="Brand" component={Brand} />
+            <Tab.Screen name="Brand" component={BrandStack} />
             <Tab.Screen name="Credits" component={Credits} />
             <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>
@@ -76,10 +77,10 @@ function BottomTab() {
 }
 
 const Stack = createNativeStackNavigator();
-const AppStack = ()=>{
+const AppStack = () => {
     return (
         <Stack.Navigator >
-            <Stack.Screen options={{ headerShown: false }}name="HomeScreen" component={Home} />
+            <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={Home} />
             <Stack.Screen options={{ headerShown: false }} name="History" component={History} />
             <Stack.Screen options={{ headerShown: false }} name="Favourites" component={Favourites} />
             <Stack.Screen options={{ headerShown: false }} name="Contact" component={Contact} />
@@ -90,6 +91,13 @@ const AppStack = ()=>{
             <Stack.Screen options={{ headerShown: false }} name="Search" component={Search} />
         </Stack.Navigator>
     )
+}
+
+const BrandStack = () => {
+    return (<Stack.Navigator >
+        <Stack.Screen options={{ headerShown: false }} name="BrandScreen" component={Brand} />
+        <Stack.Screen options={{ headerShown: false }} name="BrandsCats" component={BrandsCats} />
+    </Stack.Navigator>)
 }
 
 export default BottomTab;

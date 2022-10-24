@@ -43,7 +43,7 @@ const SplashScreen = () => {
                 index: 0,
                 routes: [{ name: 'Home' }],
             })
-        }, 2500);
+        }, 2000);
     }, [])
 
 

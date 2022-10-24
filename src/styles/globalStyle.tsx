@@ -111,7 +111,22 @@ const gStyles = StyleSheet.create({
   self_End:{alignSelf:"flex-end"},
   space_between:{justifyContent:"space-between"},
   ph_4:{paddingHorizontal:moderateScale(4)},
-  pt_6:{paddingTop:moderateScale(6)}
+  pt_6:{paddingTop:moderateScale(6)},
+  pb_6:{paddingBottom:moderateScale(6)},
+  pl_3:{paddingLeft:moderateScale(3)},
+  circleBorder:{
+    borderColor: '#eee',
+    borderWidth: moderateScale(0.5),
+    // padding: moderateScale(1),
+    borderRadius: moderateScale(50),
+  },
+  card:{
+    borderColor: '#eee',
+    borderWidth: moderateScale(1),
+    padding: moderateScale(1),
+    borderRadius: moderateScale(50),
+
+  }
 });
 
 export default gStyles;

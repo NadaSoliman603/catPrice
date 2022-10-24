@@ -16,7 +16,8 @@ export type RootStack = {
     ForgetPassword:undefined;
     OTPVeritfication:undefined;
     AuthNav:undefined,
-    Search:undefined
+    Search:undefined;
+    BrandsCats:{catId :string};
 };
 
 

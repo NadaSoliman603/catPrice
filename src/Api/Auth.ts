@@ -17,3 +17,9 @@ export const loginApi = (data: any) => {
 export const getBrandApi = () => {
   return axios.get('http://floridatrading.online:8010/api/v1/brands/get-all-brands')
 };
+
+
+
+export const searchCatdApi = ({search , limit}:{search:string ; limit:string}) => {
+  return axios.get(`http://floridatrading.online:8010/api/v1/cat/search?search=${search}&limit=${limit}`)
+};
