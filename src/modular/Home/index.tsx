@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     },
     borderLine: {
         width: moderateScale(34),
-        borderBottomWidth: moderateScale(0.4),
+        borderBottomWidth: moderateScale(0.3),
     },
     height: {
         height: moderateScale(40)

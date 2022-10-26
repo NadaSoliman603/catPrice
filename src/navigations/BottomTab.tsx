@@ -26,6 +26,13 @@ import OrderList from '../modular/Cart/screens/OrderList';
 import fontSizes from '../styles/fontSizes';
 import Search from '../modular/Search';
 import BrandsCats from '../modular/Brand/BrandsCats';
+import Login from '../modular/Auth/screens/Login';
+import Register from '../modular/Auth/screens/Register';
+import ForgetPassword from '../modular/Auth/screens/ForgetPassword';
+import OTPVeritfication from '../modular/Auth/screens/OTPVeritfication';
+import ProductDetails from '../modular/Products/Screens/ProductDetails';
+import OrderCompleted from '../modular/Cart/screens/OrderCompleted';
+import BayerList from '../modular/Cart/screens/BayerList';
 const Tab = createBottomTabNavigator();
 
 
@@ -89,6 +96,14 @@ const AppStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="Privacy" component={Privacy} />
             <Stack.Screen options={{ headerShown: false }} name="OrderList" component={OrderList} />
             <Stack.Screen options={{ headerShown: false }} name="Search" component={Search} />
+            <Stack.Screen options={{ headerShown: false }} name="ProductDetails" component={ProductDetails} />
+            <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+            <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
+            <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPassword} />
+            <Stack.Screen options={{ headerShown: false }} name="OTPVeritfication" component={OTPVeritfication} />
+            <Stack.Screen options={{ headerShown: false }} name="OrderCompleted" component={OrderCompleted} />
+            <Stack.Screen options={{ headerShown: false }} name="BayerList" component={BayerList} />
+
         </Stack.Navigator>
     )
 }

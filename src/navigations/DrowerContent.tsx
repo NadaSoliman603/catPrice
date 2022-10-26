@@ -36,7 +36,13 @@ const DrowerContent = ({ props }: Props) => {
     }
 
     const onLogin = ()=>{
-        navigation.navigate('Login')
+        console.log("login")
+        try {
+            navigation.navigate('Login')
+        } catch (error) {
+            console.log(error)
+        }
+        
     }
 
     useEffect(()=>{

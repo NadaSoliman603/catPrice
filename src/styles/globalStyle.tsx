@@ -102,7 +102,7 @@ const gStyles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   p_6: { padding: moderateScale(6), },
-  text_black: { color: "#000" },
+  text_black: { color: "#565656" },
   mh_15: { marginHorizontal: moderateScale(15) },
   text_darkGray: { color: Colors.darkGray },
   pt_10: { paddingTop: moderateScale(10) },
@@ -125,7 +125,22 @@ const gStyles = StyleSheet.create({
     borderWidth: moderateScale(1),
     padding: moderateScale(1),
     borderRadius: moderateScale(50),
-
+  },
+  borderPimary:{
+    borderWidth:moderateScale(0.8),
+    borderColor:Colors.primary,
+    paddingVertical:moderateScale(4),
+    borderRadius:moderateScale(3),
+    margin:moderateScale(8)
+  },
+  text_dark_gray:{
+    color:"#565656"
+  },
+  text_lightGray:{
+    color:Colors.textLightGray
+  },
+  pt_2:{
+    paddingTop:moderateScale(2)
   }
 });
 

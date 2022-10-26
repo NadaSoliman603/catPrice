@@ -32,7 +32,7 @@ const ForgetPassword = (props: Props) => {
     }
 
     return (
-        <MainView>
+        <View style={styles.screen}>
             <>
                 <BackHeader title='Forget Password' />
                 {/* <ScrollView style={styles.screen}> */}
@@ -72,7 +72,7 @@ const ForgetPassword = (props: Props) => {
                 </View>
                 {/* </ScrollView> */}
             </>
-        </MainView>
+        </View>
     );
 }
 
@@ -82,6 +82,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignContent: "center",
+        // flex: 1,
+        backgroundColor: Colors.white,
+        padding: "2.5%"
     },
     logoImg: {
         width: 260,

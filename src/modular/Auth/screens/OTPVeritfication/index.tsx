@@ -32,7 +32,7 @@ const OTPVeritfication = (props: Props) => {
     }
 
     return (
-        <MainView>
+        <View style={styles.screen}>
             <>
                 <BackHeader title='OTP Verification' />
                 <View style={styles.screen}>
@@ -60,7 +60,7 @@ const OTPVeritfication = (props: Props) => {
 
                 </View>
             </>
-        </MainView>
+        </View>
     );
 }
 
@@ -70,6 +70,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignContent: "center",
+      
+        // flex: 1,
+        backgroundColor: Colors.white,
+        padding: "2.5%"
     },
     logoImg: {
         width: 290,

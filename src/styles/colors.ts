@@ -6,6 +6,9 @@ const Colors = {
     bg:'#19875457',
     gray:"#ccc",
     darkGray : "#999", 
+    link:"#0075FF",
+    lightGray:"#E1E1E1",
+    textLightGray :"#949494"
 };
 
 export default Colors;

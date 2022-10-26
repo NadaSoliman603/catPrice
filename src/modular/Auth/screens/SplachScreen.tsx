@@ -4,7 +4,7 @@ import React, { useEffect, useState, } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
-import { login } from "../../../Redux/reducers/AuthReducer";
+// import { login } from "../../../Redux/reducers/AuthReducer";
 import { Text, View , Image} from 'react-native'
 import * as Animatable from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
@@ -12,6 +12,7 @@ import { NavigationType } from '../../../types/navigationTypes';
 import Colors from '../../../styles/colors';
 import { wp } from '../../../styles/globalStyle';
 import imgs from '../../../assets/images';
+import { AddToCart } from '../../../Redux/reducers/CartReducer';
 
 
 const SplashScreen = () => {
@@ -19,19 +20,19 @@ const SplashScreen = () => {
     const dispatch = useDispatch();
 
     const checkLogin = async () => {
-        // const user = await AsyncStorage.getItem('user')
-        // if (user) {
-        //     dispatch(login(user))
-        //     const userinfo = await AsyncStorage.getItem("user")
-        //         if (userinfo) {
-        //             navigation.reset({
-        //                 index: 0,
-        //                 routes: [{ name: 'Home' }],
-        //             })
-        //         }
-        // } else {
-        //     navigation.reset({ index: 0, routes: [{ name: 'Login' }], })
-        // }
+        const cartData = await AsyncStorage.getItem("cartData")
+        if(cartData){
+            const userCartData = await JSON.parse(cartData)
+            dispatch(AddToCart({quantity:userCartData.quantity , item:userCartData.data}))
+        }
+        const user = await AsyncStorage.getItem("user")
+        if(user){
+            const userData = await JSON.parse(user)
+            console.log(userData)
+        }else{
+            console.log("notAuth")
+        }
+
     }
 
 

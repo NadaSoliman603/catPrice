@@ -13,6 +13,8 @@ import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { Image } from 'react-native-animatable';
 import { moderateScale } from '../../styles/ResponsiveDimentions';
 import Colors from '../../styles/colors';
+import FastImage from 'react-native-fast-image';
+import AppImage from '../../common/AppImage';
 type Props = {}
 
 const Brand = (props: Props) => {
@@ -60,7 +62,9 @@ const Brand = (props: Props) => {
                                 <Pressable onPress={()=>onBrandPress(item.makerName)} style={({pressed})=>[{
                                     backgroundColor:pressed?Colors.primaryPresedButton:Colors.white
                                 },styles.brandContainer , gStyles.center ]}>
-                                    <Image source={{ uri: item.makerImage }} style={styles.brandImag} />
+                                    {/* <FastImage source={{ uri: item.makerImage }} style={styles.brandImag} /> */}
+                                    <AppImage  imgWidth={moderateScale(30)}  uri= {item.makerImage } style={styles.brandImag} />
+
                                 </Pressable>
                                 <Text style={[gStyles.text_black, gStyles.selfCenter]}>{item.makerName}</Text>
                             </View>

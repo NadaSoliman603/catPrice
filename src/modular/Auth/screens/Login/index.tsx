@@ -59,7 +59,7 @@ const Login = (props: Props) => {
             AsyncStorage.setItem('user', JSON.stringify(user))
 
             dispatch(login(user))
-            // navigation.navigate("Home")
+            navigation.navigate("Home")
 
         } catch (error) {
             console.log("error", error)
@@ -68,7 +68,7 @@ const Login = (props: Props) => {
 
 
     return (
-        <MainView>
+        <View style={styles.screen}>
             <View style={styles.screen}>
                 <Image source={imgs.logo} style={styles.logoImg} />
                 <Text style={[gStyles.alignCenter, gStyles.text_Primary, gStyles.h1]}>Login</Text>
@@ -119,7 +119,7 @@ const Login = (props: Props) => {
                     <Button textStyle={[gStyles.text_Primary, gStyles.h4]} style={[gStyles.alignCenter, styles.register]} onPress={() => { navigation.navigate("Register") }} title={"Register here"} />
                 </View>
             </View>
-        </MainView>
+        </View>
     );
 }
 
@@ -129,6 +129,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignContent: "center",
+        // flex: 1,
+        backgroundColor: Colors.white,
+        padding: "2.5%"
     },
     logoImg: {
         width: 250,

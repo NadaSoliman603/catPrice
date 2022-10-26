@@ -27,6 +27,10 @@ import Credits from '../modular/Cridits.tsx';
 import Profile from '../modular/Profile';
 import BottomTab from './BottomTab';
 import SplashScreen from '../modular/Auth/screens/SplachScreen';
+import { Badge } from 'react-native-paper';
+import { moderateScale } from '../styles/ResponsiveDimentions';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Redux/store/store';
 const RootStackType = createNativeStackNavigator<RootStack>();
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -41,6 +45,8 @@ const Stack = createNativeStackNavigator();
 const DrowerNav = () => {
     const navigation = useNavigation()
     const route = useRoute()
+    const cart = useSelector((state: RootState) => state.Cart.quantity)
+
     return (
         <Drawer.Navigator
             screenOptions={{
@@ -48,7 +54,8 @@ const DrowerNav = () => {
                     const navigation = useNavigation<NavigationType>()
                     return (
                         <Pressable style={{ paddingHorizontal: 20 }} onPress={() => navigation.navigate("OrderList")} >
-                            <Feather color={Colors.primary} name='shopping-cart' size={fontSizes.font20} />
+                            {cart >0 &&<Badge style={{ backgroundColor:"#AD1F1F" , left: moderateScale(3) , top: moderateScale(2) }} size={moderateScale(5)}>{cart}</Badge>}
+                            <Feather color={Colors.primary} name='shopping-cart' size={fontSizes.font22} />
                         </Pressable>
                     )
                 },

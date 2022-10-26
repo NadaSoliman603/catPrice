@@ -8,7 +8,7 @@ type Props = {
     children:JSX.Element;
     style:object;
     loading:boolean;
-    data:any[];
+    data:any[] | object;
     overLayLoading : boolean | undefined;
 }
 
@@ -16,11 +16,13 @@ const MainView = ({children , style , loading , data , overLayLoading}:Props) =>
     if(overLayLoading){
         return (<View style={[styles.screen , style ]}><OverLayLoading/></View>)
     }
+
     return (
         <View style={[styles.screen , style ]}>
             {loading && <Loading/>}
-            {data?.length === 0 && loading === false &&<NoFoundData title='No Brands found'/>}
-            {data?.length > 0 &&  children}
+            {/* {data?.length === 0 && loading === false &&<NoFoundData title='No Brands found'/>} */}
+            {/* {data?.length > 0 &&  children} */}
+            {data &&  children} 
         </View>
     );
 }

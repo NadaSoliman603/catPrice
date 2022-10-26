@@ -16,26 +16,34 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Colors from '../../styles/colors';
 import Loading from '../../common/Loading';
 import NoFoundData from '../../common/NoDataFound';
+import CatCard from '../../components/CatCard';
 type Props = {};
 
 const Search = (props: Props) => {
-    const [search, setSearch] = useState('');
+    const [search, setSearch] = useState<string>('');
     const navigation = useNavigation<NavigationType>();
     const [loading, setLoading] = useState(false);
     const [flatListLoading, setFlatLisloading] = useState(false)
     const [limit, setLimit] = useState(10)
+    const [noSearchResult , setNoSearchResult] =useState(false)
 
-    const [cats, setCats] = useState();
+    const [cats, setCats] = useState([]);
     const [mount, setMount] = useState(true);
 
 
 
+    // ========================
+    //get Search result
+    //========================
     const getBrandData = async ({ search, limit }: { search: string; limit: string }) => {
         try {
             setLoading(true)
             const res = await searchCatdApi({ search: search, limit: limit.toString() });
             const catsData = res.data.body;
+            if(catsData.length === 0){ setNoSearchResult(true)}else{setNoSearchResult(false)}
+            console.log(mount)
             if (mount) {
+                // console.log(catsData)
                 setCats(catsData);
                 setLoading(false)
             }
@@ -45,28 +53,27 @@ const Search = (props: Props) => {
         }
     };
 
+
+
     useEffect(() => {
         navigation.setOptions({
             headerTitle: 'Search',
         });
-
-        // inputRef.current.focus()
-        // getBrandData({ search: search, limit: limit.toString() });
-        return () => {
-            setMount(false);
-        };
+        return () => { };
     }, []);
 
 
+
+    // ======================================
+    //get more Search result if scroll end
+    //=======================================
     useEffect(() => {
-        navigation.setOptions({
-            headerTitle: 'Search',
-        });
         const getBrandData = async ({ search, limit }: { search: string; limit: string }) => {
             try {
                 setFlatLisloading(true)
                 const res = await searchCatdApi({ search: search, limit: limit.toString() });
                 const catsData = res.data.body;
+                if(catsData.length === 0){ setNoSearchResult(true)}else{setNoSearchResult(false)}
                 if (mount) {
                     setCats(catsData);
                     setFlatLisloading(false)
@@ -76,8 +83,7 @@ const Search = (props: Props) => {
                 setFlatLisloading(false)
             }
         };
-        if(limit !== 10) getBrandData({ search: search, limit: limit.toString() });
-       
+        if (limit !== 10)  getBrandData({ search: search, limit: limit.toString() });
         return () => {
             setMount(false);
         };
@@ -96,7 +102,7 @@ const Search = (props: Props) => {
                         onChangeText={text => setSearch(text)}
                         right={
                             <TextInput.Icon
-                                icon={() => <Pressable onPress={() => getBrandData({ search: search, limit: limit.toString() })}>
+                                icon={() => <Pressable onPress={() => { getBrandData({ search: search, limit: limit.toString() }) }}>
                                     <Feather name={'search'} size={fontSizes.font18} />
                                 </Pressable>}
                             />
@@ -107,75 +113,24 @@ const Search = (props: Props) => {
                         autoFocus={true}
                     />
                 </View>
+                
                 {loading && <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />}
-                {cats?.length > 0 ? (
-                    <FlatList
-                        data={[...cats, { loader: true, catId: "loading123" }]}
-                        renderItem={({ item }) => {
-                            if (item.loader) {
-                                return (
-                                    <View key="loading" style={[styles.flatListEndLoder]}>
-                                        {flatListLoading && <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />}
-                                    </View>
-                                )
-                            }
-                            return (
-                                <View key={item.catId}>
-                                    <Pressable style={[styles.brandContainer]}>
-                                        <View style={[gStyles.row, gStyles.spaceBetwen]}>
-                                            <View style={[gStyles.row]}>
-                                                <View
-                                                    style={[styles.brandLogoContainer, gStyles.center]}>
-                                                    <Image source={{ uri: item.brands[0]?.makerImage }} style={styles.brandImg}
-                                                    />
-                                                </View>
-                                                <Text
-                                                    style={[gStyles.text_Bold, gStyles.text_black, gStyles.pl_3,
-                                                    ]}>
-                                                    {item?.catSn}
-                                                </Text>
-                                            </View>
 
-                                            <Pressable
-                                                style={({ }) => [gStyles.circleBorder, styles.showInfo, gStyles.row, gStyles.center,
-                                                ]}>
-                                                <Text
-                                                    style={[gStyles.text_Bold, gStyles.text_black, gStyles.h5, gStyles.text_Primary,
-                                                    ]}>
-                                                    ?
-                                                </Text>
-                                            </Pressable>
-                                        </View>
-                                        <View style={[styles.catImgContainer]}>
-                                            <Image source={{ uri: item?.images[0]?.fullImageURL }} style={styles.catImg} />
-                                        </View>
+                {noSearchResult && <NoFoundData title={'No cat With This ID'} />}
 
-                                        <View style={[gStyles.row, gStyles.spaceBetwen]}>
-                                            <Pressable onPress={()=>console.log("preesed")} style={({pressed})=>[{  backgroundColor:pressed?Colors.primaryPresedButton :"#fff"}]}>
-                                                <Text style={[gStyles.text_Primary, styles.showPrice, gStyles.text_center, gStyles.text_Bold]}> Show Price</Text>
-                                            </Pressable>
+                {cats.length >0 &&<FlatList
+                    data={[...cats, { loader: true, catId: "loading123" }]}
+                    renderItem={({ item }) => <CatCard item={item} flatListLoading={flatListLoading} />}
+                    keyExtractor={item => item?.catId}
+                    onEndReached={() => {
+                        setLimit(limit + 10)
+                    }}
+                />}
+                <>
+                    
+                </>
 
-                                            <Pressable onPress={()=>console.log("preesed")}  style={({pressed})=>[{  backgroundColor:pressed?Colors.primaryPresedButton :"#fff"}, styles.favButton]}  s>
-                                                <AntDesign name="hearto" color={Colors.primary} size={20} />
-                                            </Pressable>
-                                        </View>
-                                    </Pressable>
-                                </View>
-                            );
-                        }}
-                        keyExtractor={item => item?.catId}
-                        onEndReached={() => {
-                            setLimit(limit + 10)
-                        }}
-
-                    />
-                ) : (
-                    <>
-                        {/* {!loading && !cats && <NoFoundData title={'No cat With This ID'} />} */}
-                    </>
-
-                    // <ActivityIndicator color={Colors.primary} size="small"  style={[gStyles.p_2]}/>
-                )}
+                {/* <ActivityIndicator color={Colors.primary} size="small"  style={[gStyles.p_2]}/> */}
             </View>
         </MainView>
     );

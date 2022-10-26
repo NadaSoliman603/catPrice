@@ -31,7 +31,7 @@ const Register = (props: Props) => {
     }
 
     return (
-        <MainView>
+        <View style={styles.screen}>
             <View style={styles.screen}>
                 <Text style={[gStyles.alignCenter, gStyles.text_Primary, gStyles.h1]}>Register</Text>
 
@@ -107,7 +107,7 @@ const Register = (props: Props) => {
                     <Button textStyle={[gStyles.text_Primary, gStyles.h4]} style={[gStyles.alignCenter, styles.register]} onPress={() => { navigation.navigate("Login") }} title={"Login here"} />
                 </View>
             </View>
-        </MainView>
+        </View>
     );
 }
 
@@ -117,6 +117,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignContent: "center",
+      
+        // flex: 1,
+        backgroundColor: Colors.white,
+        padding: "2.5%"
     },
     logoImg: {
         width: 250,

@@ -1,5 +1,5 @@
 export type Trip = {
-   
+
 }
 
 export type LoginData = {

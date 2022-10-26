@@ -18,6 +18,9 @@ export type RootStack = {
     AuthNav:undefined,
     Search:undefined;
     BrandsCats:{catId :string};
+    ProductDetails:{catID :string };
+    OrderCompleted:undefined;
+    BayerList:undefined
 };
 
 

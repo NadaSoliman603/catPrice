@@ -1,23 +1,21 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { Api } from '../../Api/redux'
-import { setupListeners } from '@reduxjs/toolkit/query'
-// import AuthReducer from '../reducers/AuthReducer'
 
-export const store = configureStore({
-  reducer: {
-    [Api.reducerPath]: Api.reducer,
-    // auth:AuthReducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-  getDefaultMiddleware().concat(Api.middleware),
+
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import  AuthSlice  from '../reducers/AuthReducer'
+import cartSlice from '../reducers/CartReducer'
+
+const reuducer = combineReducers({
+  Cart: cartSlice,
+  Auth:AuthSlice
 })
 
+export const store = configureStore({
+  reducer: reuducer,
 
-setupListeners(store.dispatch)
+})
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
-
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
 
