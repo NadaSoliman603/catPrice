@@ -12,6 +12,7 @@ const imgs = {
     subtract : require('./imgs/Subtract.png'),
     emailIcon : require('./imgs/emailIcon.png'), 
     phonIcon : require('./imgs/phonIcon.png'),
+    edit : require('./imgs/Edit.png'),
 }
 
 export default imgs;

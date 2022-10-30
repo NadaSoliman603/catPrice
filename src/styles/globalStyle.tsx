@@ -141,7 +141,13 @@ const gStyles = StyleSheet.create({
   },
   pt_2:{
     paddingTop:moderateScale(2)
-  }
+  },
+  border: {
+    borderWidth: moderateScale(0.5),
+    borderColor: "#ccc",
+    borderRadius: moderateScale(2)
+  },
+  p_4:{padding:moderateScale(4)}
 });
 
 export default gStyles;

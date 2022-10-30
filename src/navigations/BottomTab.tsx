@@ -33,6 +33,10 @@ import OTPVeritfication from '../modular/Auth/screens/OTPVeritfication';
 import ProductDetails from '../modular/Products/Screens/ProductDetails';
 import OrderCompleted from '../modular/Cart/screens/OrderCompleted';
 import BayerList from '../modular/Cart/screens/BayerList';
+import CountryScreen from '../modular/Profile/Screens/CountryScreen';
+import CurrencyScreen from '../modular/Profile/Screens/CurrencyScreen';
+import LanguageScreen from '../modular/Profile/Screens/LanguageScreen';
+import UserSettingScreen from '../modular/Profile/Screens/UserSettingScreen';
 const Tab = createBottomTabNavigator();
 
 
@@ -78,7 +82,7 @@ function BottomTab() {
             <Tab.Screen name="Explore" component={Explore} />
             <Tab.Screen name="Brand" component={BrandStack} />
             <Tab.Screen name="Credits" component={Credits} />
-            <Tab.Screen name="Profile" component={Profile} />
+            <Tab.Screen name="Profile" component={BrofileStack} />
         </Tab.Navigator>
     );
 }
@@ -112,6 +116,18 @@ const BrandStack = () => {
     return (<Stack.Navigator >
         <Stack.Screen options={{ headerShown: false }} name="BrandScreen" component={Brand} />
         <Stack.Screen options={{ headerShown: false }} name="BrandsCats" component={BrandsCats} />
+    </Stack.Navigator>)
+}
+
+const BrofileStack = () => {
+    return (<Stack.Navigator >
+        <Stack.Screen options={{ headerShown: false }} name="ProfileScreen" component={Profile} />
+        <Stack.Screen options={{ headerShown: false }} name="CountryScreen" component={CountryScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="CurrencyScreen" component={CurrencyScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="LanguageScreen" component={LanguageScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="UserSettingScreen" component={UserSettingScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="CreditsScreen" component={Credits} />
+
     </Stack.Navigator>)
 }
 
