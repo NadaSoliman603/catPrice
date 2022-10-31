@@ -16,7 +16,7 @@ export type RootStack = {
     ForgetPassword: undefined;
     OTPVeritfication: undefined;
     AuthNav: undefined,
-    Search: undefined;
+    Search: undefined | {search:boolean};
     BrandsCats: { catId: string };
     ProductDetails: { catID: string };
     OrderCompleted: undefined;
@@ -27,6 +27,9 @@ export type RootStack = {
     LanguageScreen: undefined;
     UserSettingScreen: undefined;
     CreditsScreen:undefined;
+    SearchStack:undefined | {search:boolean};
+    OrderStack:undefined;
+    HomeScreen:undefined
 };
 
 

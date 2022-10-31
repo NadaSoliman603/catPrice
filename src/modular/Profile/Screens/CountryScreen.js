@@ -6,38 +6,39 @@ import gStyles from "../../../styles/globalStyle";
 import { moderateScale } from "../../../styles/ResponsiveDimentions";
 import Feather from 'react-native-vector-icons/Feather';
 import fontSizes from "../../../styles/fontSizes";
+import RNCountry from "react-native-countries";
+
 
 export default function App() {
-    const [value, setValue] = useState("Saudi Arabia Riyal");
+    const [value, setValue] = useState("Saudi Arabia");
     // const flatlist = useRef()
-    const [ref, setRef] = useState<any>(null);
-    const [scroll , setScroll] = useState(false)
+    const [ref, setRef] = useState(null);
+    // const [countries , setCountry] = useState(RNCountry.getCountryNames())
 
-
+    const countries =  RNCountry.getCountryNames
+console.log('RNCountry')
 
     // get all of the supported currency codes
-    const currencyCodes = getSupportedCurrencies();
+   
 
-    const changeCurrancy = (value: any, index: number) => {
-        setValue(value.name)
+    const changeCurrancy = (value, index ) => {
+        console.log(value)
+        setValue(value)
     }
    
 
     useEffect(() => {
-        const index = currencyCodes.findIndex(item => item.name === value)
-        if (ref ) {
-            ref.scrollToIndex({ index: index })
-        }
-    },[])
+            // setCountry(RNCountry)
+    },[RNCountry])
 
     // loop through each currency code and show formatted value
-    const renderItem = ({ item, index }: { item: any, index: number }) => {
+    const renderItem = ({ item, index }) => {
         return (
             <Pressable onPress={() => changeCurrancy(item, index)} style={[styles.itemContainer, gStyles.row, gStyles.space_between]}>
                 <Text style={[gStyles.text_black, gStyles.h4 , gStyles.text_Bold, {
                     color:item === value ? Colors.primary : Colors.textBlack
-                }]}>{item.name}</Text>
-                {item.name === value && <Feather name="check" size={fontSizes.font20} color={Colors.primary} />}
+                }]}>{item}</Text>
+                {item === value && <Feather name="check" size={fontSizes.font20} color={Colors.primary} />}
             </Pressable>
         );
     };
@@ -46,7 +47,7 @@ export default function App() {
         <View style={[styles.screen]}>
             <FlatList
                 style={styles.scrollView}
-                data={currencyCodes}
+                data={countries}
                 renderItem={renderItem}
                 keyExtractor={(code) => code.code}
                 ref={(ref) => {setRef(ref)}}

@@ -18,7 +18,7 @@ type Props = {}
 
 const Credits = (props: Props) => {
     const [plans, setPlans] = useState(planData)
-    const [showPlan , setShowPlan] = useState(plans[0])
+    const [showPlan , setShowPlan] = useState(plans?.[0])
     const [mount , setMount] = useState(true)
 
   
@@ -33,8 +33,8 @@ const Credits = (props: Props) => {
     //=================================
     const getPlanData = async () => {
         const res = await getPlanApi({ path: "", token: "" })
-        const plans = res.data.body
-        if(mount){
+        const plans = res?.data?.body
+        if(mount && plans){
             setPlans(plans)
         }
     }

@@ -16,7 +16,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { loginApi } from '../../../../Api/Auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector, useDispatch } from 'react-redux'
-import { login } from '../../../../Redux/reducers/AuthReducer';
+import { Login as login } from '../../../../Redux/reducers/AuthReducer';
 
 type Props = {}
 

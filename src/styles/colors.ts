@@ -9,7 +9,9 @@ const Colors = {
     link:"#0075FF",
     lightGray:"#E1E1E1",
     textLightGray :"#949494",
-    error:"#E41E26"
+    error:"#E41E26",
+    textBlack : "#565656",
+    textDarkBlack:"#232323"
 };
 
 export default Colors;

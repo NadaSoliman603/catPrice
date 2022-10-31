@@ -22,6 +22,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
 import { AddToCart } from '../../../../Redux/reducers/CartReducer';
 import addCartDataToLocalStorag from '../../../../Redux/actions/CartAction';
+import ButtomMeueModal from '../../../../common/ButtomMeueModal';
+// import PieChart from 'react-native-pie-chart';
+
+
 type Props = {}
 
 type ScreenRouteProp = RouteProp<RootStack, 'ProductDetails'>;
@@ -31,7 +35,15 @@ const ProductDetails = (props: Props) => {
     const [productDetails, setProductDetails] = useState<any>({})
     const route = useRoute<ScreenRouteProp>()
     const [mount, setMount] = useState(true);
-    const [quantity , setQuantity] = useState(1)
+    const [quantity, setQuantity] = useState(1)
+    const [modalVisible, setModalVisible] = useState(true);
+    const series = [123, 321, 123, 789, 537]
+    const sliceColor = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800']
+    const widthAndHeight = 250
+
+    const togleModal = (show: boolean, id: string | undefined) => {
+        setModalVisible(show)
+    }
 
 
     // ===========================
@@ -61,104 +73,121 @@ const ProductDetails = (props: Props) => {
     //Add To Cart
     //============================
     const dispatch = useDispatch()
-    const onAddToCart = async()=>{
+    const onAddToCart = async () => {
         // console.log(quantity,productDetails)
-        const cartData = await addCartDataToLocalStorag({catData:productDetails ,catQuantity: quantity})
+        const cartData = await addCartDataToLocalStorag({ catData: productDetails, catQuantity: quantity })
         // console.log(cartData)
-        dispatch(AddToCart({quantity:cartData.quantity , item:cartData.data}))
+        dispatch(AddToCart({ quantity: cartData.quantity, item: cartData.data }))
     }
 
     return (
-        <MainView data={productDetails} loading={loading} overLayLoading={false} style={styles.screen}>
-            {productDetails.catId && <ScrollView>
-                <View style={[styles.imageContainer]}>
-                    <View style={[gStyles.row, gStyles.spaceBetwen, gStyles.pb_6]} >
-                        <AntDesign name="hearto" color={Colors.primary} size={fontSizes.font20} />
-                        <Pressable style={[gStyles.row]} >
-                            <Text style={[gStyles.text_Primary, gStyles.h6]} >Metal Details </Text>
-                            <AntDesign color={Colors.primary} name='arrowright' size={fontSizes.font12} />
-                        </Pressable>
+        <>
+            <MainView data={productDetails} loading={loading} overLayLoading={false} style={styles.screen}>
+                {productDetails.catId && <ScrollView>
+                    <View style={[styles.imageContainer]}>
+                        <View style={[gStyles.row, gStyles.spaceBetwen, gStyles.pb_6]} >
+                            <AntDesign name="hearto" color={Colors.primary} size={fontSizes.font20} />
+                            <Pressable style={[gStyles.row]} >
+                                <Text style={[gStyles.text_Primary, gStyles.h6]} >Metal Details </Text>
+                                <AntDesign color={Colors.primary} name='arrowright' size={fontSizes.font12} />
+                            </Pressable>
+                        </View>
+                        {/* <FastImage  source={{ uri: productDetails.images[0].fullImageURL}} style={[styles.img]} /> */}
+                        <AppImage imgWidth={moderateScale(120)} style={styles.img} uri={productDetails.images[0].fullImageURL} />
                     </View>
-                    {/* <FastImage  source={{ uri: productDetails.images[0].fullImageURL}} style={[styles.img]} /> */}
-                    <AppImage imgWidth={moderateScale(120)} style={styles.img} uri={productDetails.images[0].fullImageURL} />
-                </View>
 
-                <View style={[gStyles.pv_6]}>
+                    <View style={[gStyles.pv_6]}>
 
 
-                    {productDetails.ref1 && <>
-                        <View style={[gStyles.row, { justifyContent: "space-between", paddingVertical: moderateScale(4) }]}>
-                            <View style={[{ width: '35%', }]}>
-                                <Text style={[gStyles.text_black]}>Ref:</Text>
+                        {productDetails.ref1 && <>
+                            <View style={[gStyles.row, { justifyContent: "space-between", paddingVertical: moderateScale(4) }]}>
+                                <View style={[{ width: '35%', }]}>
+                                    <Text style={[gStyles.text_black]}>Ref:</Text>
+                                </View>
+                                <View style={[{ width: '35%', alignItems: "flex-end", alignSelf: "flex-end" }]}>
+                                    <Text style={[gStyles.text_darkGray, { textAlign: "right" }]}>{productDetails.ref1}</Text>
+                                </View>
                             </View>
-                            <View style={[{ width: '35%', alignItems: "flex-end", alignSelf: "flex-end" }]}>
-                                <Text style={[gStyles.text_darkGray, { textAlign: "right" }]}>{productDetails.ref1}</Text>
+                            <Divider />
+                        </>}
+
+
+                        {productDetails.ref2 && <>
+                            <View style={[gStyles.row, { justifyContent: "space-between", paddingVertical: moderateScale(4) }]}>
+                                <View style={[{ width: '35%', }]}>
+                                    <Text style={[gStyles.text_black]}>Ref2:</Text>
+                                </View>
+                                <View style={[{ width: '35%', alignItems: "flex-end", alignSelf: "flex-end" }]}>
+                                    <Text style={[gStyles.text_darkGray, { textAlign: "right" }]}>{productDetails.ref2}</Text>
+                                </View>
                             </View>
-                        </View>
-                        <Divider />
-                    </>}
+                            <Divider />
+                        </>}
 
+                        {productDetails.brand && <>
+                            <View style={[gStyles.row, { justifyContent: "space-between", paddingVertical: moderateScale(4), }]}>
 
-                    {productDetails.ref2 && <>
-                        <View style={[gStyles.row, { justifyContent: "space-between", paddingVertical: moderateScale(4) }]}>
-                            <View style={[{ width: '35%', }]}>
-                                <Text style={[gStyles.text_black]}>Ref2:</Text>
-                            </View>
-                            <View style={[{ width: '35%', alignItems: "flex-end", alignSelf: "flex-end" }]}>
-                                <Text style={[gStyles.text_darkGray, { textAlign: "right" }]}>{productDetails.ref2}</Text>
-                            </View>
-                        </View>
-                        <Divider />
-                    </>}
+                                <View style={[{ width: '35%', alignSelf: "flex-start" }]}>
+                                    <Text style={[gStyles.text_black]}>Cat Models:</Text>
+                                </View>
 
-                    {productDetails.brand && <>
-                        <View style={[gStyles.row, { justifyContent: "space-between", paddingVertical: moderateScale(4), }]}>
+                                <View style={[{ width: '35%', alignItems: "flex-end", alignSelf: "flex-end", justifyContent: "flex-end" }]}>
 
-                            <View style={[{ width: '35%', alignSelf: "flex-start" }]}>
-                                <Text style={[gStyles.text_black]}>Cat Models:</Text>
-                            </View>
-
-                            <View style={[{ width: '35%', alignItems: "flex-end", alignSelf: "flex-end", justifyContent: "flex-end" }]}>
-
-                                {productDetails.brands.map((item: any) => (
-                                    <View style={[gStyles.row]} key={item.brandId}>
-                                        <Text style={[gStyles.text_Primary, { textAlign: "right" }]}>{item.makerName}</Text>
-                                        <View style={[gStyles.circle, { borderWidth: 1, padding: 2, borderColor: "#eee" }]}>
-                                            <AppImage imgWidth={moderateScale(4)} style={{ padding: moderateScale(3) }} uri={item.makerImage} />
+                                    {productDetails.brands.map((item: any) => (
+                                        <View style={[gStyles.row]} key={item.brandId}>
+                                            <Text style={[gStyles.text_Primary, { textAlign: "right" }]}>{item.makerName}</Text>
+                                            <View style={[gStyles.circle, { borderWidth: 1, padding: 2, borderColor: "#eee" }]}>
+                                                <AppImage imgWidth={moderateScale(4)} style={{ padding: moderateScale(3) }} uri={item.makerImage} />
+                                            </View>
                                         </View>
-                                    </View>
-                                ))}
+                                    ))}
+                                </View>
+
                             </View>
-
-                        </View>
-                        <Divider />
-                    </>}
+                            <Divider />
+                        </>}
 
 
-                    {productDetails.carModel && <>
-                        <View style={[gStyles.row, { justifyContent: "space-between", paddingVertical: moderateScale(4) }]}>
-                            <View style={[{ width: '35%', }]}>
-                                <Text style={[gStyles.text_black]}>Cat Models:</Text>
+                        {productDetails.carModel && <>
+                            <View style={[gStyles.row, { justifyContent: "space-between", paddingVertical: moderateScale(4) }]}>
+                                <View style={[{ width: '35%', }]}>
+                                    <Text style={[gStyles.text_black]}>Cat Models:</Text>
+                                </View>
+                                <View style={[{ width: '35%', alignItems: "flex-end", alignSelf: "flex-end" }]}>
+                                    <Text style={[gStyles.text_darkGray, { textAlign: "right" }]}>{productDetails.carModel}</Text>
+                                </View>
                             </View>
-                            <View style={[{ width: '35%', alignItems: "flex-end", alignSelf: "flex-end" }]}>
-                                <Text style={[gStyles.text_darkGray, { textAlign: "right" }]}>{productDetails.carModel}</Text>
+                            <Divider />
+                        </>}
+
+                        <OutLineButton textStyle={{}} outline={false} style={{}} title='Show Price ' onPress={onShowprice} icon={<Feather name="eye" size={fontSizes.font16} color={Colors.primary} />} />
+
+
+                        <View style={[gStyles.row, gStyles.spaceBetwen]}>
+                            <View>
+                                <Quantity buttonStyle={{}} quantity={quantity} setQuantity={setQuantity} />
                             </View>
+                            <OutLineButton textStyle={{}} outline={true} style={{ paddingHorizontal: moderateScale(6) }} title='Add to cart ' onPress={onAddToCart} icon={<AntDesign name="shoppingcart" size={fontSizes.font16} color={"#fff"} />} />
                         </View>
-                        <Divider />
-                    </>}
-
-                    <OutLineButton outline={false} style={{}} title='Show Price ' onPress={onShowprice} icon={<Feather name="eye" size={fontSizes.font16} color={Colors.primary} />} />
-
-
-                    <View style={[gStyles.row , gStyles.spaceBetwen]}>
-                        <View>
-                            <Quantity buttonStyle={{  }} quantity={quantity} setQuantity={setQuantity}/>
-                        </View>
-                        <OutLineButton outline={true} style={{ paddingHorizontal:moderateScale(6)}} title='Add to cart ' onPress={onAddToCart} icon={<AntDesign name="shoppingcart" size={fontSizes.font16} color={"#fff"} />} />
                     </View>
-                </View>
-            </ScrollView>}
-        </MainView>
+
+                </ScrollView>}
+
+            </MainView>
+
+            <ButtomMeueModal title="Metal Details" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={setModalVisible}>
+                <>
+                    {/* <PieChart
+                        widthAndHeight={widthAndHeight}
+                        series={series}
+                        sliceColor={sliceColor}
+                        doughnut={true}
+                        coverRadius={0.45}
+                        coverFill={'#FFF'}
+                    /> */}
+                </>
+            </ButtomMeueModal>
+        </>
     );
 }
 
@@ -182,7 +211,7 @@ const styles = StyleSheet.create({
 
     },
     showPrice: {
-        paddingHorizontal:moderateScale(6)
+        paddingHorizontal: moderateScale(6)
     }
 });
 

@@ -17,11 +17,10 @@ type Props = {}
 const Profile = (props: Props) => {
     const navigation = useNavigation<NavigationType>()
     const imgUri = "https://img.freepik.com/free-photo/handsome-confident-smiling-man-with-hands-crossed-chest_176420-18743.jpg?w=2000"
-
     return (
         <View style={styles.screen}>
             <View>
-                <Pressable onPress={() => {navigation.navigate('CreditsScreen')}} style={planStyle}  >
+                <Pressable onPress={() => {navigation.reset({index: 0, routes: [{ name: 'CreditsScreen' }],})}} style={planStyle}  >
                     <Text style={[gStyles.h4]}>Currunt Plan</Text>
                     <Avatar.Image size={moderateScale(10)} style={{ backgroundColor: Colors.white }} source={imgs.golodOffer} />
                 </Pressable>

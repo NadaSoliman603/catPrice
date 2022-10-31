@@ -7,6 +7,7 @@ import Feather  from 'react-native-vector-icons/Feather';
 import fontSizes from '../styles/fontSizes';
 import gStyles from '../styles/globalStyle';
 import Colors from '../styles/colors';
+import { moderateScale } from '../styles/ResponsiveDimentions';
 type Props = {
     // value: string;
     // onChangeText: (text: string) => void;
@@ -31,7 +32,7 @@ const CustomTextInput = ({ label, control, name, error , icon ,rightIcon=false ,
                    <View style={[styles.container] }>
                     {/* {rightIcon ? rightIcon() : <></>} */}
                     <TextInput
-                        // style={styles.input}
+                        style={styles.input}
                         label={label}
                         value={value}
                         onChangeText={onChange}
@@ -43,6 +44,15 @@ const CustomTextInput = ({ label, control, name, error , icon ,rightIcon=false ,
                         selectionColor={Colors.bg}
                         keyboardType = {keyboard ? keyboard : "default"}
                         secureTextEntry ={secureTextEntry}
+                        dense={true}
+                        outlineColor={"#eee"}
+                        // placeholder= {'Some Text'}
+                        // theme={{
+                        //     colors: {
+                        //                placeholder: 'white'
+                        //        }
+                        //  }}
+                        
                     />
                    </View>
                 )}
@@ -54,7 +64,7 @@ const CustomTextInput = ({ label, control, name, error , icon ,rightIcon=false ,
 
 const styles = StyleSheet.create({
     input: {
-        marginVertical: 7,
+        marginVertical: moderateScale(1),
         // width:"100%",
         // // flex:1
     },

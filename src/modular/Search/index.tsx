@@ -5,8 +5,8 @@ import fontSizes from '../../styles/fontSizes';
 import gStyles, { hp, wp } from '../../styles/globalStyle';
 import Feather from 'react-native-vector-icons/Feather';
 import MainView from '../../common/MainView';
-import { useNavigation } from '@react-navigation/native';
-import { NavigationType } from '../../types/navigationTypes';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationType, RootStack } from '../../types/navigationTypes';
 import { useGetQuery } from '../../Api/redux';
 import { getBrandApi, searchCatdApi } from '../../Api/Auth';
 import { FlatList } from 'react-native-gesture-handler';
@@ -18,8 +18,10 @@ import Loading from '../../common/Loading';
 import NoFoundData from '../../common/NoDataFound';
 import CatCard from '../../components/CatCard';
 type Props = {};
+type ScreenRouteProp = RouteProp<RootStack, 'Search'>;
 
 const Search = (props: Props) => {
+    const routs = useRoute<ScreenRouteProp>()
     const [search, setSearch] = useState<string>('');
     const navigation = useNavigation<NavigationType>();
     const [loading, setLoading] = useState(false);
@@ -54,11 +56,16 @@ const Search = (props: Props) => {
     };
 
 
-
+    const params = routs.params
     useEffect(() => {
         navigation.setOptions({
             headerTitle: 'Search',
         });
+        
+        if(!params?.search){
+            getBrandData({ search: search, limit: limit.toString() });
+        }
+        
         return () => { };
     }, []);
 
@@ -110,7 +117,7 @@ const Search = (props: Props) => {
                         onSubmitEditing={() => {
                             getBrandData({ search: search, limit: limit.toString() });
                         }}
-                        autoFocus={true}
+                        autoFocus={params?.search}
                     />
                 </View>
                 

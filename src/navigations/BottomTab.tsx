@@ -79,7 +79,7 @@ function BottomTab() {
             })}
         >
             <Tab.Screen name="Home" component={AppStack} />
-            <Tab.Screen name="Explore" component={Explore} />
+            <Tab.Screen name="Explore" component={SearchStack} />
             <Tab.Screen name="Brand" component={BrandStack} />
             <Tab.Screen name="Credits" component={Credits} />
             <Tab.Screen name="Profile" component={BrofileStack} />
@@ -98,16 +98,16 @@ const AppStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="About" component={About} />
             <Stack.Screen options={{ headerShown: false }} name="TermsAndConditions" component={TermsAndConditions} />
             <Stack.Screen options={{ headerShown: false }} name="Privacy" component={Privacy} />
-            <Stack.Screen options={{ headerShown: false }} name="OrderList" component={OrderList} />
+            {/* <Stack.Screen options={{ headerShown: false }} name="OrderList" component={OrderList} /> */}
             <Stack.Screen options={{ headerShown: false }} name="Search" component={Search} />
             <Stack.Screen options={{ headerShown: false }} name="ProductDetails" component={ProductDetails} />
             <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
             <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
             <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPassword} />
             <Stack.Screen options={{ headerShown: false }} name="OTPVeritfication" component={OTPVeritfication} />
-            <Stack.Screen options={{ headerShown: false }} name="OrderCompleted" component={OrderCompleted} />
-            <Stack.Screen options={{ headerShown: false }} name="BayerList" component={BayerList} />
-
+            {/* <Stack.Screen options={{ headerShown: false }} name="OrderCompleted" component={OrderCompleted} /> */}
+            {/* <Stack.Screen options={{ headerShown: false }} name="BayerList" component={BayerList} /> */}
+            <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
         </Stack.Navigator>
     )
 }
@@ -127,8 +127,38 @@ const BrofileStack = () => {
         <Stack.Screen options={{ headerShown: false }} name="LanguageScreen" component={LanguageScreen} />
         <Stack.Screen options={{ headerShown: false }} name="UserSettingScreen" component={UserSettingScreen} />
         <Stack.Screen options={{ headerShown: false }} name="CreditsScreen" component={Credits} />
-
     </Stack.Navigator>)
+}
+
+const SearchStack = () => {
+    return (<Stack.Navigator >
+        <Stack.Screen options={{ headerShown: false }} name="Search" component={Search} />
+        <Stack.Screen options={{ headerShown: false }} name="ProductDetails" component={ProductDetails} />
+    </Stack.Navigator>)
+}
+
+const OrderStack = () => {
+    return (<Stack.Navigator >
+        <Stack.Screen options={{ headerShown: false }} name="OrderList" component={OrderList} />
+        <Stack.Screen options={{ headerShown: false }} name="OrderCompleted" component={OrderCompleted} />
+        <Stack.Screen options={{ headerShown: false }} name="BayerList" component={BayerList} />
+    </Stack.Navigator>)
+}
+
+
+
+const DrowerStack = () => {
+    return (
+        <Stack.Navigator >
+            <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={Home} />
+            <Stack.Screen options={{ headerShown: false }} name="History" component={History} />
+            <Stack.Screen options={{ headerShown: false }} name="Favourites" component={Favourites} />
+            <Stack.Screen options={{ headerShown: false }} name="Contact" component={Contact} />
+            <Stack.Screen options={{ headerShown: false }} name="About" component={About} />
+            <Stack.Screen options={{ headerShown: false }} name="TermsAndConditions" component={TermsAndConditions} />
+            <Stack.Screen options={{ headerShown: false }} name="Privacy" component={Privacy} />
+        </Stack.Navigator>
+    )
 }
 
 export default BottomTab;

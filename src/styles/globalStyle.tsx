@@ -147,7 +147,8 @@ const gStyles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: moderateScale(2)
   },
-  p_4:{padding:moderateScale(4)}
+  p_4:{padding:moderateScale(4)},
+  textDarkBlack:{color:Colors.textDarkBlack},
 });
 
 export default gStyles;

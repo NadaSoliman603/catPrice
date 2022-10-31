@@ -53,7 +53,7 @@ const DrowerNav = () => {
                 headerRight: () => {
                     const navigation = useNavigation<NavigationType>()
                     return (
-                        <Pressable style={{ paddingHorizontal: 20 }} onPress={() => navigation.navigate("OrderList")} >
+                        <Pressable style={{ paddingHorizontal: 20 }} onPress={() => navigation.navigate("OrderStack")} >
                             {cart >0 &&<Badge style={{ backgroundColor:"#AD1F1F" , left: moderateScale(3) , top: moderateScale(2) }} size={moderateScale(5)}>{cart}</Badge>}
                             <Feather color={Colors.primary} name='shopping-cart' size={fontSizes.font22} />
                         </Pressable>

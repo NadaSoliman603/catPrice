@@ -46,7 +46,7 @@ const Home = (props: Props) => {
             </View> */}
 
             <Pressable 
-            onPress={()=>{navigation.navigate("Search")}}
+            onPress={()=>{navigation.navigate("Search" , {search:true})}}
             style={({pressed})=>[{
                 backgroundColor: pressed ? "#eee" :"#fff"
             },gStyles.row , gStyles.space_between  , styles.searchButton]}  >
