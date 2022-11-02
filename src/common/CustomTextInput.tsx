@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text  } from 'react-native';
 import { TextInput , } from 'react-native-paper';
 import { useForm, Controller, FieldValues } from "react-hook-form";
 import Error from './Error';
@@ -32,7 +32,7 @@ const CustomTextInput = ({ label, control, name, error , icon ,rightIcon=false ,
                    <View style={[styles.container] }>
                     {/* {rightIcon ? rightIcon() : <></>} */}
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input , styles.textInput]}
                         label={label}
                         value={value}
                         onChangeText={onChange}
@@ -51,9 +51,9 @@ const CustomTextInput = ({ label, control, name, error , icon ,rightIcon=false ,
                         //     colors: {
                         //                placeholder: 'white'
                         //        }
-                        //  }}
-                        
+                        //  }}  
                     />
+
                    </View>
                 )}
             />
@@ -66,11 +66,15 @@ const styles = StyleSheet.create({
     input: {
         marginVertical: moderateScale(1),
         // width:"100%",
-        // // flex:1
+        // // flex:1,
+     
     },
     container:{
         // flexDirection:"row",
         // flex:1,
+    },
+    textInput:{
+        backgroundColor:Colors.white
     }
 });
 

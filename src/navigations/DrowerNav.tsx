@@ -46,6 +46,7 @@ const DrowerNav = () => {
     const navigation = useNavigation()
     const route = useRoute()
     const cart = useSelector((state: RootState) => state.Cart.quantity)
+    const header = useSelector((state: RootState) => state.Drower)
 
     return (
         <Drawer.Navigator
@@ -63,7 +64,7 @@ const DrowerNav = () => {
             }}
             drawerContent={(props) => <DrowerContent props={props} />}
         >
-            <Drawer.Screen options={{ title: "Home", headerTitleAlign: "center" }} name="TabNave" component={BottomTab}  />
+            <Drawer.Screen options={{ title: header.title, headerTitleAlign: "center" , headerShown:header.headerShown}} name="TabNave" component={BottomTab}  />
         </Drawer.Navigator>
     );
 }

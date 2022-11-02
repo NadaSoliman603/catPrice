@@ -40,6 +40,10 @@ import UserSettingScreen from '../modular/Profile/Screens/UserSettingScreen';
 const Tab = createBottomTabNavigator();
 
 
+const headerSetting = {
+    animationDuration:0,  headerTitleAlign:"center",
+}
+
 ///api/v1/brands/get-all-brands
 
 function BottomTab() {
@@ -90,8 +94,8 @@ function BottomTab() {
 const Stack = createNativeStackNavigator();
 const AppStack = () => {
     return (
-        <Stack.Navigator >
-            <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={Home} />
+        <Stack.Navigator initialRouteName='HomeScreen'>
+            <Stack.Screen  options={{ headerShown: false }} name="HomeScreen" component={Home} />
             <Stack.Screen options={{ headerShown: false }} name="History" component={History} />
             <Stack.Screen options={{ headerShown: false }} name="Favourites" component={Favourites} />
             <Stack.Screen options={{ headerShown: false }} name="Contact" component={Contact} />
@@ -108,37 +112,39 @@ const AppStack = () => {
             {/* <Stack.Screen options={{ headerShown: false }} name="OrderCompleted" component={OrderCompleted} /> */}
             {/* <Stack.Screen options={{ headerShown: false }} name="BayerList" component={BayerList} /> */}
             <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
+            <Stack.Screen options={{ headerShown: false }} name="BayerList" component={BayerList} />
+
         </Stack.Navigator>
     )
 }
 
 const BrandStack = () => {
-    return (<Stack.Navigator >
-        <Stack.Screen options={{ headerShown: false }} name="BrandScreen" component={Brand} />
+    return (<Stack.Navigator initialRouteName='BrandScreen' >
+        <Stack.Screen  options={{ headerShown: false }} name="BrandScreen" component={Brand} />
         <Stack.Screen options={{ headerShown: false }} name="BrandsCats" component={BrandsCats} />
     </Stack.Navigator>)
 }
 
 const BrofileStack = () => {
-    return (<Stack.Navigator >
-        <Stack.Screen options={{ headerShown: false }} name="ProfileScreen" component={Profile} />
-        <Stack.Screen options={{ headerShown: false }} name="CountryScreen" component={CountryScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="CurrencyScreen" component={CurrencyScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="LanguageScreen" component={LanguageScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="UserSettingScreen" component={UserSettingScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="CreditsScreen" component={Credits} />
+    return (<Stack.Navigator initialRouteName='ProfileScreen'>
+        <Stack.Screen options={{ headerShown: false  }} name="ProfileScreen" component={Profile} />
+        <Stack.Screen options={{ headerShown: true ,animationDuration:0,  headerTitleAlign:"center" ,}} name="CountryScreen" component={CountryScreen} />
+        <Stack.Screen options={{ headerShown: true  ,animationDuration:0,  headerTitleAlign:"center",}} name="CurrencyScreen" component={CurrencyScreen} />
+        <Stack.Screen options={{ headerShown: true  ,animationDuration:0,  headerTitleAlign:"center",}} name="LanguageScreen" component={LanguageScreen} />
+        <Stack.Screen options={{ headerShown: true  ,animationDuration:0,  headerTitleAlign:"center",}} name="UserSettingScreen" component={UserSettingScreen} />
+        <Stack.Screen options={{ headerShown: true  ,animationDuration:0,  headerTitleAlign:"center",}} name="CreditsScreen" component={Credits} />
     </Stack.Navigator>)
 }
 
 const SearchStack = () => {
-    return (<Stack.Navigator >
+    return (<Stack.Navigator   initialRouteName='Search'>
         <Stack.Screen options={{ headerShown: false }} name="Search" component={Search} />
         <Stack.Screen options={{ headerShown: false }} name="ProductDetails" component={ProductDetails} />
     </Stack.Navigator>)
 }
 
 const OrderStack = () => {
-    return (<Stack.Navigator >
+    return (<Stack.Navigator  initialRouteName='OrderList'>
         <Stack.Screen options={{ headerShown: false }} name="OrderList" component={OrderList} />
         <Stack.Screen options={{ headerShown: false }} name="OrderCompleted" component={OrderCompleted} />
         <Stack.Screen options={{ headerShown: false }} name="BayerList" component={BayerList} />

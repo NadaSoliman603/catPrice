@@ -6,13 +6,16 @@ import gStyles from "../../../styles/globalStyle";
 import { moderateScale } from "../../../styles/ResponsiveDimentions";
 import Feather from 'react-native-vector-icons/Feather';
 import fontSizes from "../../../styles/fontSizes";
+import useDrower from "./useDrower";
 
-export default function App() {
+
+
+export default function CurrencyScreen() {
     const [value, setValue] = useState("Saudi Arabia Riyal");
     // const flatlist = useRef()
     const [ref, setRef] = useState<any>(null);
     const [scroll , setScroll] = useState(false)
-
+    useDrower("Currency")
 
 
     // get all of the supported currency codes
@@ -48,7 +51,7 @@ export default function App() {
                 style={styles.scrollView}
                 data={currencyCodes}
                 renderItem={renderItem}
-                keyExtractor={(code) => code.code}
+                keyExtractor={(code) => code.name}
                 ref={(ref) => {setRef(ref)}}
             />
         </View>

@@ -13,6 +13,7 @@ import Colors from '../../../styles/colors';
 import { wp } from '../../../styles/globalStyle';
 import imgs from '../../../assets/images';
 import { AddToCart } from '../../../Redux/reducers/CartReducer';
+import { Login } from '../../../Redux/reducers/AuthReducer';
 
 
 const SplashScreen = () => {
@@ -28,7 +29,7 @@ const SplashScreen = () => {
         const user = await AsyncStorage.getItem("user")
         if(user){
             const userData = await JSON.parse(user)
-            console.log(userData)
+            dispatch(Login(userData))
         }else{
             console.log("notAuth")
         }

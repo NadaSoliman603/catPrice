@@ -90,7 +90,7 @@ const Search = (props: Props) => {
                 setFlatLisloading(false)
             }
         };
-        if (limit !== 10)  getBrandData({ search: search, limit: limit.toString() });
+        if (limit !== 10 && limit <=30)  getBrandData({ search: search, limit: limit.toString() });
         return () => {
             setMount(false);
         };

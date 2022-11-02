@@ -6,9 +6,12 @@ import Colors from '../../../styles/colors';
 import gStyles from '../../../styles/globalStyle';
 import { moderateScale } from '../../../styles/ResponsiveDimentions';
 import Feather  from 'react-native-vector-icons/Feather';
+import useDrower from './useDrower';
 type Props = {}
 
 const LanguageScreen = (props: Props) => {
+    useDrower("Language")
+
     return (
         <View style={styles.screen}>
             <Pressable style={[styles.lang]}>

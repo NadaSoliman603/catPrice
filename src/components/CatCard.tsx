@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
         // elevation: 11,
     },
     flatListEndLoder: {
-        height: hp(25),
+        height: hp(15),
     }
 });
 

@@ -3,10 +3,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import  AuthSlice  from '../reducers/AuthReducer'
 import cartSlice from '../reducers/CartReducer'
+import  DrowerSlice  from '../reducers/DrowerNavigation'
 
 const reuducer = combineReducers({
   Cart: cartSlice,
-  Auth:AuthSlice
+  Auth:AuthSlice,
+  Drower:DrowerSlice,
 })
 
 export const store = configureStore({

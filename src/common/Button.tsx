@@ -13,7 +13,7 @@ const Button = ({ title, onPress , style , textStyle }: Props) => {
     return (
         <Pressable  style={({pressed})=>[
             {
-                backgroundColor : pressed ? Colors.bg : "#fff"
+                backgroundColor : pressed ? Colors.primaryPresedButton :  "#fff"
             },
             styles.conatiner,
             ...style

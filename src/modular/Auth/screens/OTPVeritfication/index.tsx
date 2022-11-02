@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import * as React from 'react';
+import  React ,{useEffect} from 'react';
 import { useForm } from 'react-hook-form';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import imgs from '../../../../assets/images';
@@ -23,7 +23,7 @@ const OTPVeritfication = (props: Props) => {
     //Submit OTPVeritfication Data
     const onSubmit = (data: object) => {
         console.log(data)
-        navigation.navigate('OTPVeritfication')
+        // navigation.navigate('OTPVeritfication')
     }
 
     //sent Phon OTP
@@ -31,6 +31,9 @@ const OTPVeritfication = (props: Props) => {
         console.log("Send OTP")
     }
 
+    useEffect(()=>{
+        
+    },[])
     return (
         <View style={styles.screen}>
             <>

@@ -144,7 +144,7 @@ const gStyles = StyleSheet.create({
   },
   border: {
     borderWidth: moderateScale(0.5),
-    borderColor: "#ccc",
+    borderColor: "#eee",
     borderRadius: moderateScale(2)
   },
   p_4:{padding:moderateScale(4)},

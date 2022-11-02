@@ -7,16 +7,20 @@ import { moderateScale } from "../../../styles/ResponsiveDimentions";
 import Feather from 'react-native-vector-icons/Feather';
 import fontSizes from "../../../styles/fontSizes";
 import RNCountry from "react-native-countries";
+import useDrower from "./useDrower";
 
 
-export default function App() {
+
+export default function CountryScreen() {
+    useDrower("Country")
+
     const [value, setValue] = useState("Saudi Arabia");
     // const flatlist = useRef()
     const [ref, setRef] = useState(null);
     // const [countries , setCountry] = useState(RNCountry.getCountryNames())
 
     const countries =  RNCountry.getCountryNames
-console.log('RNCountry')
+
 
     // get all of the supported currency codes
    
@@ -34,7 +38,7 @@ console.log('RNCountry')
     // loop through each currency code and show formatted value
     const renderItem = ({ item, index }) => {
         return (
-            <Pressable onPress={() => changeCurrancy(item, index)} style={[styles.itemContainer, gStyles.row, gStyles.space_between]}>
+            <Pressable key={index} onPress={() => changeCurrancy(item, index)} style={[styles.itemContainer, gStyles.row, gStyles.space_between]}>
                 <Text style={[gStyles.text_black, gStyles.h4 , gStyles.text_Bold, {
                     color:item === value ? Colors.primary : Colors.textBlack
                 }]}>{item}</Text>
@@ -49,7 +53,7 @@ console.log('RNCountry')
                 style={styles.scrollView}
                 data={countries}
                 renderItem={renderItem}
-                keyExtractor={(code) => code.code}
+                keyExtractor={(code) => code}
                 ref={(ref) => {setRef(ref)}}
             />
         </View>

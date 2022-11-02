@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React , {useEffect} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import NoFoundData from '../../../../common/NoDataFound';
 import { RootState } from '../../../../Redux/store/store';
 import Colors from '../../../../styles/colors';
@@ -14,11 +14,20 @@ import { NavigationType } from '../../../../types/navigationTypes';
 import OrderCompleted from '../OrderCompleted';
 import gStyles from '../../../../styles/globalStyle';
 import { Divider } from 'react-native-paper';
+import { Drower } from '../../../../Redux/reducers/DrowerNavigation';
 type Props = {}
 
 const OrderList = (props: Props) => {
     const navigation = useNavigation<NavigationType>()
     const cart = useSelector((state: RootState) => state.Cart)
+
+    const dispatch = useDispatch()
+
+    useEffect(()=>{
+        dispatch(Drower({title:"Cart" , headerShown:true}))
+
+
+    },[])
 
     const compelteOrder = () => {
         navigation.navigate("OrderCompleted")
@@ -27,6 +36,7 @@ const OrderList = (props: Props) => {
     if (cart.quantity === 0) {
         return <NoFoundData title='Your Cart Is Empty' />
     }
+    
     return (
         <ScrollView style={styles.screen}>
             {

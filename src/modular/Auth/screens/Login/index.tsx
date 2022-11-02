@@ -11,13 +11,17 @@ import fontSizes from '../../../../styles/fontSizes';
 import gStyles, { hp, wp } from '../../../../styles/globalStyle';
 import { NavigationType } from '../../../../types/navigationTypes';
 import Feather from 'react-native-vector-icons/Feather';
-import PickCountryCode from '../../../../common/CountryPicker';
+// import PickCountryCode from '../../../../common/CountryPicker';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { loginApi } from '../../../../Api/Auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector, useDispatch } from 'react-redux'
 import { Login as login } from '../../../../Redux/reducers/AuthReducer';
-
+import OverLayLoading from '../../../../common/OverLayLoading';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import CountryPicker from 'react-native-country-picker-modal'
+import { moderateScale } from '../../../../styles/ResponsiveDimentions';
+import Error from '../../../../common/Error';
 type Props = {}
 
 const Login = (props: Props) => {
@@ -27,8 +31,9 @@ const Login = (props: Props) => {
     const [show, setShow] = useState(false);
     const [mobileCode, setMobileCode] = useState('+61');
     // const [mount , setMount] = useState<boolean>(true)
-
-
+    const [loading, setLoading] = useState(false)
+    const [countryCode, setCountryCode] = useState<any>({ cca2: 'SA', currency: ['SAR'], callingCode: ["966"], name: "Saudi Arabia" });
+    const [serverError, setServerError] = useState<boolean>(false)
     useEffect(() => {
         const checkLogin = async () => {
             const userinfo = await AsyncStorage.getItem("user")
@@ -37,7 +42,7 @@ const Login = (props: Props) => {
                 //     index: 0,
                 //     routes: [{ name: 'Home' }],
                 // })
-                console.log(JSON.parse(userinfo))
+                // console.log(JSON.parse(userinfo))
             }
         }
         checkLogin()
@@ -48,21 +53,42 @@ const Login = (props: Props) => {
     //Submit Login Data
     const onSubmit = async (authData: any) => {
         const loginData = {
-            username: authData.username,
-            password: authData.password,
-            mobileCode: mobileCode.substring(1),
+            username: authData.phone,
+            mobileCode:  countryCode.callingCode[0],
+            password:  authData.password,
         }
         try {
+            console.log({ loginData })
+            setLoading(true)
             const res = await loginApi(loginData)
-            const user = res.data.body
-            console.log(user)
-            AsyncStorage.setItem('user', JSON.stringify(user))
+            setLoading(false)
 
-            dispatch(login(user))
-            navigation.navigate("Home")
+            const user = res.data.body
+            console.log(res.data)
+            if (user === null) {
+                const headerMessage = res.data.header.headerMessage
+                if (headerMessage === "User No Active Mobile") {
+                    navigation.navigate("OTPVeritfication" , {mobileCode:countryCode.callingCode[0], phone:authData.phone,}) 
+                }
+                if (headerMessage === 'WRONG_CREDENTIAL') {
+                    setServerError(true)
+                }
+            }
+
+            console.log({ user })
+            // setLoading(false)
+            // console.log(user)
+            // AsyncStorage.setItem('user', JSON.stringify(user))
+
+            // dispatch(login(user))
+            // navigation.navigate("Home")
 
         } catch (error) {
-            console.log("error", error)
+            console.log(error)
+            // const headerMessage = res.data.header.headerMessage
+                setServerError(true)
+ 
+            setLoading(false)
         }
     }
 
@@ -73,29 +99,35 @@ const Login = (props: Props) => {
                 <Image source={imgs.logo} style={styles.logoImg} />
                 <Text style={[gStyles.alignCenter, gStyles.text_Primary, gStyles.h1]}>Login</Text>
 
-                <PickCountryCode
-                    setCountryCode={setMobileCode}
-                    setShow={setShow}
-                    show={show}
-                />
                 <CustomTextInput
                     secureTextEntry={false}
                     keyboard={"number-pad"}
                     label='Phone Number'
                     control={control}
-                    error={errors.username}
-                    name="username"
+                    error={errors.phone}
+                    name="phone"
                     icon={() => <Feather name='phone' size={fontSizes.font20} />}
                     rightIcon={() => <Pressable onPress={() => { setShow(true) }} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.bg : "#fff" }, gStyles.py_2, gStyles.row_Center]}>
-                        <Text style={[gStyles.text_Primary, gStyles.h6, gStyles.selfCenter]}>{mobileCode}</Text>
-                        <Entypo color={Colors.primary} name='chevron-small-down' size={fontSizes.font10} />
+                        <Ionicons name='caret-down-outline' size={fontSizes.font12} />
+                        <CountryPicker
+                            countryCode={countryCode.cca2}
+                            withFilter={true}
+                            withFlag={true}
+                            // withCountryNameButton={true}
+                            withAlphaFilter={true}
+                            withCallingCode={true}
+                            withEmoji={true}
+                            onSelect={(country: any) => {
+                                setCountryCode(country)
+                            }}
+                            // withCurrency={true}
+                            visible={false}
+                            containerButtonStyle={{ width: moderateScale(10) }}
+                        />
                     </Pressable>}
-                    rules={{
-                        required: true,
-                        // minLength:10,
-                        // maxLength:10,
-                    }}
+                    rules={{ required: true, }}
                 />
+
 
                 <CustomTextInput
                     secureTextEntry={true}
@@ -112,13 +144,17 @@ const Login = (props: Props) => {
                     }}
                 />
 
+
+
                 <View style={[gStyles.center]}>
                     <Button textStyle={[gStyles.text_sm, gStyles.text_Primary]} style={[gStyles.alignCenter]} onPress={() => { navigation.navigate('ForgetPassword') }} title={"I forget my Password"} />
+                    {serverError && <Error message="That's not the right password or phone number tray again" />}
                     <Button textStyle={[gStyles.text_White, gStyles.text_center]} style={[gStyles.bg_Primary, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Login"} />
                     <Text style={[gStyles.alignCenter, gStyles.pt_20]}>Don't have an acount? </Text>
                     <Button textStyle={[gStyles.text_Primary, gStyles.h4]} style={[gStyles.alignCenter, styles.register]} onPress={() => { navigation.navigate("Register") }} title={"Register here"} />
                 </View>
             </View>
+            {loading && <OverLayLoading />}
         </View>
     );
 }

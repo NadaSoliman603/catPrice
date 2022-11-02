@@ -23,6 +23,8 @@ import { useDispatch } from 'react-redux';
 import { AddToCart } from '../../../../Redux/reducers/CartReducer';
 import addCartDataToLocalStorag from '../../../../Redux/actions/CartAction';
 import ButtomMeueModal from '../../../../common/ButtomMeueModal';
+import PieChart from 'react-native-pie-chart';
+import PieChartText from './PieChartText';
 // import PieChart from 'react-native-pie-chart';
 
 
@@ -36,12 +38,11 @@ const ProductDetails = (props: Props) => {
     const route = useRoute<ScreenRouteProp>()
     const [mount, setMount] = useState(true);
     const [quantity, setQuantity] = useState(1)
-    const [modalVisible, setModalVisible] = useState(true);
-    const series = [123, 321, 123, 789, 537]
-    const sliceColor = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800']
-    const widthAndHeight = 250
+    const [modalVisible, setModalVisible] = useState(false);
+    const series = [productDetails?.pd, productDetails?.pt, productDetails.rh]
+    const sliceColor = [ Colors.RhodiumGreen, Colors.platinumBlue,  Colors.palladiumOrang, ]
 
-    const togleModal = (show: boolean, id: string | undefined) => {
+    const togleModal = (show: boolean,) => {
         setModalVisible(show)
     }
 
@@ -87,7 +88,7 @@ const ProductDetails = (props: Props) => {
                     <View style={[styles.imageContainer]}>
                         <View style={[gStyles.row, gStyles.spaceBetwen, gStyles.pb_6]} >
                             <AntDesign name="hearto" color={Colors.primary} size={fontSizes.font20} />
-                            <Pressable style={[gStyles.row]} >
+                            <Pressable onPress={()=>togleModal(true)} style={[gStyles.row]} >
                                 <Text style={[gStyles.text_Primary, gStyles.h6]} >Metal Details </Text>
                                 <AntDesign color={Colors.primary} name='arrowright' size={fontSizes.font12} />
                             </Pressable>
@@ -177,14 +178,19 @@ const ProductDetails = (props: Props) => {
 
             <ButtomMeueModal title="Metal Details" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={setModalVisible}>
                 <>
-                    {/* <PieChart
-                        widthAndHeight={widthAndHeight}
-                        series={series}
-                        sliceColor={sliceColor}
-                        doughnut={true}
-                        coverRadius={0.45}
-                        coverFill={'#FFF'}
-                    /> */}
+                    <View style={[styles.chartContainer]}>
+                        <PieChart
+                            sliceColor={sliceColor}
+                            series={series}
+                            widthAndHeight={moderateScale(80)}
+                            doughnut={false}
+                        />
+                        <View style={[gStyles.row , gStyles.spaceBetwen , gStyles.row_Center]}>
+                            <PieChartText color={Colors.palladiumOrang} title='palladium' />
+                            <PieChartText color={Colors.platinumBlue} title='rhodium' />
+                            <PieChartText color={Colors.RhodiumGreen} title='platinum' />
+                        </View>
+                    </View>
                 </>
             </ButtomMeueModal>
         </>
@@ -212,6 +218,13 @@ const styles = StyleSheet.create({
     },
     showPrice: {
         paddingHorizontal: moderateScale(6)
+    },
+    chartContainer: {
+        // backgroundColor:"red",
+        justifyContent: "center",
+        flex: 1,
+        alignContent: "center",
+        alignItems: "center"
     }
 });
 

@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+import fontSizes from '../styles/fontSizes';
+import { moderateScale } from '../styles/ResponsiveDimentions';
 
 type Props = {
     message:string;
@@ -13,7 +15,8 @@ const Error = ({message}:Props) => {
 const styles = StyleSheet.create({
     error:{
         color:'red',
-        marginLeft:5,
+        marginLeft:moderateScale(1),
+        fontSize:fontSizes.font12
     }
 });
 

@@ -1,5 +1,5 @@
 
-import * as React from 'react';
+import  React , {useEffect} from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 import fontSizes from '../../styles/fontSizes';
 import gStyles from '../../styles/globalStyle';
@@ -10,13 +10,22 @@ import { moderateScale } from '../../styles/ResponsiveDimentions';
 import ProfileItem from './components/ProfileItem';
 import { Avatar } from 'react-native-paper';
 import imgs from '../../assets/images';
-import { useNavigation } from '@react-navigation/native';
+import {  useNavigation } from '@react-navigation/native';
 import { NavigationType } from '../../types/navigationTypes';
+import { useDispatch } from 'react-redux';
+import BackBotton from '../../components/BackBotton';
+import { Drower } from '../../Redux/reducers/DrowerNavigation';
 type Props = {}
 
 const Profile = (props: Props) => {
     const navigation = useNavigation<NavigationType>()
     const imgUri = "https://img.freepik.com/free-photo/handsome-confident-smiling-man-with-hands-crossed-chest_176420-18743.jpg?w=2000"
+    const dispatch = useDispatch()
+
+    useEffect(()=>{
+        dispatch(Drower({title:"Profile" , headerShown:true}))  
+    },)
+
     return (
         <View style={styles.screen}>
             <View>

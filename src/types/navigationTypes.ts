@@ -14,7 +14,7 @@ export type RootStack = {
     Login: undefined;
     Register: undefined;
     ForgetPassword: undefined;
-    OTPVeritfication: undefined;
+    OTPVeritfication: {phone:string , mobileCode:string};
     AuthNav: undefined,
     Search: undefined | {search:boolean};
     BrandsCats: { catId: string };

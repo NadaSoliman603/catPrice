@@ -19,16 +19,24 @@ import MaterialIcons  from 'react-native-vector-icons/MaterialIcons';
 import fontSizes from '../styles/fontSizes';
 import { hp } from '../styles/globalStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../Redux/store/store';
+import { Login } from '../Redux/reducers/AuthReducer';
 type Props = {
     props: any;
 };
 type NavigationType = NativeStackNavigationProp<RootStack>
 const DrowerContent = ({ props }: Props) => {
-    const [login , setLogin] = useState<any>(false)
+    // const [login , setLogin] = useState<any>(false)
     const navigation = useNavigation<NavigationType>()
-
+    const login = useSelector((state: RootState) => state.Auth.user)
+    const dispatch = useDispatch()
     const onLogout = async()=>{
         await AsyncStorage.removeItem("user")
+         dispatch(Login({
+            token:null,
+            user:null
+         }))
         navigation.reset({
             index: 0,
             routes: [{ name: 'Home' }],
@@ -51,8 +59,8 @@ const DrowerContent = ({ props }: Props) => {
     },[login])
 
     const checkLogin = async () => {
-        const user = await AsyncStorage.getItem('user')
-        setLogin(user)
+        // const user = await AsyncStorage.getItem('user')
+        // setLogin(user)
     }
 
     return (
@@ -67,6 +75,7 @@ const DrowerContent = ({ props }: Props) => {
                 </Pressable>
 
                 <IconButton  icon={<Feather color={Colors.primary} name='home' size={fontSizes.font20} />} onPress={() => { navigation.navigate("HomeScreen") }} title="Home" />
+                <IconButton icon={<Feather color={Colors.primary} name='users' size={fontSizes.font20} />} onPress={() => {  navigation.navigate("BayerList") }} title="Buyers List" />
                 <IconButton icon={<Octicons color={Colors.primary} name='history' size={fontSizes.font20} />} onPress={() => {  navigation.navigate("History") }} title="History" />
                 <IconButton icon={<AntDesign color={Colors.primary} name='hearto' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Favourites") }} title="Favourites" />
                 <IconButton icon={<AntDesign color={Colors.primary} name='message1' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Contact") }} title="Contact Us" />

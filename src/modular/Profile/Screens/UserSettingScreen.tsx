@@ -1,7 +1,7 @@
 
-import * as React from 'react';
+import  React ,{ useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { StyleSheet, View, Text , ScrollView } from 'react-native';
+import { StyleSheet, View, Text , ScrollView, Pressable } from 'react-native';
 import { Avatar } from 'react-native-paper';
 import imgs from '../../../assets/images';
 import CustomTextInput from '../../../common/CustomTextInput';
@@ -11,15 +11,27 @@ import gStyles from '../../../styles/globalStyle';
 import { moderateScale } from '../../../styles/ResponsiveDimentions';
 import Feather from 'react-native-vector-icons/Feather';
 import { Image } from 'react-native-animatable';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationType } from '../../../types/navigationTypes';
+import Ionicons  from 'react-native-vector-icons/Ionicons';
+import { useDispatch } from 'react-redux';
+import { Drower } from '../../../Redux/reducers/DrowerNavigation';
+import BackBotton from '../../../components/BackBotton';
+import useDrower from './useDrower';
 type Props = {}
 
 const UserSettingScreen = () => {
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm();
+    useDrower("User Setting")
+
+  
 
     //Submit User Seting  Data
     const onSubmit = (data: object) => {
         console.log(data)
     }
+   
+
 
     const imgUri = "https://img.freepik.com/free-photo/handsome-confident-smiling-man-with-hands-crossed-chest_176420-18743.jpg?w=2000"
 

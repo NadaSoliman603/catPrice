@@ -11,7 +11,10 @@ const Colors = {
     textLightGray :"#949494",
     error:"#E41E26",
     textBlack : "#565656",
-    textDarkBlack:"#232323"
+    textDarkBlack:"#232323",
+    palladiumOrang : '#DD6420', //palladium orang
+    RhodiumGreen:'#198754', // Rhodium green
+    platinumBlue:'#3B92C2', // platinum blue
 };
 
 export default Colors;
