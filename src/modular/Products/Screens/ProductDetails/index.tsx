@@ -1,12 +1,12 @@
 
-import { RouteProp, useRoute, } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute, } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
-import { getCatDetailsApi } from '../../../../Api/Auth';
+import { getCatDetailsApi, showPriceApi } from '../../../../Api/Auth';
 import AppImage from '../../../../common/AppImage';
 import MainView from '../../../../common/MainView';
 import { moderateScale } from '../../../../styles/ResponsiveDimentions';
-import { RootStack } from '../../../../types/navigationTypes';
+import { NavigationType, RootStack } from '../../../../types/navigationTypes';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import fontSizes from '../../../../styles/fontSizes';
 import FastImage from 'react-native-fast-image';
@@ -19,12 +19,14 @@ import Feather from 'react-native-vector-icons/Feather';
 import OutLineButton from '../../../../common/OutLineButton';
 import Quantity from '../../../../components/Quantity';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AddToCart } from '../../../../Redux/reducers/CartReducer';
 import addCartDataToLocalStorag from '../../../../Redux/actions/CartAction';
 import ButtomMeueModal from '../../../../common/ButtomMeueModal';
 import PieChart from 'react-native-pie-chart';
 import PieChartText from './PieChartText';
+import OverLayLoading from '../../../../common/OverLayLoading';
+import { RootState } from '../../../../Redux/store/store';
 // import PieChart from 'react-native-pie-chart';
 
 
@@ -41,7 +43,6 @@ const ProductDetails = (props: Props) => {
     const [modalVisible, setModalVisible] = useState(false);
     const series = [productDetails?.pd, productDetails?.pt, productDetails.rh]
     const sliceColor = [ Colors.RhodiumGreen, Colors.platinumBlue,  Colors.palladiumOrang, ]
-
     const togleModal = (show: boolean,) => {
         setModalVisible(show)
     }
@@ -68,7 +69,30 @@ const ProductDetails = (props: Props) => {
     // ===========================
     //Show Price
     //============================
-    const onShowprice = () => { console.log("preesed") }
+    const token = useSelector((state: RootState) => state.Auth.token)
+    const navigation = useNavigation<NavigationType>();
+    const [overLayloading , setOverLayLoading] = useState(false)
+    const [price , setPrice] = useState<null |string>(null)
+
+    const onShowprice = async() => { 
+        if(token){
+            console.log(token , productDetails.catId)
+            setOverLayLoading(true)
+            const res = await showPriceApi({catId:productDetails.catId , token:token})
+            console.log(res.data)
+            const price = res.data.body?.price
+            setOverLayLoading(false)
+            if(!price){
+                navigation.navigate('Login')
+            }else{
+                const priceText = "SAR " + price
+                setPrice(priceText) 
+            }
+           
+        }else{
+            navigation.navigate('Login')
+        }
+     }
 
     // ===========================
     //Add To Cart
@@ -161,7 +185,8 @@ const ProductDetails = (props: Props) => {
                             <Divider />
                         </>}
 
-                        <OutLineButton textStyle={{}} outline={false} style={{}} title='Show Price ' onPress={onShowprice} icon={<Feather name="eye" size={fontSizes.font16} color={Colors.primary} />} />
+                        <OutLineButton textStyle={{}} outline={false} style={{}} title={price?price:'Show Price '} onPress={onShowprice} icon={
+                        price?<></>: <Feather name="eye" size={fontSizes.font16} color={Colors.primary} />} />
 
 
                         <View style={[gStyles.row, gStyles.spaceBetwen]}>
@@ -193,6 +218,7 @@ const ProductDetails = (props: Props) => {
                     </View>
                 </>
             </ButtomMeueModal>
+            {overLayloading && <OverLayLoading />}
         </>
     );
 }

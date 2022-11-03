@@ -29,28 +29,23 @@ const Login = (props: Props) => {
     const navigation = useNavigation<NavigationType>()
     const dispatch = useDispatch()
     const [show, setShow] = useState(false);
-    const [mobileCode, setMobileCode] = useState('+61');
     // const [mount , setMount] = useState<boolean>(true)
     const [loading, setLoading] = useState(false)
     const [countryCode, setCountryCode] = useState<any>({ cca2: 'SA', currency: ['SAR'], callingCode: ["966"], name: "Saudi Arabia" });
     const [serverError, setServerError] = useState<boolean>(false)
     useEffect(() => {
-        const checkLogin = async () => {
-            const userinfo = await AsyncStorage.getItem("user")
-            if (userinfo) {
-                // navigation.reset({
-                //     index: 0,
-                //     routes: [{ name: 'Home' }],
-                // })
-                // console.log(JSON.parse(userinfo))
-            }
-        }
-        checkLogin()
+        // const checkLogin = async () => {
+        //     const userinfo = await AsyncStorage.getItem("user")
+        //     if (userinfo) { }
+        // }
+        // checkLogin()
         return () => { };
     }, []);
 
 
+    //==========================
     //Submit Login Data
+    //==========================
     const onSubmit = async (authData: any) => {
         const loginData = {
             username: authData.phone,
@@ -64,7 +59,6 @@ const Login = (props: Props) => {
             setLoading(false)
 
             const user = res.data.body
-            console.log(res.data)
             if (user === null) {
                 const headerMessage = res.data.header.headerMessage
                 if (headerMessage === "User No Active Mobile") {
@@ -73,21 +67,16 @@ const Login = (props: Props) => {
                 if (headerMessage === 'WRONG_CREDENTIAL') {
                     setServerError(true)
                 }
+            }else{
+                AsyncStorage.setItem('user', JSON.stringify(user))
+                console.log(user)
+                dispatch(login({user:user , token:user.token}))
+                navigation.navigate("Home")
             }
-
-            console.log({ user })
-            // setLoading(false)
-            // console.log(user)
-            // AsyncStorage.setItem('user', JSON.stringify(user))
-
-            // dispatch(login(user))
-            // navigation.navigate("Home")
 
         } catch (error) {
             console.log(error)
-            // const headerMessage = res.data.header.headerMessage
-                setServerError(true)
- 
+            setServerError(true)
             setLoading(false)
         }
     }
@@ -121,7 +110,7 @@ const Login = (props: Props) => {
                                 setCountryCode(country)
                             }}
                             // withCurrency={true}
-                            visible={false}
+                            visible={show}
                             containerButtonStyle={{ width: moderateScale(10) }}
                         />
                     </Pressable>}

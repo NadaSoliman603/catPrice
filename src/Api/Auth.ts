@@ -66,3 +66,16 @@ export const getPlanApi = ({path ,token}:{path:string ;token:string}) => {
       },
   })
 };
+
+
+
+export const showPriceApi = ({catId ,token}:{catId:string ;token:string}) => {
+  return axios 
+  .get(`http://floridatrading.online:8010/api/v1/cat/show-price?id=${catId}`, {
+      headers: {
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`,
+          "Currency" :"SAR"
+      },
+  })
+};

@@ -29,7 +29,9 @@ const SplashScreen = () => {
         const user = await AsyncStorage.getItem("user")
         if(user){
             const userData = await JSON.parse(user)
-            dispatch(Login(userData))
+            dispatch(Login({user:userData , token:userData.token}))
+            console.log("tokke")
+
         }else{
             console.log("notAuth")
         }

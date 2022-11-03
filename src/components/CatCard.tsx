@@ -1,4 +1,4 @@
-import * as React from 'react';
+import  React , {useState} from 'react';
 import { StyleSheet, View, Text , Pressable } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator } from 'react-native-paper';
@@ -9,6 +9,10 @@ import AntDesign  from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationType } from '../types/navigationTypes';
 import fontSizes from '../styles/fontSizes';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Redux/store/store';
+import { showPriceApi } from '../Api/Auth';
+import OverLayLoading from '../common/OverLayLoading';
 type Props = {
     item :any
     flatListLoading :boolean;
@@ -17,7 +21,32 @@ type Props = {
 const CatCard = ({item , flatListLoading}:Props) => {
 
     const navigation = useNavigation<NavigationType>()
+ // ===========================
+    //Show Price
+    //============================
+    const token = useSelector((state: RootState) => state.Auth.token)
+    const [overLayloading , setOverLayLoading] = useState(false)
+    const [price , setPrice] = useState<null |string>(null)
 
+    const onShowprice = async(productDetails:any) => { 
+        if(token){
+            console.log(token , productDetails.catId)
+            setOverLayLoading(true)
+            const res = await showPriceApi({catId:productDetails.catId , token:token})
+            console.log(res.data)
+            const price = res.data.body?.price
+            setOverLayLoading(false)
+            if(!price){
+                navigation.navigate('Login')
+            }else{
+                const priceText = "SAR " + price
+                setPrice(priceText) 
+            }
+           
+        }else{
+            navigation.navigate('Login')
+        }
+     }
 
     if (item.loader) {
         return (
@@ -58,14 +87,16 @@ const CatCard = ({item , flatListLoading}:Props) => {
                 </View>
 
                 <View style={[gStyles.row, gStyles.spaceBetwen]}>
-                    <Pressable onPress={()=>console.log("preesed")} style={({pressed})=>[{  backgroundColor:pressed?Colors.primaryPresedButton :"#fff"}]}>
-                        <Text style={[gStyles.text_Primary, styles.showPrice, gStyles.text_center, gStyles.text_Bold]}> Show Price</Text>
+                    <Pressable onPress={()=>onShowprice(item)} style={({pressed})=>[{  backgroundColor:pressed?Colors.primaryPresedButton :"#fff"}]}>
+                        <Text style={[gStyles.text_Primary, styles.showPrice, gStyles.text_center, gStyles.text_Bold]}>{price ? price :"Show Price"} </Text>
                     </Pressable>
 
                     <Pressable onPress={()=>console.log("preesed")}  style={({pressed})=>[{  backgroundColor:pressed?Colors.primaryPresedButton :"#fff"}, styles.favButton]}  >
                         <AntDesign name="hearto" color={Colors.primary} size={fontSizes.font20} />
                     </Pressable>
                 </View>
+                {overLayloading && <OverLayLoading/>}
+
             </Pressable>
         </View>
     );
