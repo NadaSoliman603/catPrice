@@ -20,3 +20,14 @@ export type RegisterData = {
     defCurrency : string;
     password : string;
 }
+
+export type OTPRegiserActivationData ={
+    mobileNo : string;
+    mobileCode :string;
+}
+
+
+export type OTPUserActivationData ={
+    activationCode : string;
+    activationToken :string;
+}

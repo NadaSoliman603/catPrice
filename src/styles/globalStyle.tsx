@@ -149,6 +149,10 @@ const gStyles = StyleSheet.create({
   },
   p_4:{padding:moderateScale(4)},
   textDarkBlack:{color:Colors.textDarkBlack},
+  disableButon:{
+    backgroundColor:Colors.primaryPresedButton,
+    // opacity:0.8
+  }
 });
 
 export default gStyles;

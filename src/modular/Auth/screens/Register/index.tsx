@@ -88,7 +88,7 @@ const Register = (props: Props) => {
             } else {
                 AsyncStorage.setItem('user', JSON.stringify(user))
                 // dispatch(Login({user:user , token:user.to}))
-                navigation.navigate("Login")
+                navigation.navigate("OTPVeritfication" , {mobileCode: countryCode.callingCode[0], phone:data.phone})
                 if (mount) setLoading(false)
             }
         }

@@ -62,6 +62,7 @@ const Login = (props: Props) => {
             if (user === null) {
                 const headerMessage = res.data.header.headerMessage
                 if (headerMessage === "User No Active Mobile") {
+                    console.log("login creen " ,{ mobileCode:countryCode.callingCode[0], phone:authData.phone})
                     navigation.navigate("OTPVeritfication" , {mobileCode:countryCode.callingCode[0], phone:authData.phone,}) 
                 }
                 if (headerMessage === 'WRONG_CREDENTIAL') {

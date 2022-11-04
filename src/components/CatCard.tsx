@@ -27,6 +27,7 @@ const CatCard = ({item , flatListLoading}:Props) => {
     const token = useSelector((state: RootState) => state.Auth.token)
     const [overLayloading , setOverLayLoading] = useState(false)
     const [price , setPrice] = useState<null |string>(null)
+    
 
     const onShowprice = async(productDetails:any) => { 
         if(token){
@@ -34,7 +35,7 @@ const CatCard = ({item , flatListLoading}:Props) => {
             setOverLayLoading(true)
             const res = await showPriceApi({catId:productDetails.catId , token:token})
             console.log(res.data)
-            const price = res.data.body?.price
+            const price = res.data.body?.formattedPrice
             setOverLayLoading(false)
             if(!price){
                 navigation.navigate('Login')
@@ -49,6 +50,7 @@ const CatCard = ({item , flatListLoading}:Props) => {
      }
 
     if (item.loader) {
+        console.log(item)
         return (
             <View key="loading" style={[styles.flatListEndLoder]}>
                 {flatListLoading && <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />}
@@ -62,7 +64,7 @@ const CatCard = ({item , flatListLoading}:Props) => {
                     <View style={[gStyles.row]}>
                         <View
                             style={[styles.brandLogoContainer, gStyles.center]}>
-                            <FastImage source={{ uri: item.brands[0]?.makerImage }} style={styles.brandImg}
+                            <FastImage source={{ uri: item.brands?.[0]?.makerImage }} style={styles.brandImg}
                             />
                         </View>
                         <Text
@@ -83,11 +85,11 @@ const CatCard = ({item , flatListLoading}:Props) => {
                     </Pressable>
                 </View>
                 <View style={[styles.catImgContainer]}>
-                    <FastImage source={{ uri: item?.images[0]?.fullImageURL }} style={styles.catImg} />
+                    <FastImage source={{ uri: item?.images?.[0]?.fullImageURL  }} style={styles.catImg} />
                 </View>
 
                 <View style={[gStyles.row, gStyles.spaceBetwen]}>
-                    <Pressable onPress={()=>onShowprice(item)} style={({pressed})=>[{  backgroundColor:pressed?Colors.primaryPresedButton :"#fff"}]}>
+                    <Pressable onPress={()=>{onShowprice(item)}} style={({pressed})=>[{  backgroundColor:pressed?Colors.primaryPresedButton :"#fff"}]}>
                         <Text style={[gStyles.text_Primary, styles.showPrice, gStyles.text_center, gStyles.text_Bold]}>{price ? price :"Show Price"} </Text>
                     </Pressable>
 

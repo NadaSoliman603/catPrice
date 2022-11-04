@@ -74,7 +74,12 @@ const BrandsCats = (props: Props) => {
 
                 {cats.length > 0 && <FlatList
                     data={[...cats, { loader: true, catId: "loading123" }]}
-                    renderItem={({ item }) => <CatCard item={item} flatListLoading={flatListLoading} />}
+                    renderItem={({ item }) => {
+                        if(item.loader) {
+                            return <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />
+                        }
+                        return (<CatCard item={item} flatListLoading={flatListLoading} />)
+                    }}
                     keyExtractor={item => item?.catId}
                     onEndReached={() => {
                         setLimit(limit + 10)

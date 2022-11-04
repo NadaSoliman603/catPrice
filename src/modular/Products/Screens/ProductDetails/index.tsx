@@ -80,7 +80,7 @@ const ProductDetails = (props: Props) => {
             setOverLayLoading(true)
             const res = await showPriceApi({catId:productDetails.catId , token:token})
             console.log(res.data)
-            const price = res.data.body?.price
+            const price = res.data.body?.formattedPrice
             setOverLayLoading(false)
             if(!price){
                 navigation.navigate('Login')
