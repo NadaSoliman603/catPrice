@@ -131,3 +131,9 @@ export const OTPRegiserActivationApi = ({ mobileCode, mobileNo }: OTPRegiserActi
 };
 
 
+export const getLocationdApi = () => {
+  return axios.get(`https://ipapi.co/json/`)
+};
+
+
+

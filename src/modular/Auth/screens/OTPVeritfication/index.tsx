@@ -79,7 +79,7 @@ const OTPVeritfication = (props: Props) => {
     useEffect(() => {
         const params = route.params
         console.log({params})
-        sendOTP({ mobileCode: params.mobileCode, mobileNo: params.phone })
+        // sendOTP({ mobileCode: params.mobileCode, mobileNo: params.phone })
         return () => {
 
         }

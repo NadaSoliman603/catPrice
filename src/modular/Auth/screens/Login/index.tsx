@@ -22,16 +22,19 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CountryPicker from 'react-native-country-picker-modal'
 import { moderateScale } from '../../../../styles/ResponsiveDimentions';
 import Error from '../../../../common/Error';
+import { RootState } from '../../../../Redux/store/store';
 type Props = {}
 
 const Login = (props: Props) => {
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm();
     const navigation = useNavigation<NavigationType>()
+    const loction = useSelector((state: RootState) => state.Location)
+    console.log({loction})
     const dispatch = useDispatch()
     const [show, setShow] = useState(false);
     // const [mount , setMount] = useState<boolean>(true)
     const [loading, setLoading] = useState(false)
-    const [countryCode, setCountryCode] = useState<any>({ cca2: 'SA', currency: ['SAR'], callingCode: ["966"], name: "Saudi Arabia" });
+    const [countryCode, setCountryCode] = useState<any>(loction);
     const [serverError, setServerError] = useState<boolean>(false)
     useEffect(() => {
         // const checkLogin = async () => {

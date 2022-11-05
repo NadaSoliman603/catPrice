@@ -22,8 +22,9 @@ import Error from '../../../../common/Error';
 import OverLayLoading from '../../../../common/OverLayLoading';
 import { registerApi } from '../../../../Api/Auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Login } from '../../../../Redux/reducers/AuthReducer';
+import { RootState } from '../../../../Redux/store/store';
 
 type Props = {}
 
@@ -32,17 +33,10 @@ const Register = (props: Props) => {
     const navigation = useNavigation<NavigationType>()
     const [agreeTermsOfUse, setAgreeTermsOfUse] = useState(false)
     const [show, setShow] = React.useState(false);
-    const [countryCode, setCountryCode] = React.useState<any>({
-        cca2: 'SA',
-        currency: ['SAR'],
-        callingCode: ["966"],
-        name: "Saudi Arabia"
-    });
-    const [currancy, setcurrancy] = React.useState<any>({
-        cca2: 'SA',
-        currency: ['SAR'],
-        callingCode: ["966"]
-    });
+    const loction = useSelector((state: RootState) => state.Location)
+
+    const [countryCode, setCountryCode] = React.useState<any>(loction);
+    const [currancy, setcurrancy] = React.useState<any>(loction);
 
     const [validation, setValidation] = useState({ confairmPass: true, checked: true })
     const [loading, setLoading] = useState(false)

@@ -13,6 +13,7 @@ import gStyles, { hp, wp } from '../../styles/globalStyle';
 import fontSizes from '../../styles/fontSizes';
 import Colors from '../../styles/colors';
 import { NavigationType } from '../../types/navigationTypes';
+import Timer from '../Auth/components/Timer';
 type Props = {}
 
 const Home = (props: Props) => {
@@ -44,6 +45,8 @@ const Home = (props: Props) => {
                     right={<TextInput.Icon icon={() => <Feather name={"search"} size={fontSizes.font22} />} />}
                 />
             </View> */}
+
+            <Timer/>
 
             <Pressable 
             onPress={()=>{navigation.navigate("Search" , {search:true})}}
