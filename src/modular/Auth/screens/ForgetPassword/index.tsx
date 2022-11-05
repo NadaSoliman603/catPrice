@@ -28,7 +28,7 @@ const ForgetPassword = (props: Props) => {
     //Submit ForgetPassword Data
     const onSubmit = (data: object) => {
         console.log({ data })
-        navigation.navigate('OTPVeritfication' ,{mobileCode:"20", phone:"1128859098"})
+        // navigation.navigate('OTPVeritfication' ,{mobileCode:"20", phone:"1128859098"})
     }
 
     return (

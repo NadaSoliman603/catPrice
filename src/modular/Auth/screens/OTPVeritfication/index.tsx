@@ -30,6 +30,11 @@ const OTPVeritfication = (props: Props) => {
     const [veritivictatin, setVeritification] = useState<null | any>(null)
     const [loading, setLoading] = useState(false)
     // const [timer , setTimer] = useState(3)
+    const [expiredCode, setExpiredCode] = useState(false)
+    const [expiredTimer, setExpiredTimer] = React.useState(3 * 60)
+
+    const [resendCode, setResendCode] = useState(false)
+    const [resend, setResend] = React.useState(0)
 
     const route = useRoute<ScreenRouteProp>()
     const input1 = useRef()
@@ -38,10 +43,10 @@ const OTPVeritfication = (props: Props) => {
     const input4 = useRef()
     //Submit OTPVeritfication Data
     const onSubmit = async (data: any) => {
-      
+
         const code = data?.v1 + data.v2 + data.v3 + data.v4;
         const token = veritivictatin?.activationToken;
-        console.log("submit code", { code },{veritivictatin} ,{ token } , )
+        console.log("submit code", { code }, { veritivictatin }, { token },)
         if (token) {
             try {
                 setLoading(true)
@@ -67,19 +72,22 @@ const OTPVeritfication = (props: Props) => {
             setLoading(true)
             const res = await OTPRegiserActivationApi({ mobileCode: mobileCode, mobileNo: mobileNo })
             const veritivictatin = res?.data?.body
-            console.log("respons ===>", {res})
-            console.log("veritivictatin====>",{veritivictatin})
+            console.log("respons ===>", { res })
+            console.log("veritivictatin====>", { veritivictatin })
+            setExpiredTimer(3 * 60)
+            setExpiredCode(false)
+            setResendCode(false)
             setVeritification(veritivictatin)
             setLoading(false)
         } catch (error) {
             console.log(error)
         }
     }
-
+    const params = route.params
     useEffect(() => {
         const params = route.params
-        console.log({params})
-        // sendOTP({ mobileCode: params.mobileCode, mobileNo: params.phone })
+        console.log({ params })
+        sendOTP({ mobileCode: params.mobileCode, mobileNo: params.phone })
         return () => {
 
         }
@@ -109,9 +117,33 @@ const OTPVeritfication = (props: Props) => {
 
                     <View style={[gStyles.center, gStyles.pt_15]}>
                         <Button textStyle={[gStyles.text_White, gStyles.text_center]} style={[!disablVerityinButton && gStyles.bg_Primary, disablVerityinButton && gStyles.disableButon, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Verify"} />
-                        <Timer />
-                        <Text style={[gStyles.alignCenter, gStyles.pt_20]}>Don't receive the OTP?</Text>
-                        <Button textStyle={[gStyles.text_Primary, gStyles.h4]} style={[gStyles.alignCenter, styles.register]} onPress={sendOTP} title={"Send Again"} />
+                        {!expiredCode && <Timer resend={expiredTimer} onFinsh={() => {
+                            setExpiredCode(true)
+                            setResend(2 * 60)
+                        }} />}
+
+                        {!expiredCode && <Text style={[gStyles.alignCenter, gStyles.pt_20]}>
+                            We Sent the OTP to +{params.mobileCode}{params.phone}
+                        </Text>}
+
+                        {expiredCode && <>
+                            {!resendCode && expiredCode && <Timer resend={resend} onFinsh={() => {
+                                // setResendcode(true)
+                                setResendCode(true)
+
+                            }} />}
+
+
+                            {resendCode && expiredCode ? <>
+                                <Text style={[gStyles.alignCenter, gStyles.pt_20]}>Don't receive the OTP?</Text>
+                                <Button textStyle={[gStyles.text_Primary, gStyles.h4]}
+                                    style={[gStyles.alignCenter, styles.register]} onPress={()=>sendOTP({ mobileCode: params.mobileCode, mobileNo: params.phone })} title={"Send Again"} />
+                            </> :  <>
+                            <Text style={[gStyles.alignCenter, gStyles.pt_20]}>Don't receive the OTP?</Text>
+                            <Text style={[gStyles.alignCenter, gStyles.pt_20]}>You can resend  OTP in a few minutes</Text>
+                            </>}
+                        </>
+                        }
                     </View>
 
                 </View>

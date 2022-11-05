@@ -13,7 +13,6 @@ import gStyles, { hp, wp } from '../../styles/globalStyle';
 import fontSizes from '../../styles/fontSizes';
 import Colors from '../../styles/colors';
 import { NavigationType } from '../../types/navigationTypes';
-import Timer from '../Auth/components/Timer';
 type Props = {}
 
 const Home = (props: Props) => {
@@ -46,7 +45,6 @@ const Home = (props: Props) => {
                 />
             </View> */}
 
-            <Timer/>
 
             <Pressable 
             onPress={()=>{navigation.navigate("Search" , {search:true})}}
