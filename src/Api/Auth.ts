@@ -1,8 +1,8 @@
-import { OTPRegiserActivationData, OTPUserActivationData, RegisterData } from '../types/types';
+import { OrderData, OTPRegiserActivationData, OTPUserActivationData, RegisterData } from '../types/types';
 
 import axios from 'axios';
 import { BASE_END_POINT } from '../Config';
-
+const END_POINT = "http://floridatrading.online:8010"
 
 export const loginApi = (data: any) => {
   return axios
@@ -135,5 +135,30 @@ export const getLocationdApi = () => {
   return axios.get(`https://ipapi.co/json/`)
 };
 
+
+
+export const newOrderApi = ({data , token , currency}:{data:OrderData[] , token:string , currency:string})=>{
+  return axios
+  .post('http://floridatrading.online:8010/apis/v1/user/forgot-password', JSON.stringify(data), {
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${token}`,
+      "Currency": currency
+
+    },
+  })
+}
+
+
+export const orderHistory =  ({ token , currency}:{ token:string , currency:string})=>{
+  return axios.get(`${END_POINT}/api/v1/order/get-orders?status=NEW` , {
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${token}`,
+      "Currency": currency
+
+    },
+  })
+}
 
 

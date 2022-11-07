@@ -6,6 +6,7 @@ import { moderateScale } from '../../../styles/ResponsiveDimentions';
 // import TimerCountdown from "react-native-timer-countdown";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import CountDown from 'react-native-countdown-component';
+import gStyles from '../../../styles/globalStyle';
 
 type Props = {
     onFinsh :()=>void,
@@ -45,7 +46,7 @@ const Timer = ({onFinsh , resend}:Props) => {
                         onFinsh()
                     }
                     const time = children({ remainingTime })
-                    return <Text>{time}</Text>
+                    return <Text style={[gStyles.text_lightGray]}>{time}</Text>
                 }}
             </CountdownCircleTimer>
         </View>

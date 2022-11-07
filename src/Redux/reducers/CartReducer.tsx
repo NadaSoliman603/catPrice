@@ -2,6 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { onDeletCartItems } from '../actions/CartAction';
 
 export interface CartState {
   data: any;
@@ -27,12 +28,20 @@ export const cartSlice = createSlice({
           }
     },
 
+    DeletItemsFromCart: (state, action: PayloadAction<{catData:{data:[] ,quantity:number} , deleteArray:{ids:number[] , quantity:number}}>) => {
+    
+      const newState :CartState =  onDeletCartItems({catData:action.payload.catData , deleteArray:action.payload.deleteArray})
+    
+      //   const quantity = action.payload.quantity;
+    //   const item = action.payload.item
+      return newState
+    },
     
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { AddToCart } = cartSlice.actions
+export const { AddToCart , DeletItemsFromCart} = cartSlice.actions
 
 // export default function persistReducer<S, A extends Action = Action>
 

@@ -70,7 +70,7 @@ function BottomTab() {
                     return icon;
                 },
 
-                headerShown: false,
+                headerShown: true,
                 headerTransparent: true,
                 tabBarActiveTintColor: Colors.primary,
                 tabBarInactiveTintColor: 'gray',
@@ -95,7 +95,7 @@ const Stack = createNativeStackNavigator();
 const AppStack = () => {
     return (
         <Stack.Navigator initialRouteName='HomeScreen'>
-            <Stack.Screen options={{ headerShown: false }} name="HomeScreen" component={Home} />
+            <Stack.Screen options={{ headerShown: true }} name="HomeScreen" component={Home} />
             <Stack.Screen options={{ headerShown: false }} name="History" component={History} />
             <Stack.Screen options={{ headerShown: false }} name="Favourites" component={Favourites} />
             <Stack.Screen options={{ headerShown: false }} name="Contact" component={Contact} />
@@ -104,7 +104,7 @@ const AppStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="Privacy" component={Privacy} />
             {/* <Stack.Screen options={{ headerShown: false }} name="OrderList" component={OrderList} /> */}
             <Stack.Screen options={{ headerShown: false }} name="Search" component={Search} />
-            <Stack.Screen options={{ headerShown: false }} name="ProductDetails" component={ProductDetails} />
+            <Stack.Screen options={{ headerShown: true ,  animationDuration: 0, headerTitleAlign: "center",}} name="ProductDetails" component={ProductDetails} />
             <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
             <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
             <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPassword} />
@@ -139,7 +139,7 @@ const BrofileStack = () => {
 const SearchStack = () => {
     return (<Stack.Navigator initialRouteName='Search'>
         <Stack.Screen options={{ headerShown: false }} name="Search" component={Search} />
-        <Stack.Screen options={{ headerShown: false }} name="ProductDetails" component={ProductDetails} />
+        <Stack.Screen options={{ headerShown: false }} name="TermsAndConditions" component={TermsAndConditions} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
         <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPassword} />
@@ -149,7 +149,7 @@ const SearchStack = () => {
 
 const OrderStack = () => {
     return (<Stack.Navigator initialRouteName='OrderList'>
-        <Stack.Screen options={{ headerShown: false }} name="OrderList" component={OrderList} />
+        <Stack.Screen options={{ headerShown: true , animationDuration: 0, headerTitleAlign: "center", }} name="OrderList" component={OrderList} />
         <Stack.Screen options={{ headerShown: false }} name="OrderCompleted" component={OrderCompleted} />
         <Stack.Screen options={{ headerShown: false }} name="BayerList" component={BayerList} />
     </Stack.Navigator>)

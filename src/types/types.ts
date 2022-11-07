@@ -31,3 +31,13 @@ export type OTPUserActivationData ={
     activationCode : string;
     activationToken :string;
 }
+
+
+export type OrderData  = {
+    catId:string;
+    catPrice:string;
+    catSerial:string;
+    catNo:string;
+    catImage:string; 
+    catBrans:string; 
+}

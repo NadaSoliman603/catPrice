@@ -2,10 +2,11 @@ import  React , {useEffect} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 import { useDispatch } from 'react-redux';
-import { Drower } from '../../../Redux/reducers/DrowerNavigation';
-import BackBotton from '../../../components/BackBotton';
+
 import { useNavigation } from '@react-navigation/native';
-import { NavigationType } from '../../../types/navigationTypes';
+import { NavigationType } from '../../types/navigationTypes';
+import { Drower } from '../../Redux/reducers/DrowerNavigation';
+import BackBotton from '../../components/BackBotton';
 
 type Props = {
     title : string
@@ -25,7 +26,7 @@ const useDrower = (title:string) => {
 
 
         return()=>{
-            dispatch(Drower({title:"default" , headerShown:true}))
+            // dispatch(Drower({title:"default" , headerShown:false}))
         }
     },[])
 

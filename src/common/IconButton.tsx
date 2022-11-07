@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, Pressable } from 'react-native';
 import Colors from './../styles/colors';
 
 type Props = {
-    title: string;
+    title: string |null;
     icon: undefined | JSX.Element;
     // style:undefined | object;
     onPress: any;
@@ -18,7 +18,7 @@ const IconButton = ({ title, icon, onPress }: Props) => {
             styles.conatiner
         ]} onPress={onPress} >
             {icon}
-            <Text style={styles.text}>{title}</Text>
+            {title &&<Text style={styles.text}>{title}</Text>}
 
         </Pressable>
     );

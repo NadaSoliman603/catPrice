@@ -21,7 +21,7 @@ export const DrowerSlice = createSlice({
     reducers: {
         Drower: (state, action: PayloadAction<{ title:  string,headerShown:boolean, }>) => {
             return {
-                title: action.payload.title,
+                title: action.payload.title === "default" ?state.title : action.payload.title,
                 headerShown:action.payload.headerShown
             }
         },

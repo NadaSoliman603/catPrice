@@ -51,6 +51,7 @@ const SplashScreen = () => {
             const res = await getLocationdApi()
             console.log({ res })
             const locationData = res?.data
+
             if (locationData) {
                 // const data = await JSON.parse(locationData)
                 dispatch(Location({
@@ -63,6 +64,7 @@ const SplashScreen = () => {
             }
         } catch (error) {
             const location = await AsyncStorage.getItem("locationData")
+            console.log("cantry===>" , location)
             if (location) {
                 const locationData = await JSON.parse(location)
                 dispatch(Location({

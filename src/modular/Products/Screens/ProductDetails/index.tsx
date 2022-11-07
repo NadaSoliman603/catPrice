@@ -27,6 +27,7 @@ import PieChart from 'react-native-pie-chart';
 import PieChartText from './PieChartText';
 import OverLayLoading from '../../../../common/OverLayLoading';
 import { RootState } from '../../../../Redux/store/store';
+import useDrower from '../../useDrower';
 // import PieChart from 'react-native-pie-chart';
 
 
@@ -42,11 +43,21 @@ const ProductDetails = (props: Props) => {
     const [quantity, setQuantity] = useState(1)
     const [modalVisible, setModalVisible] = useState(false);
     const series = [productDetails?.pd, productDetails?.pt, productDetails.rh]
-    const sliceColor = [ Colors.RhodiumGreen, Colors.platinumBlue,  Colors.palladiumOrang, ]
+    const sliceColor = [ Colors.palladiumOrang, Colors.RhodiumGreen,  Colors.platinumBlue, ]
     const togleModal = (show: boolean,) => {
         setModalVisible(show)
     }
 
+    const [total , setTotal] = useState<number>(0)
+    
+   
+    // const prs =  (productDetails?.pd /total) * 100
+    // console.log((productDetails?.pd /total)* 100, Math.round( (productDetails?.pd /total * 100) * 100) /100)
+    // console.log((productDetails?.pt /total)* 100, Math.round( (productDetails?.pt /total * 100) * 100)/100)
+    // console.log((productDetails?.rh /total)* 100, Math.round( (productDetails?.rh /total * 100) * 100)/100)
+
+
+    useDrower("Product Details")
 
     // ===========================
     //feach Product Details Data
@@ -55,7 +66,9 @@ const ProductDetails = (props: Props) => {
         const catId = route?.params?.catID
         const productDetails = await getCatDetailsApi({ catID: catId })
         setLoading(false)
-        setProductDetails(productDetails.data.body)
+        const product = productDetails.data.body
+        setProductDetails(product)
+        setTotal(product?.pd + product?.pt + product.rh)
     }
     useEffect(() => {
         try {
@@ -69,7 +82,7 @@ const ProductDetails = (props: Props) => {
     // ===========================
     //Show Price
     //============================
-    const token = useSelector((state: RootState) => state.Auth.token)
+    const token = useSelector((state: RootState) => state?.Auth?.token)
     const navigation = useNavigation<NavigationType>();
     const [overLayloading , setOverLayLoading] = useState(false)
     const [price , setPrice] = useState<null |string>(null)
@@ -191,7 +204,7 @@ const ProductDetails = (props: Props) => {
 
                         <View style={[gStyles.row, gStyles.spaceBetwen]}>
                             <View>
-                                <Quantity buttonStyle={{}} quantity={quantity} setQuantity={setQuantity} />
+                                <Quantity handelChange={()=>{}} buttonStyle={{}} quantity={quantity} setQuantity={setQuantity} />
                             </View>
                             <OutLineButton textStyle={{}} outline={true} style={{ paddingHorizontal: moderateScale(6) }} title='Add to cart ' onPress={onAddToCart} icon={<AntDesign name="shoppingcart" size={fontSizes.font16} color={"#fff"} />} />
                         </View>
@@ -210,10 +223,10 @@ const ProductDetails = (props: Props) => {
                             widthAndHeight={moderateScale(80)}
                             doughnut={false}
                         />
-                        <View style={[gStyles.row , gStyles.spaceBetwen , gStyles.row_Center]}>
-                            <PieChartText color={Colors.palladiumOrang} title='palladium' />
-                            <PieChartText color={Colors.platinumBlue} title='rhodium' />
-                            <PieChartText color={Colors.RhodiumGreen} title='platinum' />
+                        <View style={[gStyles.row , gStyles.spaceBetwen , gStyles.row_Center , {paddingHorizontal:moderateScale(2)}]}>
+                            <PieChartText prec = {Math.round( (productDetails?.pd /total * 100) * 100) /100} color={Colors.palladiumOrang} title='palladium' />
+                            <PieChartText prec = {Math.round( (productDetails?.rh /total * 100) * 100) /100} color={Colors.platinumBlue} title='rhodium' />
+                            <PieChartText prec = {Math.round( (productDetails?.pt /total * 100) * 100) /100} color={Colors.RhodiumGreen} title='platinum' />
                         </View>
                     </View>
                 </>

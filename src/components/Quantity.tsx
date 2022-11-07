@@ -9,20 +9,31 @@ import { moderateScale } from '../styles/ResponsiveDimentions';
 type Props = {
     quantity :number;
     setQuantity:any;
-    buttonStyle:object
+    buttonStyle:object,
+    handelChange :  ()=>Promise<void>  | any
 }
 
-const Quantity = ({quantity , setQuantity , buttonStyle}:Props) => {
+const Quantity = ({quantity , setQuantity , buttonStyle , handelChange}:Props) => {
 
-        const onAdd = ()=>{setQuantity(quantity+1)}
+        const onAdd =async ()=>{
+            setQuantity(quantity+1)
+            if(handelChange !== undefined) await handelChange()
 
-        const onMinus = ()=>{if(quantity >1) setQuantity(quantity-1)}
+        }
+
+        const onMinus = async()=>{
+            if(quantity >1) {
+                setQuantity(quantity-1)
+                if(handelChange !== undefined) await handelChange()
+               
+            }
+        }
 
     return (
-        <View style={[gStyles.row  , ]}>
-            <OutLineButton style={{ ...gStyles.center ,...styles.button , ...buttonStyle}} icon={<Fontisto name='minus-a' size={fontSizes.font10}  color={Colors.primary}/>} onPress={onMinus} outline={false} title={''} />
+        <View style={[gStyles.row  ,    ]}>
+            <OutLineButton textStyle={{  }} style={{ ...gStyles.center ,...styles.button , ...buttonStyle}} icon={<Fontisto name='minus-a' size={fontSizes.font10}  color={Colors.primary}/>} onPress={onMinus} outline={false} title={''} />
             <Text>{quantity}</Text>
-            <OutLineButton style={{ ...gStyles.center , ...styles.button , ...buttonStyle}} icon={<Fontisto name='plus-a' size={fontSizes.font10}  color={"#fff"} />} onPress={onAdd} outline={true} title={''} />
+            <OutLineButton textStyle={{  }} style={{ ...gStyles.center , ...styles.button , ...buttonStyle}} icon={<Fontisto name='plus-a' size={fontSizes.font10}  color={"#fff"} />} onPress={onAdd} outline={true} title={''} />
 
         </View>
     );
@@ -31,7 +42,7 @@ const Quantity = ({quantity , setQuantity , buttonStyle}:Props) => {
 const styles = StyleSheet.create({
 button:{
     paddingHorizontal:moderateScale(2),
-    // paddingVertical:1
+    // paddingVertical:1,
 }
 });
 

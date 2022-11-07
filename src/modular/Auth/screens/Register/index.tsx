@@ -106,7 +106,10 @@ const Register = (props: Props) => {
                         rightIcon={false}
                         keyboard={false}
                         secureTextEntry={false}
-                        rules={{}}
+                        rules={{
+                            min:3,
+                            max:20
+                        }}
                     />
 {/* 
                     <PickCountryCode

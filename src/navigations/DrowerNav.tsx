@@ -64,7 +64,12 @@ const DrowerNav = () => {
             }}
             drawerContent={(props) => <DrowerContent props={props} />}
         >
-            <Drawer.Screen options={{ title: header.title, headerTitleAlign: "center" , headerShown:header.headerShown}} name="TabNave" component={BottomTab}  />
+            <Drawer.Screen 
+            options={{ 
+                title: header.title, headerTitleAlign: "center" ,
+                headerShown:false
+                }} 
+            name="TabNave" component={BottomTab}  />
         </Drawer.Navigator>
     );
 }

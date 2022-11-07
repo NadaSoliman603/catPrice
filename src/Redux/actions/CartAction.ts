@@ -21,11 +21,13 @@ const addCartDataToLocalStorag = async ({catData , catQuantity} :{catData:any , 
       if(isExsisted !== -1){
         console.log("the element in cart update quantity", {isExsisted} )
         const cartElement = userCartData.data[isExsisted]
-        userCartData[isExsisted] = {
-          quantity:cartElement.quantity + catQuantity ,
-          item: catData
-        }
+        // userCartData[isExsisted] = {
+        //   quantity:cartElement.quantity + catQuantity ,
+        //   item: catData
+        // }
+        userCartData.data[isExsisted].quantity = userCartData.data[isExsisted].quantity + catQuantity
         userCartData.quantity= userCartData.quantity + catQuantity
+        
         AsyncStorage.setItem('cartData', JSON.stringify(userCartData))
         // //=====================
         // //update state Reducer
@@ -60,5 +62,30 @@ const addCartDataToLocalStorag = async ({catData , catQuantity} :{catData:any , 
         }
     }
   }
+
+
+
+  
+  export const onDeletCartItems = ({catData , deleteArray} :{catData:{data:[] ,quantity:number} , deleteArray:{ids:number[] , quantity:number}})=>{
+    const newQuantity = catData.quantity - deleteArray.quantity 
+    console.log({deleteArray})
+
+    console.log({catData})
+    const newData = catData.data.filter((item:{item:any ,quantity:number})=> {
+      console.log(item.item.catId , deleteArray.ids ,  deleteArray.ids.includes(item.item.catId) )
+      return !deleteArray.ids.includes(item.item.catId)
+    })
+
+    console.log({newData})
+    console.log({catData})
+
+
+    AsyncStorage.setItem("cartData" ,  JSON.stringify({ data:newData,quantity:newQuantity,}))
+
+    return {
+      data:newData,
+      quantity:newQuantity,
+    }
+}
   
   export default addCartDataToLocalStorag;

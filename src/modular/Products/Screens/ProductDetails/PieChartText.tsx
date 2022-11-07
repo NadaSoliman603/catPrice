@@ -10,13 +10,14 @@ import Entypo  from 'react-native-vector-icons/Entypo';
 type Props = {
     title: string ,
     color:string,
+    prec:number
 }
 
-const PieChartText = ({ title , color }: Props) => {
+const PieChartText = ({ title , color ,prec}: Props) => {
     return (
         <View style={[styles.screen]}>
             <Entypo style={styles.icon} color={color} name='dot-single' size={moderateScale(14)}/>
-            <View style={[styles.titleContainer]}><Text style={[ styles.title]}>{title}</Text></View>
+            <View style={[styles.titleContainer]}><Text style={[ styles.title]}>{title} <Text style={[{ color:color  } , gStyles.h6]}>{prec}%</Text> </Text></View>
         </View>
     );
 }
@@ -25,7 +26,11 @@ const styles = StyleSheet.create({
     screen: {
         marginVertical:moderateScale(5),
         flexDirection:"row",
-        paddingHorizontal:moderateScale(2)
+        // paddingHorizontal:moderateScale(2),
+        justifyContent:"center",
+        alignContent:"center",
+        textAlign:"center",
+        alignSelf:"center",
     },
     title:{
         textTransform: 'capitalize',
