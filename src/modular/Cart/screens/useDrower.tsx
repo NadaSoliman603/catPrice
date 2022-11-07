@@ -15,13 +15,13 @@ const useDrower = (title:string) => {
     const dispatch = useDispatch()
     
     useEffect(()=>{
-        dispatch(Drower({title:"default" , headerShown:false}))
-        navigation.setOptions({
-                title:title,
-                headerLeft : ()=><BackBotton navOption={{title:"default" , headerShown:true}}/>,
-                animationDuration:0,
-                headerTitleAlign:"center",
-        })
+        // dispatch(Drower({title:"default" , headerShown:false}))
+        // navigation.setOptions({
+        //         title:title,
+        //         headerLeft : ()=><BackBotton navOption={{title:"default" , headerShown:true}}/>,
+        //         animationDuration:0,
+        //         headerTitleAlign:"center",
+        // })
 
 
         return()=>{

@@ -74,7 +74,11 @@ const DrowerContent = ({ props }: Props) => {
                     </View>
                 </Pressable>
 
-                <IconButton  icon={<Feather color={Colors.primary} name='home' size={fontSizes.font20} />} onPress={() => { navigation.navigate("HomeScreen") }} title="Home" />
+                <IconButton  icon={<Feather color={Colors.primary} name='home' size={fontSizes.font20} />} onPress={() => { 
+                    // navigation.getParent()?.navigate("AppStack")
+                    // console.log(navigation.getParent())
+                    
+                 }} title="Home" />
                 <IconButton icon={<Feather color={Colors.primary} name='users' size={fontSizes.font20} />} onPress={() => {  navigation.navigate("BayerList") }} title="Buyers List" />
                 <IconButton icon={<Octicons color={Colors.primary} name='history' size={fontSizes.font20} />} onPress={() => {  navigation.navigate("History") }} title="History" />
                 <IconButton icon={<AntDesign color={Colors.primary} name='hearto' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Favourites") }} title="Favourites" />

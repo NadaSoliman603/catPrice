@@ -31,6 +31,7 @@ export type RootStack = {
     OrderStack:undefined;
     HomeScreen:undefined;
     CreditsPrfileScreen:undefined;
+    AppStack:undefined
 };
 
 

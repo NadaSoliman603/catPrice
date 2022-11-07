@@ -66,6 +66,21 @@ const stackOption: NativeStackNavigationOptions = {
     headerTintColor: Colors.textBlack,
 }
 
+// const HeaderMenue = () => {
+//     const navigation = useNavigation()
+//     return (
+//         <Pressable onPress={() => {
+//             navigation?.openDrawer()
+//         }}>
+//             <Image style={{
+//                 width: moderateScale(8),
+//                 marginHorizontal: moderateScale(5),
+//                 height: moderateScale(8),
+//             }} source={imgs.drawer} />
+//             {/* <Image /> */}
+//         </Pressable>
+//     )
+// }
 
 function BottomTab() {
     const navigation = useNavigation<NavigationType>()
@@ -127,6 +142,7 @@ const AppStack = () => {
         <Stack.Navigator screenOptions={{ ...stackOption }} initialRouteName='HomeScreen'>
             <Stack.Screen options={{ title: "Serch Result", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="Search" component={Search} />
             <Stack.Screen options={{ title: "Product Details", headerRight: () => <CartIcon navigationScreen='default' />, headerLeft: () => <BackBotton /> }} name="ProductDetails" component={ProductDetails} />
+
             <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Contact Us" }} name="Contact" component={Contact} />
             <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "About Us" }} name="About" component={About} />
             <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Terms and Conditions" }} name="TermsAndConditions" component={TermsAndConditions} />
@@ -136,6 +152,7 @@ const AppStack = () => {
             <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
             <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
             <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
+
         </Stack.Navigator>
     )
 }
@@ -144,15 +161,9 @@ const BrandStack = () => {
     return (<Stack.Navigator screenOptions={stackOption} initialRouteName='BrandScreen' >
         <Stack.Screen options={{ title: "Brands", }} name="BrandScreen" component={Brand} />
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="BrandsCats" component={BrandsCats} />
-        <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Contact Us" }} name="Contact" component={Contact} />
-            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "About Us" }} name="About" component={About} />
-            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Terms and Conditions" }} name="TermsAndConditions" component={TermsAndConditions} />
-            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Privacy Policy" }} name="Privacy" component={Privacy} />
-            <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' /> }} name="History" component={History} />
-            <Stack.Screen options={{ title: "Home", headerRight: () => <CartIcon navigationScreen='default' /> }} name="HomeScreen" component={Home} />
-            <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
-            <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
-            <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
+
+
+
     </Stack.Navigator>)
 }
 
@@ -164,15 +175,6 @@ const BrofileStack = () => {
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="LanguageScreen" component={LanguageScreen} />
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="UserSettingScreen" component={UserSettingScreen} />
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="CreditsPrfileScreen" component={CreditsScreen} />
-        <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Contact Us" }} name="Contact" component={Contact} />
-            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "About Us" }} name="About" component={About} />
-            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Terms and Conditions" }} name="TermsAndConditions" component={TermsAndConditions} />
-            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Privacy Policy" }} name="Privacy" component={Privacy} />
-            <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' /> }} name="History" component={History} />
-            <Stack.Screen options={{ title: "Home", headerRight: () => <CartIcon navigationScreen='default' /> }} name="HomeScreen" component={Home} />
-            <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
-            <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
-            <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
     </Stack.Navigator>)
 }
 
@@ -180,21 +182,16 @@ const SearchStack = () => {
     return (<Stack.Navigator screenOptions={stackOption} initialRouteName='Search'>
         <Stack.Screen options={{ title: "Explor", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="Search" component={Search} />
         <Stack.Screen options={{ title: "Product Details", headerRight: () => <CartIcon navigationScreen='default' />, headerLeft: () => <BackBotton /> }} name="ProductDetails" component={ProductDetails} />
-        <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Contact Us" }} name="Contact" component={Contact} />
-            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "About Us" }} name="About" component={About} />
-            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Terms and Conditions" }} name="TermsAndConditions" component={TermsAndConditions} />
-            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Privacy Policy" }} name="Privacy" component={Privacy} />
-            <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' /> }} name="History" component={History} />
-            <Stack.Screen options={{ title: "Home", headerRight: () => <CartIcon navigationScreen='default' /> }} name="HomeScreen" component={Home} />
-            <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
-            <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
-            <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
+
 
         {/* <Stack.Screen options={{ headerShown: true }} name="TermsAndConditions" component={TermsAndConditions} />
         <Stack.Screen options={{ headerShown: true }} name="Login" component={Login} />
         <Stack.Screen options={{ headerShown: true }} name="Register" component={Register} />
         <Stack.Screen options={{ headerShown: true }} name="ForgetPassword" component={ForgetPassword} />
         <Stack.Screen options={{ headerShown: true }} name="OTPVeritfication" component={OTPVeritfication} /> */}
+
+
+
     </Stack.Navigator>)
 }
 
@@ -211,15 +208,7 @@ const Credits = () => {
     return (<Stack.Navigator screenOptions={stackOption} initialRouteName='Credits'>
         <Stack.Screen options={{ title: "Credits", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="CreditsScreen" component={CreditsScreen} />
 
-        <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Contact Us" }} name="Contact" component={Contact} />
-            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "About Us" }} name="About" component={About} />
-            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Terms and Conditions" }} name="TermsAndConditions" component={TermsAndConditions} />
-            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Privacy Policy" }} name="Privacy" component={Privacy} />
-            <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' /> }} name="History" component={History} />
-            <Stack.Screen options={{ title: "Home", headerRight: () => <CartIcon navigationScreen='default' /> }} name="HomeScreen" component={Home} />
-            <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
-            <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
-            <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
+
     </Stack.Navigator>)
 }
 
