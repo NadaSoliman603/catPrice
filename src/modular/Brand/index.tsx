@@ -26,9 +26,9 @@ const Brand = (props: Props) => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        navigation.setOptions({
-            headerTitle: "Brand",
-        });
+        // navigation.setOptions({
+        //     headerTitle: "Brand",
+        // });
 
         const getBrandData = async () => {
             try {

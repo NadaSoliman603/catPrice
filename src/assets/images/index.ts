@@ -15,6 +15,7 @@ const imgs = {
     edit : require('./imgs/Edit.png'),
     profession : require('./imgs/profession.png'), 
     currancy : require('./imgs/cyrrancy.png'),
+    drawer : require('./imgs/Drawer.png'),
 }
 
 export default imgs;

@@ -57,7 +57,7 @@ const ProductDetails = (props: Props) => {
     // console.log((productDetails?.rh /total)* 100, Math.round( (productDetails?.rh /total * 100) * 100)/100)
 
 
-    useDrower("Product Details")
+    // useDrower("Product Details")
 
     // ===========================
     //feach Product Details Data

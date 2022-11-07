@@ -16,7 +16,7 @@ import planData from './dumyData';
 type Props = {}
 
 
-const Credits = (props: Props) => {
+const CreditsScreen = (props: Props) => {
     const [plans, setPlans] = useState(planData)
     const [showPlan , setShowPlan] = useState(plans?.[0])
     const [mount , setMount] = useState(true)
@@ -104,4 +104,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Credits;
+export default CreditsScreen;

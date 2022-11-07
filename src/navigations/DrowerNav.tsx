@@ -23,7 +23,7 @@ import ForgetPassword from '../modular/Auth/screens/ForgetPassword';
 import OTPVeritfication from '../modular/Auth/screens/OTPVeritfication';
 import Explore from '../modular/Explore';
 import Brand from '../modular/Brand';
-import Credits from '../modular/Cridits.tsx';
+import Credits from '../modular/Cridits';
 import Profile from '../modular/Profile';
 import BottomTab from './BottomTab';
 import SplashScreen from '../modular/Auth/screens/SplachScreen';
@@ -66,7 +66,8 @@ const DrowerNav = () => {
         >
             <Drawer.Screen 
             options={{ 
-                title: header.title, headerTitleAlign: "center" ,
+                // title: header.title, 
+                // headerTitleAlign: "center" ,
                 headerShown:false
                 }} 
             name="TabNave" component={BottomTab}  />

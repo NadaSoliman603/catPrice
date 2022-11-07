@@ -19,7 +19,7 @@ const useDrower = (title:string) => {
         dispatch(Drower({title:"default" , headerShown:false}))
         navigation.setOptions({
                 title:title,
-                headerLeft : ()=><BackBotton navOption={{title:"default" , headerShown:true}}/>,
+                headerLeft : ()=><BackBotton />,
                 animationDuration:0,
                 headerTitleAlign:"center",
         })

@@ -23,13 +23,15 @@ const Profile = (props: Props) => {
     const dispatch = useDispatch()
 
     useEffect(()=>{
-        dispatch(Drower({title:"Profile" , headerShown:true}))  
+        // dispatch(Drower({title:"Profile" , headerShown:true}))  
     },)
 
     return (
         <View style={styles.screen}>
             <View>
-                <Pressable onPress={() => {navigation.reset({index: 0, routes: [{ name: 'CreditsScreen' }],})}} style={planStyle}  >
+                <Pressable onPress={() => {
+                    navigation.navigate('CreditsPrfileScreen')
+                    }} style={planStyle}  >
                     <Text style={[gStyles.h4]}>Currunt Plan</Text>
                     <Avatar.Image size={moderateScale(10)} style={{ backgroundColor: Colors.white }} source={imgs.golodOffer} />
                 </Pressable>

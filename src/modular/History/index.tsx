@@ -9,7 +9,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import favorites from '../Favourites/dumyData';
 import gStyles from '../../styles/globalStyle';
 import CreditCard from './components/CreditCard';
-import planData from '../Cridits.tsx/dumyData';
+import planData from '../Cridits/dumyData';
 import SearchCard from './components/SearchCard';
 
 type Props = {}

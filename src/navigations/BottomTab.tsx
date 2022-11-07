@@ -1,12 +1,11 @@
 
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../modular/Home';
 import Explore from '../modular/Explore';
 import Brand from '../modular/Brand';
-import Credits from '../modular/Cridits.tsx';
 import Profile from '../modular/Profile';
 import Colors from '../styles/colors';
 import Feather from 'react-native-vector-icons/Feather';
@@ -37,6 +36,16 @@ import CountryScreen from '../modular/Profile/Screens/CountryScreen';
 import CurrencyScreen from '../modular/Profile/Screens/CurrencyScreen';
 import LanguageScreen from '../modular/Profile/Screens/LanguageScreen';
 import UserSettingScreen from '../modular/Profile/Screens/UserSettingScreen';
+import FastImage from 'react-native-fast-image';
+import imgs from '../assets/images';
+import { Image } from 'react-native-animatable';
+import { NavigationType } from '../types/navigationTypes';
+import BackBotton from '../components/BackBotton';
+import CartIcon from '../components/CartIcon';
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack'
+import CreditsScreen from '../modular/Cridits';
+
+
 const Tab = createBottomTabNavigator();
 
 
@@ -45,13 +54,40 @@ const headerSetting = {
 }
 
 ///api/v1/brands/get-all-brands
+const stackOption : NativeStackNavigationOptions  = {
+    headerStyle: {
+        backgroundColor: '#fff',
+        
+    },
+    headerTitleAlign: "center",
+    headerShown: true,
+    headerLeft: () => <HeaderMenue/>,
+    headerTintColor:Colors.textBlack,
+}
+
+const HeaderMenue = () => {
+    const navigation = useNavigation<NavigationType>()
+    return (
+        <Pressable onPress={() => {
+            navigation?.openDrawer()
+        }}>
+            <Image style={{
+                width: moderateScale(8),
+                marginHorizontal: moderateScale(5),
+                height: moderateScale(8),
+            }} source={imgs.drawer} />
+            {/* <Image /> */}
+        </Pressable>
+    )
+}
 
 function BottomTab() {
+    const navigation = useNavigation<NavigationType>()
+
     return (
         <Tab.Navigator
             initialRouteName={'Home'}
             screenOptions={({ route }) => ({
-
                 tabBarIcon: ({ focused, color, size }) => {
                     let icon
 
@@ -70,7 +106,7 @@ function BottomTab() {
                     return icon;
                 },
 
-                headerShown: true,
+                headerShown: false,
                 headerTransparent: true,
                 tabBarActiveTintColor: Colors.primary,
                 tabBarInactiveTintColor: 'gray',
@@ -80,6 +116,10 @@ function BottomTab() {
                     paddingTop: moderateScale(4),
                 },
                 tabBarLabelStyle: { fontWeight: '600', paddingBottom: moderateScale(2), },
+                animationDuration: 0,
+                headerTitleAlign: "center",
+                // title: "",
+                
             })}
         >
             <Tab.Screen name="Home" component={AppStack} />
@@ -93,69 +133,76 @@ function BottomTab() {
 
 const Stack = createNativeStackNavigator();
 const AppStack = () => {
+    const navigation = useNavigation<NavigationType>()
+
     return (
-        <Stack.Navigator initialRouteName='HomeScreen'>
-            <Stack.Screen options={{ headerShown: true }} name="HomeScreen" component={Home} />
-            <Stack.Screen options={{ headerShown: false }} name="History" component={History} />
-            <Stack.Screen options={{ headerShown: false }} name="Favourites" component={Favourites} />
-            <Stack.Screen options={{ headerShown: false }} name="Contact" component={Contact} />
-            <Stack.Screen options={{ headerShown: false }} name="About" component={About} />
-            <Stack.Screen options={{ headerShown: false }} name="TermsAndConditions" component={TermsAndConditions} />
-            <Stack.Screen options={{ headerShown: false }} name="Privacy" component={Privacy} />
+        <Stack.Navigator screenOptions={stackOption} initialRouteName='HomeScreen'>
+            <Stack.Screen options={{ title: "Home",  headerRight:()=><CartIcon navigationScreen='default'/>}} name="HomeScreen" component={Home} />
+            <Stack.Screen options={{headerRight:()=><CartIcon navigationScreen='default'/>}} name="History" component={History} />
+            <Stack.Screen options={{headerLeft: () => <BackBotton/>}} name="Favourites" component={Favourites} />
+            <Stack.Screen options={{ headerShown: true , headerLeft: () => <BackBotton/> , title:"Contact Us" }} name="Contact" component={Contact} />
+            <Stack.Screen options={{ headerShown: true , headerLeft: () => <BackBotton/> , title:"About Us"  }} name="About" component={About} />
+            <Stack.Screen options={{ headerShown: true , headerLeft: () => <BackBotton/> , title:"Terms and Conditions" }} name="TermsAndConditions" component={TermsAndConditions} />
+            <Stack.Screen options={{ headerShown: true , headerLeft: () => <BackBotton/> , title:"Privacy Policy"  }} name="Privacy" component={Privacy} />
             {/* <Stack.Screen options={{ headerShown: false }} name="OrderList" component={OrderList} /> */}
-            <Stack.Screen options={{ headerShown: false }} name="Search" component={Search} />
-            <Stack.Screen options={{ headerShown: true ,  animationDuration: 0, headerTitleAlign: "center",}} name="ProductDetails" component={ProductDetails} />
-            <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
-            <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
-            <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPassword} />
-            <Stack.Screen options={{ headerShown: false }} name="OTPVeritfication" component={OTPVeritfication} />
+            <Stack.Screen options={{title: "Serch Result", headerShown: true  , headerRight:()=><CartIcon navigationScreen='default'/> }} name="Search" component={Search} />
+            <Stack.Screen options={{title: "Product Details",  headerRight:()=><CartIcon navigationScreen='default'/>  , headerLeft: () => <BackBotton/>}} name="ProductDetails" component={ProductDetails} />
+            {/* <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} /> */}
+            {/* <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} /> */}
+            {/* <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPassword} /> */}
+            {/* <Stack.Screen options={{ headerShown: false }} name="OTPVeritfication" component={OTPVeritfication} /> */}
             {/* <Stack.Screen options={{ headerShown: false }} name="OrderCompleted" component={OrderCompleted} /> */}
             {/* <Stack.Screen options={{ headerShown: false }} name="BayerList" component={BayerList} /> */}
-            <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
-            <Stack.Screen options={{ headerShown: false }} name="BayerList" component={BayerList} />
+            <Stack.Screen options={{ headerShown:false}} name="OrderStack" component={OrderStack} />
+            <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
 
         </Stack.Navigator>
     )
 }
 
 const BrandStack = () => {
-    return (<Stack.Navigator initialRouteName='BrandScreen' >
-        <Stack.Screen options={{ headerShown: false }} name="BrandScreen" component={Brand} />
-        <Stack.Screen options={{ headerShown: false }} name="BrandsCats" component={BrandsCats} />
+    return (<Stack.Navigator screenOptions={stackOption}  initialRouteName='BrandScreen' >
+        <Stack.Screen options={{title:"Brands" , }} name="BrandScreen" component={Brand} />
+        <Stack.Screen options={{ headerLeft: () => <BackBotton/> }} name="BrandsCats" component={BrandsCats} />
     </Stack.Navigator>)
 }
 
 const BrofileStack = () => {
-    return (<Stack.Navigator initialRouteName='ProfileScreen'>
-        <Stack.Screen options={{ headerShown: false }} name="ProfileScreen" component={Profile} />
-        <Stack.Screen options={{ headerShown: true, animationDuration: 0, headerTitleAlign: "center", }} name="CountryScreen" component={CountryScreen} />
-        <Stack.Screen options={{ headerShown: true, animationDuration: 0, headerTitleAlign: "center", }} name="CurrencyScreen" component={CurrencyScreen} />
-        <Stack.Screen options={{ headerShown: true, animationDuration: 0, headerTitleAlign: "center", }} name="LanguageScreen" component={LanguageScreen} />
-        <Stack.Screen options={{ headerShown: true, animationDuration: 0, headerTitleAlign: "center", }} name="UserSettingScreen" component={UserSettingScreen} />
-        <Stack.Screen options={{ headerShown: true, animationDuration: 0, headerTitleAlign: "center", }} name="CreditsScreen" component={Credits} />
+    return (<Stack.Navigator screenOptions={stackOption}  initialRouteName='ProfileScreen'>
+        <Stack.Screen options={{ title:"Profile" }} name="ProfileScreen" component={Profile} />
+        <Stack.Screen options={{headerLeft: () => <BackBotton/> }} name="CountryScreen" component={CountryScreen} />
+        <Stack.Screen options={{headerLeft: () => <BackBotton/> }} name="CurrencyScreen" component={CurrencyScreen} />
+        <Stack.Screen options={{headerLeft: () => <BackBotton/> }} name="LanguageScreen" component={LanguageScreen} />
+        <Stack.Screen options={{headerLeft: () => <BackBotton/> }} name="UserSettingScreen" component={UserSettingScreen} />
+        <Stack.Screen options={{headerLeft: () => <BackBotton/> }} name="CreditsPrfileScreen" component={CreditsScreen} />
     </Stack.Navigator>)
 }
 
 const SearchStack = () => {
-    return (<Stack.Navigator initialRouteName='Search'>
-        <Stack.Screen options={{ headerShown: false }} name="Search" component={Search} />
-        <Stack.Screen options={{ headerShown: false }} name="TermsAndConditions" component={TermsAndConditions} />
-        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
-        <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
-        <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPassword} />
-        <Stack.Screen options={{ headerShown: false }} name="OTPVeritfication" component={OTPVeritfication} />
+    return (<Stack.Navigator screenOptions={stackOption}  initialRouteName='Search'>
+        <Stack.Screen options={{  title:"Explor",headerShown: true , headerRight:()=><CartIcon navigationScreen='default'/> }} name="Search" component={Search} />
+        {/* <Stack.Screen options={{ headerShown: true }} name="TermsAndConditions" component={TermsAndConditions} />
+        <Stack.Screen options={{ headerShown: true }} name="Login" component={Login} />
+        <Stack.Screen options={{ headerShown: true }} name="Register" component={Register} />
+        <Stack.Screen options={{ headerShown: true }} name="ForgetPassword" component={ForgetPassword} />
+        <Stack.Screen options={{ headerShown: true }} name="OTPVeritfication" component={OTPVeritfication} /> */}
     </Stack.Navigator>)
 }
 
 const OrderStack = () => {
-    return (<Stack.Navigator initialRouteName='OrderList'>
-        <Stack.Screen options={{ headerShown: true , animationDuration: 0, headerTitleAlign: "center", }} name="OrderList" component={OrderList} />
-        <Stack.Screen options={{ headerShown: false }} name="OrderCompleted" component={OrderCompleted} />
-        <Stack.Screen options={{ headerShown: false }} name="BayerList" component={BayerList} />
+    return (<Stack.Navigator  screenOptions={stackOption} initialRouteName='OrderList'>
+        <Stack.Screen options={{ headerShown: true, animationDuration: 0, headerTitleAlign: "center", }} name="OrderList" component={OrderList} />
+        <Stack.Screen options={{ headerShown: true  , title: "Order Completed",  headerRight:()=><CartIcon navigationScreen='OrderList'/>  , headerLeft: () => <BackBotton/> }} name="OrderCompleted" component={OrderCompleted} />
+        <Stack.Screen options={{ headerShown: true  , title: "Bayers List",  headerRight:()=><CartIcon navigationScreen='OrderList'/>  , headerLeft: () => <BackBotton/>  }} name="BayerList" component={BayerList} />
     </Stack.Navigator>)
 }
 
 
+const Credits = ()=>{
+    return (<Stack.Navigator screenOptions={stackOption}  initialRouteName='Credits'>
+    <Stack.Screen options={{  title:"Credits",headerShown: true , headerRight:()=><CartIcon navigationScreen='default'/> }} name="CreditsScreen" component={CreditsScreen} />
+</Stack.Navigator>)
+}
 
 const DrowerStack = () => {
     return (

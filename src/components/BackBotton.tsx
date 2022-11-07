@@ -8,18 +8,12 @@ import fontSizes from '../styles/fontSizes';
 import { useDispatch } from 'react-redux';
 import { Drower } from '../Redux/reducers/DrowerNavigation';
 type Props = {
-    navOption:{
-        title:string , 
-        headerShown:boolean
-    }
 }
 
-const BackBotton = ({navOption}: Props) => {
+const BackBotton = ({}: Props) => {
     const navigation = useNavigation<NavigationType>()
-    const dispatch = useDispatch()
 
     return (<Pressable onPress={() =>{
-        dispatch(Drower(navOption))   
         navigation.goBack()
          }}>
         <Ionicons name='arrow-back' color={Colors.primary} size={fontSizes.font22} />

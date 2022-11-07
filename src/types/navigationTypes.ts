@@ -29,7 +29,8 @@ export type RootStack = {
     CreditsScreen:undefined;
     SearchStack:undefined | {search:boolean};
     OrderStack:undefined;
-    HomeScreen:undefined
+    HomeScreen:undefined;
+    CreditsPrfileScreen:undefined;
 };
 
 

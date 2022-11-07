@@ -80,8 +80,8 @@ const DrowerContent = ({ props }: Props) => {
                 <IconButton icon={<AntDesign color={Colors.primary} name='hearto' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Favourites") }} title="Favourites" />
                 <IconButton icon={<AntDesign color={Colors.primary} name='message1' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Contact") }} title="Contact Us" />
                 <IconButton icon={<Feather color={Colors.primary} name='alert-circle' size={fontSizes.font20} />} onPress={() => { navigation.navigate("About") }} title="About" />
-                <IconButton icon={<Feather  color={Colors.primary} name='file-text' size={fontSizes.font20} />} onPress={() => { navigation.navigate("TermsAndConditions") }} title="Terms And Conditions" />
-                <IconButton icon={<Octicons color={Colors.primary} name='shield-check' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Privacy") }} title="Privacy" />
+                <IconButton icon={<Feather  color={Colors.primary} name='file-text' size={fontSizes.font20} />} onPress={() => { navigation.navigate("TermsAndConditions") }} title="Terms and Conditions" />
+                <IconButton icon={<Octicons color={Colors.primary} name='shield-check' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Privacy") }} title="Privacy Policy" />
                 {login && <IconButton icon={<MaterialIcons color={Colors.primary} name='logout' size={fontSizes.font20} />} onPress={onLogout} title="Log Out" />}
                 {!login && <IconButton icon={<MaterialIcons color={Colors.primary} name='login' size={fontSizes.font20} />} onPress={onLogin} title="Login" />}
             </View>

@@ -58,9 +58,9 @@ const Search = (props: Props) => {
 
     const params = routs.params
     useEffect(() => {
-        navigation.setOptions({
-            headerTitle: 'Search',
-        });
+        // navigation.setOptions({
+        //     headerTitle: 'Search',
+        // });
         
         if(!params?.search){
             getBrandData({ search: search, limit: limit.toString() });
