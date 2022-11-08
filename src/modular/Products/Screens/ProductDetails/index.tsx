@@ -82,12 +82,13 @@ const ProductDetails = (props: Props) => {
     // ===========================
     //Show Price
     //============================
-    const token = useSelector((state: RootState) => state?.Auth?.token)
+    const token = useSelector((state: RootState) => state.Auth.token)
     const navigation = useNavigation<NavigationType>();
     const [overLayloading , setOverLayLoading] = useState(false)
     const [price , setPrice] = useState<null |string>(null)
 
     const onShowprice = async() => { 
+        console.log({token})
         if(token){
             console.log(token , productDetails.catId)
             setOverLayLoading(true)
@@ -96,7 +97,10 @@ const ProductDetails = (props: Props) => {
             const price = res.data.body?.formattedPrice
             setOverLayLoading(false)
             if(!price){
-                navigation.navigate('Login')
+                if(res.data.header.headerMessage ===  "NO_ACTIVE_PLAN"){
+                    navigation.navigate('CreditsSearchStack')
+                }
+                
             }else{
                 const priceText = "SAR " + price
                 setPrice(priceText) 
@@ -198,7 +202,7 @@ const ProductDetails = (props: Props) => {
                             <Divider />
                         </>}
 
-                        <OutLineButton textStyle={{}} outline={false} style={{}} title={price?price:'Show Price '} onPress={onShowprice} icon={
+                        <OutLineButton textStyle={{}} outline={false} style={{}} title={price?price:'Show Price '} onPress={price === null? onShowprice : ()=>{}} icon={
                         price?<></>: <Feather name="eye" size={fontSizes.font16} color={Colors.primary} />} />
 
 

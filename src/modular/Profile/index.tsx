@@ -12,19 +12,26 @@ import { Avatar } from 'react-native-paper';
 import imgs from '../../assets/images';
 import {  useNavigation } from '@react-navigation/native';
 import { NavigationType } from '../../types/navigationTypes';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import BackBotton from '../../components/BackBotton';
 import { Drower } from '../../Redux/reducers/DrowerNavigation';
+import { RootState } from '../../Redux/store/store';
 type Props = {}
 
 const Profile = (props: Props) => {
     const navigation = useNavigation<NavigationType>()
     const imgUri = "https://img.freepik.com/free-photo/handsome-confident-smiling-man-with-hands-crossed-chest_176420-18743.jpg?w=2000"
     const dispatch = useDispatch()
+    const user = useSelector((state: RootState) => state.Auth.token)
+    const userData = useSelector((state: RootState) => state.Auth.user)
+
 
     useEffect(()=>{
         // dispatch(Drower({title:"Profile" , headerShown:true}))  
     },)
+
+    
+   
 
     return (
         <View style={styles.screen}>
@@ -36,12 +43,12 @@ const Profile = (props: Props) => {
                     <Avatar.Image size={moderateScale(10)} style={{ backgroundColor: Colors.white }} source={imgs.golodOffer} />
                 </Pressable>
 
-                <ProfileItem value='Saudi Arabia' title='Country/region' onChange={() => {navigation.navigate("CountryScreen")}} />
-                <ProfileItem value='SAR' title='Currency' onChange={() => {navigation.navigate('CurrencyScreen') }} />
+                <ProfileItem value={userData?.countryEn || ""} title='Country/region' onChange={() => { user? navigation.navigate('CountryScreen') :  navigation.navigate("Login")}} />
+                <ProfileItem value={userData?.defCurrency || ""} title='Currency' onChange={() => {navigation.navigate('CurrencyScreen') }} />
                 <ProfileItem value='English' title='Language' onChange={() => {navigation.navigate('LanguageScreen') }} />
 
 
-                <Pressable onPress={() => {navigation.navigate('UserSettingScreen') }} style={planStyle}  >
+                <Pressable onPress={() => {user? navigation.navigate('UserSettingScreen') : navigation.navigate('Login') }} style={planStyle}  >
                     <View style={[gStyles.row]}>
                         <Avatar.Image size={moderateScale(10)} source={{ uri: imgUri }} />
                         <Text> User</Text>

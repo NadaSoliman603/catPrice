@@ -62,7 +62,7 @@ export const getPlanApi = ({ path, token }: { path: string; token: string }) => 
     .get(`${'http://floridatrading.online:8010/api/v1/plans/get-plans'}`, {
       headers: {
         'Content-Type': 'application/json',
-        "Authorization": `Bearer ${'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhYmRhYnVnaGF6YWxlaEBob3RtYWlsLmNvbSIsImV4cCI6MTY2NzEzNDAyNCwiaWF0IjoxNjY2Nzc0MDI0fQ.g6MHTnY6qGaaDkaXSVYlPOpsAPmoMHPOLpYmaS9TLOgdyWhhEUs8OlOdPk6hbL0v2F6oGpk4u7NWzDsHwtmYlw'}`,
+        "Authorization": `Bearer ${token}`,
       },
     })
 };
@@ -162,3 +162,18 @@ export const orderHistory =  ({ token , currency}:{ token:string , currency:stri
 }
 
 
+export const getSystemSettingApi =  ()=>{
+  return axios.get(`${END_POINT}/api/v1/settings/all`)
+}
+
+
+
+export const userUpdatInfApi =  ({ token , data}:{ token:string , data:any})=>{
+  return axios.post(`${END_POINT}/apis/v1/user/update-profile` ,  JSON.stringify(data), {
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${token}`,
+
+    },
+  })
+}

@@ -89,7 +89,7 @@ const CatCard = ({item , flatListLoading}:Props) => {
                 </View>
 
                 <View style={[gStyles.row, gStyles.spaceBetwen]}>
-                    <Pressable onPress={()=>{onShowprice(item)}} style={({pressed})=>[{  backgroundColor:pressed?Colors.primaryPresedButton :"#fff"}]}>
+                    <Pressable onPress={price === null? ()=>{onShowprice(item)}:()=>{}} style={({pressed})=>[{  backgroundColor:pressed?Colors.primaryPresedButton :"#fff"}]}>
                         <Text style={[gStyles.text_Primary, styles.showPrice, gStyles.text_center, gStyles.text_Bold]}>{price ? price :"Show Price"} </Text>
                     </Pressable>
 

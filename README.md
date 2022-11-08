@@ -1,15 +1,18 @@
 # catalytic-price-react-native-application
 gradlew app:assembleRelease
+========================================
 
 
 
-//====================================
+====================================
  not finshed (back end && front end)
-//====================================
+====================================
 1-Plan payment
 3-auto complet
 3-history 
     --order ==> want to show all order in one request (canceled , new , completed)
+    --order ==> empity array
+    --new order == > server error (api/v1/order/save-order)
     -- search ==> no Api For it
     -- cridits ==> _image not found , _api response and ui (not the same)
 4- about , terms .. , privcy policy
@@ -24,31 +27,39 @@ gradlew app:assembleRelease
 5- in some api (ui dont show all data)
 1- new order ===> add quantity
 2- buyer List
+8-system setting ==> metal price currancy , last update  time
+9- setting Api ===> end image (dose not work) 
+    -- if user change the numer ther is veritificatin msg?
+    -- current plan == >not found
 
 
 
 
 
-//==============================================
+==============================================
  finshed (back end) , not finshed (front end)
-//===============================================
-1-metal price
-2-profil setting
-3- active plan
+===============================================
+1-metal price // done
+2-profil setting  //done
+    -- uplad img 
+    -- update currancy
+    -- update cantry 
+   
 
 4-change password (no UI for it)
 5- forget password (no UI for it)
 6- user balance  (no UI for it)
 7- favourit collection  (no UI for it)
+8- in profile curancy == > not show all currancy
 
 
 
 
 
 
-//==============
+==============
  front issus 
-//===============
+===============
 1- in list cat 
     -show brand and information && favorit model
     -Show Price only one time 
@@ -58,14 +69,14 @@ gradlew app:assembleRelease
 4- contact ==> call button start new call
 5- change buttom tab icon
 6- show login in modal
+7-plan remove static data //done 
+8-handel id user tay to show price mutiy time //done 
 
 
 
-
-
-//==============
+==============
     UI && UX
-//==============
+==============
 1-change password ( old passowd ,new password , confairm password ,) 
 2- forget password ( new password , confairm password ,)
 3- faivourit collection UI (list and show)

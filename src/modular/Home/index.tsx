@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { Image } from 'react-native-animatable';
 import { TextInput } from 'react-native-paper';
@@ -13,12 +13,44 @@ import gStyles, { hp, wp } from '../../styles/globalStyle';
 import fontSizes from '../../styles/fontSizes';
 import Colors from '../../styles/colors';
 import { NavigationType } from '../../types/navigationTypes';
+import { getSystemSettingApi } from '../../Api/Auth';
+import { MetalPrice } from '../../types/types';
 type Props = {}
 
 const Home = (props: Props) => {
-    // const [search, setSearch] = React.useState("");
-
+    const [mount, setMount] = useState<boolean>(true);
+    const [metalPrice, setmetalPrice] = useState<null |MetalPrice>(null)
+    const [loading , setLoading] = useState<boolean>(true)
     const navigation = useNavigation<NavigationType>()
+
+
+    //================
+    //get MetalPrice
+    //================
+    const getMetalPrice = async () => {
+        try {
+            setLoading(true)
+            const res = await getSystemSettingApi()
+            const metalPrice = res.data.body
+            console.log({metalPrice})
+            console.log(metalPrice)
+            console.log(metalPrice.fdPdPrice)
+            if(mount)  setmetalPrice({
+                currancy:"SAR",
+                fdPdPrice:metalPrice.fdPdPrice,
+                fdPtPrice:metalPrice.fdPtPrice,
+                fdRhPrice:metalPrice.fdRhPrice
+            }) 
+            setLoading(false)
+        } catch (error) {
+            console.log({ error })
+        }
+    }
+
+    useEffect(() => {
+        getMetalPrice()
+        return ()=>{setMount(false)}
+    }, [])
 
     return (
         // <MainView>
@@ -34,24 +66,12 @@ const Home = (props: Props) => {
                 </Text>
             </View>
 
-            {/* <View style={[gStyles.pv_6]}>
-                <TextInput
-                    mode="outlined"
-                    outlineColor={Colors.gray}
-                    label="Search by Cat id..."
-                    value={search}
-                    onChangeText={text => setSearch(text)}
-                    right={<TextInput.Icon icon={() => <Feather name={"search"} size={fontSizes.font22} />} />}
-                />
-            </View> */}
-
-
-            <Pressable 
-            onPress={()=>{navigation.navigate("Search" , {search:true})}}
-            style={({pressed})=>[{
-                backgroundColor: pressed ? "#eee" :"#fff"
-            },gStyles.row , gStyles.space_between  , styles.searchButton]}  >
-                <Text style={[gStyles.text_darkGray , gStyles.h4 , ]}>Search by Cat id...</Text>
+            <Pressable
+                onPress={() => { navigation.navigate("Search", { search: true }) }}
+                style={({ pressed }) => [{
+                    backgroundColor: pressed ? "#eee" : "#fff"
+                }, gStyles.row, gStyles.space_between, styles.searchButton]}  >
+                <Text style={[gStyles.text_darkGray, gStyles.h4,]}>Search by Cat id...</Text>
                 <Feather color={Colors.darkGray} name={"search"} size={fontSizes.font22} />
             </Pressable>
 
@@ -66,9 +86,9 @@ const Home = (props: Props) => {
                 <Text style={[gStyles.h1, gStyles.text_Bold, gStyles.text_Primary]}>Metal Price</Text>
                 <View style={[styles.borderLine]}></View>
             </View>
-            <MetalPriceCard name={"PT"} title={"SAR 112.88"} subTitle={"03h:02m"} />
-            <MetalPriceCard name={"Pd"} title={"SAR 274.68"} subTitle={"03h:02m"} />
-            <MetalPriceCard name={"RH"} title={"SAR 1655.60"} subTitle={"03h:02m"} />
+            <MetalPriceCard name={"PT"} title={loading ? "Loading ..." : `${metalPrice?.currancy} ${metalPrice?.fdPtPrice}`} subTitle={"03h:02m"} />
+            <MetalPriceCard name={"Pd"} title={loading ? "Loading ..." : `${metalPrice?.currancy} ${metalPrice?.fdPdPrice}`} subTitle={"03h:02m"} />
+            <MetalPriceCard name={"RH"} title={loading ? "Loading ..." : `${metalPrice?.currancy} ${metalPrice?.fdRhPrice}`} subTitle={"03h:02m"} />
             {/* <MetalPriceCard name={"PT"} title={"SAR 1655.60"} subTitle={"03h:02m"}/> */}
             <View style={[styles.height]}></View>
         </ScrollView>
@@ -95,12 +115,12 @@ const styles = StyleSheet.create({
     height: {
         height: moderateScale(40)
     },
-    searchButton:{
-        borderWidth:1,
-        borderRadius:moderateScale(2),
-        padding:moderateScale(5),
-        borderColor:Colors.darkGray,
-        marginVertical:moderateScale(6)
+    searchButton: {
+        borderWidth: 1,
+        borderRadius: moderateScale(2),
+        padding: moderateScale(5),
+        borderColor: Colors.darkGray,
+        marginVertical: moderateScale(6)
     }
 });
 

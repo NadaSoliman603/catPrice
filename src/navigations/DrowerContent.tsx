@@ -29,7 +29,7 @@ type NavigationType = NativeStackNavigationProp<RootStack>
 const DrowerContent = ({ props }: Props) => {
     // const [login , setLogin] = useState<any>(false)
     const navigation = useNavigation<NavigationType>()
-    const login = useSelector((state: RootState) => state.Auth.user)
+    const login = useSelector((state: RootState) => state.Auth.token)
     const dispatch = useDispatch()
     const onLogout = async()=>{
         await AsyncStorage.removeItem("user")
