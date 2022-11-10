@@ -25,12 +25,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { Login } from '../../../../Redux/reducers/AuthReducer';
 import { RootState } from '../../../../Redux/store/store';
+import { AuthCustomNav, Phone } from '../..';
 
-type Props = {}
+type Props = {
+    handelAuthScreens:(screen :AuthCustomNav)=>void,
+    handelPhonNumber:(phone:Phone)=>void
+}
 
 const Register = (props: Props) => {
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm();
-    const navigation = useNavigation<NavigationType>()
+    // const navigation = useNavigation<NavigationType>()
     const [agreeTermsOfUse, setAgreeTermsOfUse] = useState(false)
     const [show, setShow] = React.useState(false);
     const loction = useSelector((state: RootState) => state.Location)
@@ -80,9 +84,12 @@ const Register = (props: Props) => {
                     setLoading(false)
                 }
             } else {
-                AsyncStorage.setItem('user', JSON.stringify(user))
+                console.log(user)
+                // AsyncStorage.setItem('user', JSON.stringify(user))
                 // dispatch(Login({user:user , token:user.to}))
-                navigation.navigate("OTPVeritfication" , {mobileCode: countryCode.callingCode[0], phone:data.phone})
+                props.handelPhonNumber({mobileCode: countryCode.callingCode[0], phone:data.phone})
+                props.handelAuthScreens("OTPVeritfication")
+                // navigation.navigate("OTPVeritfication" , {mobileCode: countryCode.callingCode[0], phone:data.phone})
                 if (mount) setLoading(false)
             }
         }
@@ -93,9 +100,9 @@ const Register = (props: Props) => {
     },[])
     return (
         <>
-            <ScrollView style={{ flex: 1, backgroundColor: Colors.white, }}>
+            <View style={{ flex: 1, backgroundColor: Colors.white, padding:moderateScale(6) }}>
                 <View style={styles.screen}>
-                    <Text style={[gStyles.alignCenter, gStyles.text_Primary, gStyles.h1]}>Register</Text>
+                    <Text style={[gStyles.alignCenter, gStyles.text_Primary, gStyles.h1 , gStyles.pb_6]}>Register</Text>
 
                     <CustomTextInput
                         label='Full Name'
@@ -195,10 +202,16 @@ const Register = (props: Props) => {
 
                         <Button textStyle={[gStyles.text_White, gStyles.text_center]} style={[gStyles.bg_Primary, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Register"} />
                         <Text style={[gStyles.alignCenter, gStyles.pt_15]}>Have an acount? </Text>
-                        <Button textStyle={[gStyles.text_Primary, gStyles.h4]} style={[gStyles.alignCenter, styles.register]} onPress={() => { navigation.navigate("Login") }} title={"Login here"} />
+                        <Button textStyle={[gStyles.text_Primary, gStyles.h4]} style={[gStyles.alignCenter, styles.register]} onPress={() => { 
+                           // navigation.navigate("Login") 
+                           props.handelAuthScreens("Login")
+                            }} title={"Login here"} />
                     </View>
+
+
+                    
                 </View>
-            </ScrollView>
+            </View>
             {loading && <OverLayLoading />}
 
         </>
@@ -214,8 +227,8 @@ const styles = StyleSheet.create({
 
         // flex: 1,
         backgroundColor: Colors.white,
-        padding: "5%",
-        minHeight: hp(100)
+        // padding: "5%",
+        // minHeight: hp(100)
     },
     logoImg: {
         width: 250,

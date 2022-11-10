@@ -33,10 +33,10 @@ const AuthStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen options={{ headerShown: false }} name="SplachScreen" component={SplashScreen} />      
-            <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+            {/* <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
             <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
             <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPassword} />
-            <Stack.Screen options={{ headerShown: false }} name="OTPVeritfication" component={OTPVeritfication} />
+            <Stack.Screen options={{ headerShown: false }} name="OTPVeritfication" component={OTPVeritfication} /> */}
             <Stack.Screen options={{ headerShown: false }} name="Home" component={DrowerNav} />
         </Stack.Navigator>
     )

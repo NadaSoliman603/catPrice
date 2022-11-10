@@ -43,5 +43,6 @@ const styles = StyleSheet.create({
     img:{
         width: moderateScale(20),
         height: moderateScale(20),
+       
     }
 })

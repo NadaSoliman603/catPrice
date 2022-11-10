@@ -64,7 +64,7 @@ const CatCard = ({item , flatListLoading}:Props) => {
                     <View style={[gStyles.row]}>
                         <View
                             style={[styles.brandLogoContainer, gStyles.center]}>
-                            <FastImage source={{ uri: item.brands?.[0]?.makerImage }} style={styles.brandImg}
+                            <FastImage resizeMode='contain' source={{ uri: item.brands?.[0]?.makerImage }} style={styles.brandImg}
                             />
                         </View>
                         <Text

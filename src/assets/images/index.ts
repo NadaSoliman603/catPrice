@@ -17,6 +17,7 @@ const imgs = {
     currancy : require('./imgs/cyrrancy.png'),
     drawer : require('./imgs/Drawer.png'), 
     userIcon : require('./imgs/userIcon.png'), 
+    outOfCridite : require('./imgs/outOfCridite.png'), 
 }
 
 export default imgs;

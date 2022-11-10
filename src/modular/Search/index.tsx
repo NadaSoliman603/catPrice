@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, View, Text, Pressable , ScrollView , Keyboard} from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 import fontSizes from '../../styles/fontSizes';
 import gStyles, { hp, wp } from '../../styles/globalStyle';
@@ -17,8 +17,11 @@ import Colors from '../../styles/colors';
 import Loading from '../../common/Loading';
 import NoFoundData from '../../common/NoDataFound';
 import CatCard from '../../components/CatCard';
+import AoutoCompletCard from './AoutoCompletCard';
 type Props = {};
 type ScreenRouteProp = RouteProp<RootStack, 'Search'>;
+
+
 
 const Search = (props: Props) => {
     const routs = useRoute<ScreenRouteProp>()
@@ -27,22 +30,79 @@ const Search = (props: Props) => {
     const [loading, setLoading] = useState(false);
     const [flatListLoading, setFlatLisloading] = useState(false)
     const [limit, setLimit] = useState(10)
-    const [noSearchResult , setNoSearchResult] =useState(false)
-
+    const [noSearchResult, setNoSearchResult] = useState(false)
     const [cats, setCats] = useState([]);
     const [mount, setMount] = useState(true);
+
+    const [searchOutoComplete, setSearchOutoComplete] = useState<string>("")
+    const [outoCompletData, setOutoCompletData] = useState<null | any[]>(null)
+    const [loadingOutoComplete, setLoadingOutoComplete] = useState<boolean>(false);
+    const [showOutoComplete ,setshowOutoComplete ] = useState(true)
+
+
+    //==============
+    //OutoComplet 
+    //==============
+    useEffect(() => {
+        let myTimeout :number
+        if(search !== searchOutoComplete){
+        let myTimeout = setTimeout(() => {
+            setSearchOutoComplete(search)
+        }, 500);
+
+        }
+        return () => {
+            clearTimeout(myTimeout)
+        }
+    }, [search])
+
+    useEffect(() => {
+        if (searchOutoComplete.length >= 3) {
+            console.log("send request")
+            console.log("================================>")
+
+            if (search === searchOutoComplete) {
+                getOutoCompletData({ limit: "10", search: searchOutoComplete })
+
+            }
+        }
+
+    }, [searchOutoComplete])
+
+    const getOutoCompletData = async ({ search, limit }: { search: string; limit: string }) => {
+        try {
+            setLoadingOutoComplete(true)
+            const res = await searchCatdApi({ search: search, limit: limit.toString() });
+            const catsData = res.data.body;
+            if (catsData.length === 0) {
+                // setNoSearchResult(true)
+            } else {
+                // setNoSearchResult(false)
+            }
+            console.log(catsData, { mount })
+            if (mount) {
+                // console.log(catsData)
+                setOutoCompletData(catsData);
+                setLoadingOutoComplete(false)
+            }
+        } catch (error) {
+            console.log(error);
+            setLoadingOutoComplete(false)
+        }
+    };
 
 
 
     // ========================
     //get Search result
     //========================
-    const getBrandData = async ({ search, limit }: { search: string; limit: string }) => {
+    const geSearchData = async ({ search, limit }: { search: string; limit: string }) => {
         try {
             setLoading(true)
             const res = await searchCatdApi({ search: search, limit: limit.toString() });
             const catsData = res.data.body;
-            if(catsData.length === 0){ setNoSearchResult(true)}else{setNoSearchResult(false)}
+            if (catsData.length === 0) { setNoSearchResult(true) } else { setNoSearchResult(false) }
+            if(catsData.length < 10)setFlatLisloading(false)
             console.log(mount)
             if (mount) {
                 // console.log(catsData)
@@ -61,71 +121,112 @@ const Search = (props: Props) => {
         // navigation.setOptions({
         //     headerTitle: 'Search',
         // });
-        
-        if(!params?.search){
-            getBrandData({ search: search, limit: limit.toString() });
+
+        if (!params?.search) {
+            geSearchData({ search: search, limit: limit.toString() });
         }
-        
+
         return () => { };
     }, []);
 
+    useEffect(() => {
 
+        const showSubscription  = Keyboard.addListener("keyboardDidShow", () => {
+            setshowOutoComplete(true)
+        });
+        const hideSubscription  = Keyboard.addListener("keyboardDidHide", () => {
+            // setshowOutoComplete(false)
+        });
+
+        return () => {
+          hideSubscription.remove();
+          showSubscription.remove();
+
+        };
+      }, []);
 
     // ======================================
     //get more Search result if scroll end
     //=======================================
     useEffect(() => {
-        const getBrandData = async ({ search, limit }: { search: string; limit: string }) => {
+        const geSearchData = async ({ search, limit }: { search: string; limit: string }) => {
             try {
                 setFlatLisloading(true)
                 const res = await searchCatdApi({ search: search, limit: limit.toString() });
                 const catsData = res.data.body;
-                if(catsData.length === 0){ setNoSearchResult(true)}else{setNoSearchResult(false)}
+                if (catsData.length === 0) { setNoSearchResult(true) } else { setNoSearchResult(false) }
                 if (mount) {
                     setCats(catsData);
                     setFlatLisloading(false)
+                    if(catsData.length < 10)setFlatLisloading(false)
+
                 }
             } catch (error) {
                 console.log(error);
                 setFlatLisloading(false)
             }
         };
-        if (limit !== 10 && limit <=30)  getBrandData({ search: search, limit: limit.toString() });
-        return () => {
-            setMount(false);
-        };
+        
+        if (limit !== 10 && limit <= 30) geSearchData({ search: search, limit: limit.toString() });
+       
     }, [limit]);
+
+    useEffect(()=>{
+        return   ()=>{setMount(false);}
+    },[])
 
     return (
         <MainView data={[{}]} loading={false} overLayLoading={false} style={[]}>
             <View>
-
+                
                 <View style={[gStyles.pt_6]}>
                     <TextInput
                         mode="outlined"
                         outlineColor={'#eee'}
-                        label="Search by Cat id..."
+                        label="Search"
                         value={search}
                         onChangeText={text => setSearch(text)}
                         right={
                             <TextInput.Icon
-                                icon={() => <Pressable onPress={() => { getBrandData({ search: search, limit: limit.toString() }) }}>
+                                icon={() => <Pressable onPress={() => { geSearchData({ search: search, limit: limit.toString() }) }}>
                                     <Feather name={'search'} size={fontSizes.font18} />
                                 </Pressable>}
                             />
                         }
                         onSubmitEditing={() => {
-                            getBrandData({ search: search, limit: limit.toString() });
+                            geSearchData({ search: search, limit: limit.toString() });
                         }}
                         autoFocus={params?.search}
+                        activeOutlineColor={Colors.lightGray}
+                        // accessibilityLabel={""}
+                        activeUnderlineColor={Colors.textLightGray}
                     />
+                    {showOutoComplete &&<View style={styles.outoCompletContainer}>
+                        {search.length < 3 && <Text style={[gStyles.h6, gStyles.text_center]}>for autocomplete you must at least write 3 characters</Text>}
+                        {loadingOutoComplete && <ActivityIndicator color={Colors.primaryPresedButton} size="small" style={[gStyles.p_2]} />}
+                        <FlatList
+                            data={outoCompletData}
+                            renderItem={({ item }) => <AoutoCompletCard onPress={(item)=>{
+                                console.log("presed")
+                                setshowOutoComplete(false)
+                                setSearch((item?.catNo && item?.catNo !== "0") ? item?.catNo :item?.catSn)
+                                setOutoCompletData((item?.catNo && item?.catNo !== "0") ? item?.catNo :item?.catSn)
+                                geSearchData({limit:"10" , search:(item?.catNo && item?.catNo !== "0") ? item?.catNo :item?.catSn})
+                            
+                            }} item={item} />}
+                            keyExtractor={item => item?.catId}
+                            onEndReached={() => {
+                                // setLimit(limit + 10)
+                            }}
+                        />
+                    </View>}
                 </View>
-                
+
                 {loading && <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />}
 
                 {noSearchResult && <NoFoundData title={'No cat With This ID'} />}
 
-                {cats.length >0 &&<FlatList
+                {cats.length > 0 && <FlatList
                     data={[...cats, { loader: true, catId: "loading123" }]}
                     renderItem={({ item }) => <CatCard item={item} flatListLoading={flatListLoading} />}
                     keyExtractor={item => item?.catId}
@@ -134,7 +235,7 @@ const Search = (props: Props) => {
                     }}
                 />}
                 <>
-                    
+
                 </>
 
                 {/* <ActivityIndicator color={Colors.primary} size="small"  style={[gStyles.p_2]}/> */}
@@ -212,6 +313,17 @@ const styles = StyleSheet.create({
     },
     flatListEndLoder: {
         height: hp(25),
+    },
+    outoCompletContainer: {
+        maxHeight: hp(40),
+        minHeight:hp(10),
+        marginTop: moderateScale(-1),
+        borderWidth: moderateScale(0.5),
+        backgroundColor: Colors.white,
+        borderColor: Colors.lightGray,
+        borderBottomRightRadius: moderateScale(3),
+        borderBottomLeftRadius: moderateScale(3),
+        zIndex:10000
     }
 });
 

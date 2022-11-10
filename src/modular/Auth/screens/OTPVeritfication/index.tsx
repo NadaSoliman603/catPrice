@@ -19,13 +19,17 @@ import CountDown from 'react-native-countdown-component';
 import { moderateScale } from '../../../../styles/ResponsiveDimentions';
 import Timer from '../../components/Timer';
 import OverLayLoading from '../../../../common/OverLayLoading';
+import { AuthCustomNav, Phone } from '../..';
 
-type Props = {}
+type Props = {
+    handelAuthScreens:(screen :AuthCustomNav)=>void;
+    phone:Phone | null
+}
 type ScreenRouteProp = RouteProp<RootStack, 'OTPVeritfication'>;
 
 const OTPVeritfication = (props: Props) => {
     const { control, register, handleSubmit, watch, formState: { errors }, getValues } = useForm();
-    const navigation = useNavigation<NavigationType>()
+    // const navigation = useNavigation<NavigationType>()
     const [disablVerityinButton, setDisablVerityinButton] = useState(true)
     const [veritivictatin, setVeritification] = useState<null | any>(null)
     const [loading, setLoading] = useState(false)
@@ -36,14 +40,13 @@ const OTPVeritfication = (props: Props) => {
     const [resendCode, setResendCode] = useState(false)
     const [resend, setResend] = React.useState(0)
 
-    const route = useRoute<ScreenRouteProp>()
+    // const route = useRoute<ScreenRouteProp>()
     const input1 = useRef()
     const input2 = useRef()
     const input3 = useRef()
     const input4 = useRef()
     //Submit OTPVeritfication Data
     const onSubmit = async (data: any) => {
-
         const code = data?.v1 + data.v2 + data.v3 + data.v4;
         const token = veritivictatin?.activationToken;
         console.log("submit code", { code }, { veritivictatin }, { token },)
@@ -54,15 +57,18 @@ const OTPVeritfication = (props: Props) => {
                 console.log({ res })
                 setLoading(false)
                 if (res?.data?.body) {
+                    console.log("Login")
                     console.log(res)
-                    navigation.navigate("Login")
+                    props.handelAuthScreens("Login")
+                    // navigation.navigate("Login")
                 }
             } catch (error) {
                 console.log(error)
             }
         }
         console.log(code)
-        navigation.navigate('Login')
+        // navigation.navigate('Login')
+        props.handelAuthScreens("Login")
         console.log(veritivictatin)
     }
 
@@ -83,11 +89,15 @@ const OTPVeritfication = (props: Props) => {
             console.log(error)
         }
     }
-    const params = route.params
+    const params = props.phone
     useEffect(() => {
-        const params = route.params
-        console.log({ params })
-        sendOTP({ mobileCode: params.mobileCode, mobileNo: params.phone })
+        console.log("LoginScreen")
+        if(props.phone !== null){
+            const params = props.phone
+            console.log({ params })
+            sendOTP({ mobileCode: params.mobileCode, mobileNo: params.phone })
+        }
+   
         return () => {
 
         }
@@ -97,7 +107,7 @@ const OTPVeritfication = (props: Props) => {
     return (
         <View style={styles.screen}>
             <>
-                <BackHeader title='OTP Verification' />
+                <BackHeader onBack={()=>{props.handelAuthScreens("Login")}} title='OTP Verification' />
                 <View style={styles.screen}>
                     <Image source={imgs.OTP_Vetitification} style={styles.logoImg} />
 
@@ -122,7 +132,7 @@ const OTPVeritfication = (props: Props) => {
                             setResend(2 * 60)
                         }} />}
 
-                        {!expiredCode && <Text style={[gStyles.alignCenter, gStyles.pt_20]}>
+                        {!expiredCode && params !== null && <Text style={[gStyles.alignCenter, gStyles.pt_20]}>
                             We Sent the OTP to +{params.mobileCode}{params.phone}
                         </Text>}
 
@@ -137,7 +147,8 @@ const OTPVeritfication = (props: Props) => {
                             {resendCode && expiredCode ? <>
                                 <Text style={[gStyles.alignCenter, gStyles.pt_20]}>Don't receive the OTP?</Text>
                                 <Button textStyle={[gStyles.text_Primary, gStyles.h4]}
-                                    style={[gStyles.alignCenter, styles.register]} onPress={()=>sendOTP({ mobileCode: params.mobileCode, mobileNo: params.phone })} title={"Send Again"} />
+                                    style={[gStyles.alignCenter, styles.register]} onPress={()=>
+                                        params !== null && sendOTP({ mobileCode:params.mobileCode, mobileNo: params.mobileCode })} title={"Send Again"} />
                             </> :  <>
                             <Text style={[gStyles.alignCenter, gStyles.pt_20]}>Don't receive the OTP?</Text>
                             <Text style={[gStyles.alignCenter, gStyles.pt_20]}>You can resend  OTP in a few minutes</Text>

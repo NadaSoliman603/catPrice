@@ -44,7 +44,7 @@ const CustomTextInput = ({ label, control, name, error , icon ,rightIcon=false ,
                         selectionColor={Colors.bg}
                         keyboardType = {keyboard ? keyboard : "default"}
                         secureTextEntry ={secureTextEntry}
-                        dense={true}
+                        dense={false}
                         outlineColor={"#eee"}
                         // placeholder= {'Some Text'}
                         // theme={{

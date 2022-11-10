@@ -155,6 +155,8 @@ const BrandStack = () => {
         <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
         <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
+        <Stack.Screen options={{ title: "Product Details", headerRight: () => <CartIcon navigationScreen='default' />, headerLeft: () => <BackBotton /> }} name="ProductDetails" component={ProductDetails} />
+
     </Stack.Navigator>)
 }
 

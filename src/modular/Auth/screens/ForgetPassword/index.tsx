@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+// import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { StyleSheet, View, Text, Image, Pressable } from 'react-native';
@@ -9,32 +9,41 @@ import MainView from '../../../../common/MainView';
 import Colors from '../../../../styles/colors';
 import fontSizes from '../../../../styles/fontSizes';
 import gStyles, { hp, wp } from '../../../../styles/globalStyle';
-import { NavigationType } from '../../../../types/navigationTypes';
+// import { NavigationType } from '../../../../types/navigationTypes';
 import Feather from 'react-native-vector-icons/Feather';
 import BackHeader from '../../../../common/BackHeader';
 import { ScrollView } from 'react-native-gesture-handler';
 import Entypo from 'react-native-vector-icons/Entypo';
-import PickCountryCode from '../../../../common/CountryPicker';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../Redux/store/store';
+import { moderateScale } from '../../../../styles/ResponsiveDimentions';
+import Ionicons  from 'react-native-vector-icons/Ionicons';
+import CountryPicker from 'react-native-country-picker-modal'
+import { AuthCustomNav } from '../..';
 
-type Props = {}
+type Props = {
+    handelAuthScreens:(screen :AuthCustomNav)=>void
+}
 
 const ForgetPassword = (props: Props) => {
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm();
-    const navigation = useNavigation<NavigationType>()
+    // const navigation = useNavigation<NavigationType>()
 
     const [show, setShow] = React.useState(false);
-    const [countryCode, setCountryCode] = React.useState('+61');
-    
+    const loction = useSelector((state: RootState) => state.Location)
+    const [countryCode, setCountryCode] = React.useState<any>(loction);
+
     //Submit ForgetPassword Data
     const onSubmit = (data: object) => {
         console.log({ data })
+        props.handelAuthScreens("OTPVeritfication")
         // navigation.navigate('OTPVeritfication' ,{mobileCode:"20", phone:"1128859098"})
     }
-
     return (
-        <View style={styles.screen}>
+        <ScrollView>
+            <View style={styles.screen}>
             <>
-                <BackHeader title='Forget Password' />
+                <BackHeader onBack={()=>{props.handelAuthScreens("Login")}} title='Forget Password' />
                 {/* <ScrollView style={styles.screen}> */}
                 <View style={styles.screen}>
                     <Image source={imgs.forgetPass} style={styles.logoImg} />
@@ -43,7 +52,7 @@ const ForgetPassword = (props: Props) => {
                         <Text style={[gStyles.alignCenter, gStyles.alin_justify]}>Enter your registered phone to get a reset link and create a new password. </Text>
                     </View>
 
-                    <PickCountryCode
+                    {/* <PickCountryCode
                         setCountryCode={setCountryCode}
                         setShow={setShow}
                         show={show}
@@ -63,6 +72,35 @@ const ForgetPassword = (props: Props) => {
                         </Pressable>}
                         rules={{ required: true, }}
 
+                    /> */}
+
+                    <CustomTextInput
+                        secureTextEntry={false}
+                        keyboard={"number-pad"}
+                        label='Phone Number'
+                        control={control}
+                        error={errors.phone}
+                        name="phone"
+                        icon={() => <Feather name='phone' size={fontSizes.font20} />}
+                        rightIcon={() => <Pressable onPress={() => { setShow(true) }} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.bg : "#fff" }, gStyles.py_2, gStyles.row_Center]}>
+                            <Ionicons name='caret-down-outline' size={fontSizes.font12} />
+                            <CountryPicker
+                                countryCode={countryCode.cca2}
+                                withFilter={true}
+                                withFlag={true}
+                                // withCountryNameButton={true}
+                                withAlphaFilter={true}
+                                withCallingCode={true}
+                                withEmoji={true}
+                                onSelect={(country: any) => {
+                                    setCountryCode(country)
+                                }}
+                                // withCurrency={true}
+                                visible={show}
+                                containerButtonStyle={{ width: moderateScale(10) }}
+                            />
+                        </Pressable>}
+                        rules={{ required: true, }}
                     />
 
 
@@ -73,6 +111,7 @@ const ForgetPassword = (props: Props) => {
                 {/* </ScrollView> */}
             </>
         </View>
+        </ScrollView>
     );
 }
 

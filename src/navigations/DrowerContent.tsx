@@ -22,6 +22,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Redux/store/store';
 import { Login } from '../Redux/reducers/AuthReducer';
+import { ShowModal } from '../Redux/reducers/AuthModalReducer';
 type Props = {
     props: any;
 };
@@ -44,9 +45,10 @@ const DrowerContent = ({ props }: Props) => {
     }
 
     const onLogin = ()=>{
-        console.log("login")
         try {
-            navigation.navigate('Login')
+            //toggleDrawer
+            dispatch(ShowModal(true))
+            //navigation.navigate('Login')
         } catch (error) {
             console.log(error)
         }

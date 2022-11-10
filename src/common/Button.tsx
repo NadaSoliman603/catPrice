@@ -1,6 +1,8 @@
 
 import React from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
+import gStyles from '../styles/globalStyle';
+import { moderateScale } from '../styles/ResponsiveDimentions';
 import Colors from './../styles/colors';
 
 type Props = {
@@ -19,7 +21,7 @@ const Button = ({ title, onPress , style , textStyle }: Props) => {
             ...style
            
         ]} onPress={onPress} >
-            <Text style={[styles.text ,  ...textStyle]}>{title}</Text>
+            <Text style={[styles.text ,  ...textStyle , gStyles.h3 ,]}>{title}</Text>
 
         </Pressable>
     );
@@ -29,16 +31,17 @@ const styles = StyleSheet.create({
     conatiner: {
         margin: 5,
         // backgroundColor: Colors.bg,
-        padding: 8,
-        borderRadius: 5,
+        padding: moderateScale(5),
+        borderRadius: moderateScale(3),
         flexDirection: "row",
         // justifyContent:"center",
         // alignItems:"center"
     },
     text: {
-        fontSize:18,
-        paddingHorizontal:5,
+        // fontSize:18,
+        // paddingHorizontal:5,
         // textAlign:"center"
+        fontWeight:"600"
     }
 });
 

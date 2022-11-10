@@ -1,6 +1,7 @@
 
 
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import  ModalSlice  from '../reducers/AuthModalReducer'
 import  AuthSlice  from '../reducers/AuthReducer'
 import cartSlice from '../reducers/CartReducer'
 import  DrowerSlice  from '../reducers/DrowerNavigation'
@@ -10,7 +11,8 @@ const reuducer = combineReducers({
   Cart: cartSlice,
   Auth:AuthSlice,
   Drower:DrowerSlice,
-  Location:LocationSlice
+  Location:LocationSlice,
+  ShowModal: ModalSlice
 })
 
 export const store = configureStore({

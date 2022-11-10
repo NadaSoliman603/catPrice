@@ -37,6 +37,8 @@ const CustomCheckbox = ({ label, name, error , value , setValue}: Props) => {
 const styles = StyleSheet.create({
     input: {
         marginVertical: 7,
+        maxWidth:"90%",
+        alignSelf:"center"
     },
 
 });

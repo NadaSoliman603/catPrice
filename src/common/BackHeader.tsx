@@ -6,15 +6,18 @@ import fontSizes from '../styles/fontSizes';
 import Colors from '../styles/colors';
 import {useNavigation } from '@react-navigation/native';
 import { NavigationType } from '../types/navigationTypes';
+import { moderateScale } from '../styles/ResponsiveDimentions';
 
 type Props = {
-    title:string
+    title:string;
+    onBack:()=>void
 }
 
-const BackHeader = ({title}: Props) => {
-    const navigation = useNavigation<NavigationType>()
+const BackHeader = ({title , onBack}: Props) => {
+    // const navigation = useNavigation<NavigationType>()
     const goBack = () => {
-        navigation.goBack()
+        // navigation.goBack()
+        onBack()
     }
     return (
         <View style={[gStyles.row ,styles.screen]}>
@@ -22,7 +25,7 @@ const BackHeader = ({title}: Props) => {
                 {
                     backgroundColor: pressed ? Colors.bg : "#fff"
                 },
-            ]} onPress={goBack} >
+            ,{paddingHorizontal:moderateScale(5)}] } onPress={goBack} >
                 <Feather color={Colors.primary} name='arrow-left' size={fontSizes.font22} />
             </Pressable>
             <View style={[styles.headerContainer]}>
@@ -34,7 +37,7 @@ const BackHeader = ({title}: Props) => {
 
 const styles = StyleSheet.create({
     screen:{
-        paddingBottom:35,
+        paddingBottom:moderateScale(10),
         zIndex:10
     },
     headerContainer: {

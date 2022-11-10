@@ -23,11 +23,16 @@ import CountryPicker from 'react-native-country-picker-modal'
 import { moderateScale } from '../../../../styles/ResponsiveDimentions';
 import Error from '../../../../common/Error';
 import { RootState } from '../../../../Redux/store/store';
-type Props = {}
+import { AuthCustomNav, Phone } from '../..';
+type Props = {
+    handelAuthScreens:(screen :AuthCustomNav )=>void ;
+    handelPhonNumber:(phone:Phone)=>void
+
+}
 
 const Login = (props: Props) => {
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm();
-    const navigation = useNavigation<NavigationType>()
+    // const navigation = useNavigation<NavigationType>()
     const loction = useSelector((state: RootState) => state.Location)
     console.log({loction})
     const dispatch = useDispatch()
@@ -65,8 +70,10 @@ const Login = (props: Props) => {
             if (user === null) {
                 const headerMessage = res.data.header.headerMessage
                 if (headerMessage === "User No Active Mobile") {
+                    props.handelPhonNumber({ mobileCode:countryCode.callingCode[0], phone:authData.phone})
+                    props.handelAuthScreens("OTPVeritfication")
                     console.log("login creen " ,{ mobileCode:countryCode.callingCode[0], phone:authData.phone})
-                    navigation.navigate("OTPVeritfication" , {mobileCode:countryCode.callingCode[0], phone:authData.phone,}) 
+                    // navigation.navigate("OTPVeritfication" , {mobileCode:countryCode.callingCode[0], phone:authData.phone,}) 
                 }
                 if (headerMessage === 'WRONG_CREDENTIAL') {
                     setServerError(true)
@@ -75,7 +82,8 @@ const Login = (props: Props) => {
                 AsyncStorage.setItem('user', JSON.stringify(user))
                 console.log(user)
                 dispatch(login({user:user , token:user.token}))
-                navigation.navigate("Home")
+                // navigation.navigate("Home")
+                props.handelAuthScreens("HideModal")
             }
 
         } catch (error) {
@@ -89,7 +97,7 @@ const Login = (props: Props) => {
     return (
         <View style={styles.screen}>
             <View style={styles.screen}>
-                <Image source={imgs.logo} style={styles.logoImg} />
+                <Image resizeMode='contain' source={imgs.logo} style={styles.logoImg} />
                 <Text style={[gStyles.alignCenter, gStyles.text_Primary, gStyles.h1]}>Login</Text>
 
                 <CustomTextInput
@@ -140,11 +148,17 @@ const Login = (props: Props) => {
 
 
                 <View style={[gStyles.center]}>
-                    <Button textStyle={[gStyles.text_sm, gStyles.text_Primary]} style={[gStyles.alignCenter]} onPress={() => { navigation.navigate('ForgetPassword') }} title={"I forget my Password"} />
+                    <Button textStyle={[gStyles.text_sm, gStyles.text_Primary]} style={[gStyles.alignCenter]} onPress={() => {
+                        props.handelAuthScreens("ForgetPassword")
+                        // navigation.navigate('ForgetPassword') 
+                    }} title={"I forget my Password"}      />
                     {serverError && <Error message="That's not the right password or phone number tray again" />}
                     <Button textStyle={[gStyles.text_White, gStyles.text_center]} style={[gStyles.bg_Primary, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Login"} />
                     <Text style={[gStyles.alignCenter, gStyles.pt_20]}>Don't have an acount? </Text>
-                    <Button textStyle={[gStyles.text_Primary, gStyles.h4]} style={[gStyles.alignCenter, styles.register]} onPress={() => { navigation.navigate("Register") }} title={"Register here"} />
+                    <Button textStyle={[gStyles.text_Primary, gStyles.h4]} style={[gStyles.alignCenter, styles.register]} onPress={() => { 
+                        //navigation.navigate("Register") 
+                        props.handelAuthScreens("Register")
+                        }} title={"Register here"} />
                 </View>
             </View>
             {loading && <OverLayLoading />}
@@ -156,16 +170,18 @@ const styles = StyleSheet.create({
 
     screen: {
         flex: 1,
-        justifyContent: "center",
-        alignContent: "center",
+        // justifyContent: "center",
+        // alignContent: "center",
         // flex: 1,
         backgroundColor: Colors.white,
-        padding: "2.5%"
+        padding: moderateScale(6)
     },
     logoImg: {
-        width: 250,
-        height: 60,
-        alignSelf: "center"
+        width: moderateScale(100),
+        height: moderateScale(23),
+        alignSelf: "center",
+        marginBottom:moderateScale(15),
+        marginTop:moderateScale(15)
     },
     register: {
         padding: 0
