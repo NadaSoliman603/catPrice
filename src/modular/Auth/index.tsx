@@ -44,7 +44,7 @@ const AuthStack = (props: Props) => {
     return (
         // <ButtomMeueModal height={100} title="" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={togleModal}>
 
-        <ButtomMeueModal height={modalHeight} title="" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={togleModal}>
+        <ButtomMeueModal bgColor='default' height={modalHeight} title="" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={togleModal}>
             <>
                 {authScreen === "Login" && <Login handelPhonNumber={handelPhonNumber}  handelAuthScreens={handelAuthScreens} />}
                 {authScreen === "Register" && <Register handelPhonNumber={handelPhonNumber} handelAuthScreens={handelAuthScreens} />}

@@ -77,19 +77,33 @@ const SplashScreen = () => {
             console.log(error)
         }
     }
-
-
+    const [navigateScreen , setNavigateScreen] = useState<"Home" | "OnBoarding1" |null>(null)
+    const onBroading = async()=>{
+        const onBroading = await AsyncStorage.getItem("onBroading")
+        if(onBroading === null) {
+            setNavigateScreen("OnBoarding1") 
+        }else{
+            setNavigateScreen("Home") 
+        }
+        console.log(onBroading)
+    }
+    const brodding = onBroading()
 
     useEffect(() => {
         checkLogin()
         getLocation()
+       
+        
         setTimeout(() => {
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Home' }],
-            })
+            if(navigateScreen !== null){
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name:  navigateScreen}],
+                })
+            }
+           
         }, 2000);
-    }, [])
+    }, [navigateScreen])
 
 
     return (

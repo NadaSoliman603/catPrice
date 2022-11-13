@@ -1,53 +1,64 @@
-import  React , {useState} from 'react';
-import { StyleSheet, View, Text , Pressable } from 'react-native';
+import React, { useState , useEffect} from 'react';
+import { StyleSheet, View, Text, Pressable , } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ActivityIndicator } from 'react-native-paper';
 import Colors from '../styles/colors';
 import gStyles, { hp, wp } from '../styles/globalStyle';
 import { moderateScale } from '../styles/ResponsiveDimentions';
-import AntDesign  from 'react-native-vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NavigationType } from '../types/navigationTypes';
 import fontSizes from '../styles/fontSizes';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Redux/store/store';
 import { showPriceApi } from '../Api/Auth';
 import OverLayLoading from '../common/OverLayLoading';
+import Button from '../common/Button';
+import { ShowModal } from '../Redux/reducers/AuthModalReducer';
 type Props = {
-    item :any
-    flatListLoading :boolean;
+    item: any
+    flatListLoading: boolean;
+    showNoCriditModal: () => void
 }
 
-const CatCard = ({item , flatListLoading}:Props) => {
+const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
 
     const navigation = useNavigation<NavigationType>()
- // ===========================
+    const token = useSelector((state: RootState) => state.Auth.token)
+    const [overLayloading, setOverLayLoading] = useState(false)
+    const [price, setPrice] = useState<null | string>(null)
+    const [serverError, setServerError] = useState<{ error: boolean; msg: string }>({ error: false, msg: "" })
+    const dispatch = useDispatch()
+    // ===========================
     //Show Price
     //============================
-    const token = useSelector((state: RootState) => state.Auth.token)
-    const [overLayloading , setOverLayLoading] = useState(false)
-    const [price , setPrice] = useState<null |string>(null)
-    
 
-    const onShowprice = async(productDetails:any) => { 
-        if(token){
-            console.log(token , productDetails.catId)
+    useEffect(()=>{
+        if(token)setServerError({error:false ,msg:""})
+    },[token])
+
+    const onShowprice = async (productDetails: any) => {
+        if (token) {
+            console.log(token, productDetails.catId)
             setOverLayLoading(true)
-            const res = await showPriceApi({catId:productDetails.catId , token:token})
+            const res = await showPriceApi({ catId: productDetails.catId, token: token })
             console.log(res.data)
             const price = res.data.body?.formattedPrice
             setOverLayLoading(false)
-            if(!price){
-                navigation.navigate('Login')
-            }else{
+            if (!price) {
+                showNoCriditModal()
+                //navigation.navigate('Login')
+            } else {
                 const priceText = "SAR " + price
-                setPrice(priceText) 
+                setPrice(priceText)
             }
-           
-        }else{
-            navigation.navigate('Login')
+
+        } else {
+            setServerError({error:true , msg:'to show Price you have to login'})
+            // showModal()
+            // navigation.navigate('Login')
         }
-     }
+    }
 
     if (item.loader) {
         console.log(item)
@@ -59,7 +70,7 @@ const CatCard = ({item , flatListLoading}:Props) => {
     }
     return (
         <View key={item.catId}>
-            <Pressable  onPress={()=>navigation.navigate("ProductDetails" , {catID:item.catId})} style={({pressed})=>[{backgroundColor:pressed?Colors.primaryPresedButton : Colors.white},styles.brandContainer]}>
+            <Pressable onPress={() => navigation.navigate("ProductDetails", { catID: item.catId })} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.primaryPresedButton : Colors.white }, styles.brandContainer]}>
                 <View style={[gStyles.row, gStyles.spaceBetwen]}>
                     <View style={[gStyles.row]}>
                         <View
@@ -85,19 +96,22 @@ const CatCard = ({item , flatListLoading}:Props) => {
                     </Pressable>
                 </View>
                 <View style={[styles.catImgContainer]}>
-                    <FastImage source={{ uri: item?.images?.[0]?.fullImageURL  }} style={styles.catImg} />
+                    <FastImage source={{ uri: item?.images?.[0]?.fullImageURL }} style={styles.catImg} />
                 </View>
 
                 <View style={[gStyles.row, gStyles.spaceBetwen]}>
-                    <Pressable onPress={price === null? ()=>{onShowprice(item)}:()=>{}} style={({pressed})=>[{  backgroundColor:pressed?Colors.primaryPresedButton :"#fff"}]}>
-                        <Text style={[gStyles.text_Primary, styles.showPrice, gStyles.text_center, gStyles.text_Bold]}>{price ? price :"Show Price"} </Text>
+                    <Pressable onPress={price === null ? () => { onShowprice(item) } : () => { }} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.primaryPresedButton : "#fff" }]}>
+                        <Text style={[gStyles.text_Primary, styles.showPrice, gStyles.text_center, gStyles.text_Bold]}>{price ? price : "Show Price"} </Text>
                     </Pressable>
 
-                    <Pressable onPress={()=>console.log("preesed")}  style={({pressed})=>[{  backgroundColor:pressed?Colors.primaryPresedButton :"#fff"}, styles.favButton]}  >
+                    <Pressable onPress={() => console.log("preesed")} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.primaryPresedButton : "#fff" }, styles.favButton]}  >
                         <AntDesign name="hearto" color={Colors.primary} size={fontSizes.font20} />
                     </Pressable>
                 </View>
-                {overLayloading && <OverLayLoading/>}
+                {serverError.error && <Button textStyle={[gStyles.h6, { color: Colors.error }]} style={[gStyles.alignCenter, { padding: 0 }]} onPress={() => {
+                    dispatch(ShowModal(true))
+                }} title={serverError.msg } />}
+                {overLayloading && <OverLayLoading />}
 
             </Pressable>
         </View>

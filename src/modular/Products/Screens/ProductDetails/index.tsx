@@ -22,12 +22,16 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { AddToCart } from '../../../../Redux/reducers/CartReducer';
 import addCartDataToLocalStorag from '../../../../Redux/actions/CartAction';
-import ButtomMeueModal from '../../../../common/ButtomMeueModal';
 import PieChart from 'react-native-pie-chart';
 import PieChartText from './PieChartText';
 import OverLayLoading from '../../../../common/OverLayLoading';
 import { RootState } from '../../../../Redux/store/store';
 import useDrower from '../../useDrower';
+import OutOfCridit from '../../../Search/OutOfCridit';
+import CustomButtomMeueModal from '../../../../components/AuthModal';
+import ButtomMeueModal from '../../../../common/ButtomMeueModal';
+import { ShowModal } from '../../../../Redux/reducers/AuthModalReducer';
+
 // import PieChart from 'react-native-pie-chart';
 
 
@@ -43,14 +47,18 @@ const ProductDetails = (props: Props) => {
     const [quantity, setQuantity] = useState(1)
     const [modalVisible, setModalVisible] = useState(false);
     const series = [productDetails?.pd, productDetails?.pt, productDetails.rh]
-    const sliceColor = [ Colors.palladiumOrang, Colors.RhodiumGreen,  Colors.platinumBlue, ]
+    const sliceColor = [Colors.palladiumOrang, Colors.RhodiumGreen, Colors.platinumBlue,]
     const togleModal = (show: boolean,) => {
         setModalVisible(show)
     }
 
-    const [total , setTotal] = useState<number>(0)
-    
-   
+    const [total, setTotal] = useState<number>(0)
+    const [serverError, setServerError] = useState<{ error: boolean; msg: string }>({ error: false, msg: "" })
+    const [noCriditmodalVisible, setNoCriditModalVisible] = useState(false);
+    const togleNoCriditModal = (show: boolean,) => {
+        setNoCriditModalVisible(show)
+    }
+
     // const prs =  (productDetails?.pd /total) * 100
     // console.log((productDetails?.pd /total)* 100, Math.round( (productDetails?.pd /total * 100) * 100) /100)
     // console.log((productDetails?.pt /total)* 100, Math.round( (productDetails?.pt /total * 100) * 100)/100)
@@ -79,37 +87,41 @@ const ProductDetails = (props: Props) => {
 
     }, [])
 
+
     // ===========================
     //Show Price
     //============================
     const token = useSelector((state: RootState) => state.Auth.token)
     const navigation = useNavigation<NavigationType>();
-    const [overLayloading , setOverLayLoading] = useState(false)
-    const [price , setPrice] = useState<null |string>(null)
+    const [overLayloading, setOverLayLoading] = useState(false)
+    const [price, setPrice] = useState<null | string>(null)
 
-    const onShowprice = async() => { 
-        console.log({token})
-        if(token){
-            console.log(token , productDetails.catId)
+    const onShowprice = async () => {
+        console.log({ token })
+        if (token) {
+            console.log(token, productDetails.catId)
             setOverLayLoading(true)
-            const res = await showPriceApi({catId:productDetails.catId , token:token})
+            const res = await showPriceApi({ catId: productDetails.catId, token: token })
             console.log(res.data)
             const price = res.data.body?.formattedPrice
             setOverLayLoading(false)
-            if(!price){
-                if(res.data.header.headerMessage ===  "NO_ACTIVE_PLAN"){
-                    navigation.navigate('CreditsSearchStack')
+            if (!price) {
+                if (res.data.header.headerMessage === "NO_ACTIVE_PLAN") {
+                    //navigation.navigate('CreditsSearchStack')
+                    setNoCriditModalVisible(true)
+
                 }
-                
-            }else{
+
+            } else {
                 const priceText = "SAR " + price
-                setPrice(priceText) 
+                setPrice(priceText)
             }
-           
-        }else{
-            navigation.navigate('Login')
+
+        } else {
+            //navigation.navigate('Login')
+            setServerError({ error: true, msg: 'to show Price you have to login' })
         }
-     }
+    }
 
     // ===========================
     //Add To Cart
@@ -122,6 +134,10 @@ const ProductDetails = (props: Props) => {
         dispatch(AddToCart({ quantity: cartData.quantity, item: cartData.data }))
     }
 
+    useEffect(() => {
+        if (token) setServerError({ error: false, msg: "" })
+    }, [token])
+
     return (
         <>
             <MainView data={productDetails} loading={loading} overLayLoading={false} style={styles.screen}>
@@ -129,7 +145,7 @@ const ProductDetails = (props: Props) => {
                     <View style={[styles.imageContainer]}>
                         <View style={[gStyles.row, gStyles.spaceBetwen, gStyles.pb_6]} >
                             <AntDesign name="hearto" color={Colors.primary} size={fontSizes.font20} />
-                            <Pressable onPress={()=>togleModal(true)} style={[gStyles.row]} >
+                            <Pressable onPress={() => togleModal(true)} style={[gStyles.row]} >
                                 <Text style={[gStyles.text_Primary, gStyles.h6]} >Metal Details </Text>
                                 <AntDesign color={Colors.primary} name='arrowright' size={fontSizes.font12} />
                             </Pressable>
@@ -202,18 +218,20 @@ const ProductDetails = (props: Props) => {
                             <Divider />
                         </>}
 
-                        <OutLineButton textStyle={{}} outline={false} style={{}} title={price?price:'Show Price '} onPress={price === null? onShowprice : ()=>{}} icon={
-                        price?<></>: <Feather name="eye" size={fontSizes.font16} color={Colors.primary} />} />
-
+                        <OutLineButton textStyle={{}} outline={false} style={{}} title={price ? price : 'Show Price '} onPress={price === null ? onShowprice : () => { }} icon={
+                            price ? <></> : <Feather name="eye" size={fontSizes.font16} color={Colors.primary} />} />
+                        {serverError.error && <Button textStyle={[gStyles.h6, { color: Colors.error }]} style={[gStyles.alignCenter, { padding: 0 }]} onPress={() => {
+                            dispatch(ShowModal(true))
+                        }} title={serverError.msg} />}
 
                         <View style={[gStyles.row, gStyles.spaceBetwen]}>
                             <View>
-                                <Quantity handelChange={()=>{}} buttonStyle={{}} quantity={quantity} setQuantity={setQuantity} />
+                                <Quantity handelChange={() => { }} buttonStyle={{}} quantity={quantity} setQuantity={setQuantity} />
                             </View>
                             <OutLineButton textStyle={{}} outline={true} style={{ paddingHorizontal: moderateScale(6) }} title='Add to cart ' onPress={onAddToCart} icon={<AntDesign name="shoppingcart" size={fontSizes.font16} color={"#fff"} />} />
                         </View>
                     </View>
-
+                    <View style={{ height: moderateScale(10) }}></View>
                 </ScrollView>}
 
             </MainView>
@@ -227,14 +245,18 @@ const ProductDetails = (props: Props) => {
                             widthAndHeight={moderateScale(80)}
                             doughnut={false}
                         />
-                        <View style={[gStyles.row , gStyles.spaceBetwen , gStyles.row_Center , {paddingHorizontal:moderateScale(2)}]}>
-                            <PieChartText prec = {Math.round( (productDetails?.pd /total * 100) * 100) /100} color={Colors.palladiumOrang} title='palladium' />
-                            <PieChartText prec = {Math.round( (productDetails?.rh /total * 100) * 100) /100} color={Colors.platinumBlue} title='rhodium' />
-                            <PieChartText prec = {Math.round( (productDetails?.pt /total * 100) * 100) /100} color={Colors.RhodiumGreen} title='platinum' />
+                        <View style={[gStyles.row, gStyles.spaceBetwen, gStyles.row_Center, { paddingHorizontal: moderateScale(2) }]}>
+                            <PieChartText prec={Math.round((productDetails?.pd / total * 100) * 100) / 100} color={Colors.palladiumOrang} title='palladium' />
+                            <PieChartText prec={Math.round((productDetails?.rh / total * 100) * 100) / 100} color={Colors.platinumBlue} title='rhodium' />
+                            <PieChartText prec={Math.round((productDetails?.pt / total * 100) * 100) / 100} color={Colors.RhodiumGreen} title='platinum' />
                         </View>
                     </View>
                 </>
             </ButtomMeueModal>
+
+            <CustomButtomMeueModal bgColor='rgba(0, 0, 0, 0.6)' height={65} title="out of credits" togleModal={togleNoCriditModal} modalVisible={noCriditmodalVisible} setModalVisible={togleNoCriditModal}>
+                <OutOfCridit cancelNoCriditeModal={() => { setNoCriditModalVisible(false) }} />
+            </CustomButtomMeueModal>
             {overLayloading && <OverLayLoading />}
         </>
     );

@@ -21,7 +21,7 @@ const Button = ({ title, onPress , style , textStyle }: Props) => {
             ...style
            
         ]} onPress={onPress} >
-            <Text style={[styles.text ,  ...textStyle , gStyles.h3 ,]}>{title}</Text>
+            <Text style={[styles.text ,   gStyles.h3 ,...textStyle ]}>{title}</Text>
 
         </Pressable>
     );

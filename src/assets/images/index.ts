@@ -18,6 +18,11 @@ const imgs = {
     drawer : require('./imgs/Drawer.png'), 
     userIcon : require('./imgs/userIcon.png'), 
     outOfCridite : require('./imgs/outOfCridite.png'), 
+    onBoarding3 : require('./imgs/onBoarding3.png'),
+    onBoarding2 : require('./imgs/onBoarding2.png'),
+    onBoarding1 : require('./imgs/onBoarding1.png'),
+    frame1 : require('./imgs/Frame1.png'),
+    frame2 : require('./imgs/Frame2.png'),
 }
 
 export default imgs;

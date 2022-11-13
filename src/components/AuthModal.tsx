@@ -16,8 +16,9 @@ type Props = {
     children: JSX.Element;
     title: string;
     height: number;
+    bgColor:string | "default"
 }
-const ButtomMeueModal = ({ height, modalVisible, togleModal, setModalVisible, children, title }: Props) => {
+const ButtomMeueModal = ({bgColor , height, modalVisible, togleModal, setModalVisible, children, title }: Props) => {
     // const [modalVisible, setModalVisible] = useState(false);
     const fulllHeight = height === 100
     return (
@@ -34,9 +35,9 @@ const ButtomMeueModal = ({ height, modalVisible, togleModal, setModalVisible, ch
             // onDismiss={}
             >
 
-                <StatusBar animated={false} backgroundColor={"#ccc"} />
+                <StatusBar animated={false} backgroundColor={bgColor === "default" ? "#bbb" :bgColor} />
 
-               <View style={{ height:hp(100) , backgroundColor:"#ccc" , flex:1 }}>
+               <View style={{ height:hp(100) , backgroundColor:bgColor === "default" ? "#bbb" :bgColor , flex:1 ,}}>
                <View style={[styles.modalView, fulllHeight && styles.border_0, {
                     top: hp(100 - height),
                     height: hp(height),
@@ -49,7 +50,7 @@ const ButtomMeueModal = ({ height, modalVisible, togleModal, setModalVisible, ch
                             <Text style={[gStyles.h3, gStyles.text_Bold, gStyles.text_center]}>{title}</Text>
 
                         </View>
-                        {!fulllHeight && <Pressable onPress={() => setModalVisible(false)} style={({ pressed }) => [{ alignSelf: 'flex-end', padding: moderateScale(2), backgroundColor: pressed ? "#fff" : "#eee", borderRadius: moderateScale(50), }]}>
+                        {!fulllHeight && <Pressable onPress={() => setModalVisible(false)} style={({ pressed }) => [{ alignSelf: 'flex-end', padding: moderateScale(2), backgroundColor: pressed ? "#fff" : "#F3F3F3", borderRadius: moderateScale(50), }]}>
                             <AntDesign name="down" size={fontSizes.font18} />
                         </Pressable>}
 

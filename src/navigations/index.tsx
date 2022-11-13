@@ -24,6 +24,11 @@ import OTPVeritfication from '../modular/Auth/screens/OTPVeritfication';
 import DrowerNav from './DrowerNav';
 import BottomTab from './BottomTab';
 import SplashScreen from '../modular/Auth/screens/SplachScreen';
+import OnBoarding1 from '../Onboarding/OnBoarding1';
+import OnBoarding2 from '../Onboarding/OnBoarding2';
+import OnBoarding3 from '../Onboarding/OnBoarding3';
+
+
 const RootStackType = createNativeStackNavigator<RootStack>();
 
 const Drawer = createDrawerNavigator();
@@ -33,6 +38,10 @@ const AuthStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen options={{ headerShown: false }} name="SplachScreen" component={SplashScreen} />      
+            <Stack.Screen options={{ headerShown: false }} name="OnBoarding1" component={OnBoarding1} />      
+            <Stack.Screen options={{ headerShown: false }} name="OnBoarding2" component={OnBoarding2} />      
+            <Stack.Screen options={{ headerShown: false }} name="OnBoarding3" component={OnBoarding3} />      
+
             {/* <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
             <Stack.Screen options={{ headerShown: false }} name="Register" component={Register} />
             <Stack.Screen options={{ headerShown: false }} name="ForgetPassword" component={ForgetPassword} />
