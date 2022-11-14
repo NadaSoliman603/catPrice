@@ -183,6 +183,7 @@ const Search = (props: Props) => {
         return () => { setMount(false); }
     }, [])
 
+    console.log({outoCompletData}, typeof(outoCompletData))
     return (
         <>
             <MainView data={[{}]} loading={false} overLayLoading={false} style={[]}>

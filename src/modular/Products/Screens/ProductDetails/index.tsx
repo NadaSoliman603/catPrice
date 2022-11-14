@@ -148,7 +148,7 @@ const ProductDetails = (props: Props) => {
                try {
                 const res = await deleteCatFromFavouritCollectionApi({data:{catId:productDetails.catId} ,token:token})
                 if (res.data.header.httpStatusCode === 200){
-                    setIsFavourit(true)
+                    setIsFavourit(false)
                    
                 }
                 setFavLoading(false)
