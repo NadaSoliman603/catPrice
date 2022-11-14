@@ -10,21 +10,21 @@ type Props = {
     quantity :number;
     setQuantity:any;
     buttonStyle:object,
-    handelChange :  ()=>Promise<void>  | any
+    handelChange :  (value:number)=>Promise<void>  | any
 }
 
 const Quantity = ({quantity , setQuantity , buttonStyle , handelChange}:Props) => {
 
         const onAdd =async ()=>{
             setQuantity(quantity+1)
-            if(handelChange !== undefined) await handelChange()
+            if(handelChange !== undefined) await handelChange(quantity+1)
 
         }
 
         const onMinus = async()=>{
             if(quantity >1) {
                 setQuantity(quantity-1)
-                if(handelChange !== undefined) await handelChange()
+                if(handelChange !== undefined) await handelChange(quantity-1)
                
             }
         }

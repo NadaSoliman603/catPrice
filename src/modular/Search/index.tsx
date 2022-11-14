@@ -20,6 +20,7 @@ import CatCard from '../../components/CatCard';
 import AoutoCompletCard from './AoutoCompletCard';
 import ButtomMeueModal from '../../components/AuthModal';
 import OutOfCridit from './OutOfCridit';
+import AddToFavourit from '../Products/Screens/ProductDetails/AddToFavourit';
 type Props = {};
 type ScreenRouteProp = RouteProp<RootStack, 'Search'>;
 
@@ -45,6 +46,7 @@ const Search = (props: Props) => {
     const [loadingOutoComplete, setLoadingOutoComplete] = useState<boolean>(false);
     const [showOutoComplete, setshowOutoComplete] = useState(true)
 
+   
 
     //==============
     //OutoComplet 
@@ -249,10 +251,10 @@ const Search = (props: Props) => {
                 </View>
             </MainView>
             <ButtomMeueModal bgColor='rgba(0, 0, 0, 0.6)' height={65} title="out of credits" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={togleModal}>
-            <>
-            <OutOfCridit cancelNoCriditeModal={()=>{setModalVisible(false)}}/>
-            </>
+                 <OutOfCridit cancelNoCriditeModal={()=>{setModalVisible(false)}}/>
             </ButtomMeueModal>
+
+         
         </>
     );
 };

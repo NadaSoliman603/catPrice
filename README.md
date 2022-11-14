@@ -52,10 +52,10 @@ gradlew app:assembleRelease
 
 
 
-==============
+==================
  front issus 
-===============
-
+===================
+1-show Pric fixed currancy
 
 2- comlete order requst 
 3- add max hieght to brand img 
@@ -77,7 +77,7 @@ gradlew app:assembleRelease
 7- in user setting ther is no save button
 8- in product details (out of cridte && add to favourit modal) whate dose the action which will show it ?
 9- no order collection in history (if order has may product) _details for it
-
+10-fave collection name not uniq
 
 
 # =============

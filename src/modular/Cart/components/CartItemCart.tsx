@@ -26,9 +26,11 @@ const CartItemCart = ({ item , handelChecked , selectedItem }: Props) => {
     const checked:boolean = selectedItem.ids.includes(item.item.catId)
 
     const dispatch = useDispatch()
-    const onChangeQuantit = async()=>{
-        console.log("ssss")
-        const cartData = await addCartDataToLocalStorag({ catData: item.item, catQuantity: quantity })
+    const onChangeQuantit = async(value:number)=>{
+        console.log({value})
+
+        const cartData = await addCartDataToLocalStorag({ catData: item.item, catQuantity: value })
+        console.log({cartData})
         dispatch(AddToCart({ quantity: cartData.quantity, item: cartData.data }))
     
     }

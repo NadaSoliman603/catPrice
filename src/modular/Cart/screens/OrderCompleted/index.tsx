@@ -25,7 +25,7 @@ const OrderCompleted = (props: Props) => {
                 <Text style={[gStyles.text_Primary, gStyles.text_Bold, gStyles.text_center]}>#CATOOO1</Text>
             </View>
 
-        <OutLineButton title="Show Buyer List" icon={<Text></Text>} onPress={showBuyerList} outline={true} style={styles.button}  />
+        <OutLineButton textStyle={{  }} title="Show Buyer List" icon={<Text></Text>} onPress={showBuyerList} outline={true} style={styles.button}  />
         </View>
     );
 }

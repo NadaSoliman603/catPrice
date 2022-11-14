@@ -37,7 +37,6 @@ const OrderList = (props: Props) => {
 
     const dispatch = useDispatch()
 
-    //{catData:cart , deleteArray:selectedItem}
     const deleteItem = (selectedItem:{ids:number[] , quantity:number})=>{
         dispatch(DeletItemsFromCart({catData:cart , deleteArray:selectedItem}))
     }
@@ -78,16 +77,6 @@ const OrderList = (props: Props) => {
     },[selectedItem])
 
 
- 
-
-
-    // catId: string;
-    // catPrice: string;
-    // catSerial: string;
-    // catNo: string;
-    // catImage: string;
-    // catBrans: string;
-
     const compelteOrder = async() => {
         // const orderData:OrderData = cart.data.map((item:any)=>{
         //     return {
@@ -110,24 +99,13 @@ const OrderList = (props: Props) => {
     
     return (
         <ScrollView style={styles.screen}>
-            {
-                // <FlatList
-                //     data={cart.data}
-                //     renderItem={({ item, index }) => <CartItemCart item={item} />}
-                //     keyExtractor={({ item, index }) => item.catId}
-                // />
-            }
-
-            {/* <ScrollView style={[styles.cartItemcontainer]}> */}
-                
+     
             <View style={[gStyles.p_6 ,]}>
                 {cart?.data.map((item: any) => (<CartItemCart selectedItem={selectedItem} handelChecked={handelChecked} item={item} key={item.item.catId} />))}
             </View>
 
-            {/* </ScrollView> */}
 
             <View style={[styles.orderCartContainer]}>
-                {/* <ScrollView style={[styles.orderContainerScroleView]}> */}
                 {cart?.data.map((item: any) => (<View key={item.item.catId}>
                     <View style={[gStyles.row, gStyles.spaceBetwen, { paddingVertical: moderateScale(4) }]}>
                         <Text style={[gStyles.text_Bold, gStyles.text_black]}>{item.item.catNo}</Text>
@@ -136,7 +114,6 @@ const OrderList = (props: Props) => {
                     <Divider />
                     <Divider />
                 </View>))}
-                {/* </ScrollView> */}
 
                 <View style={[gStyles.row, gStyles.spaceBetwen, { paddingVertical: moderateScale(4) }]}>
                     <Text style={[gStyles.text_Bold, gStyles.text_black]}>{"Total"}</Text>

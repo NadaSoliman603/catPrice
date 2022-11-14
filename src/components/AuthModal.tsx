@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Modal, StyleSheet, Text, Pressable, View, StatusBar } from "react-native";
+import { Alert, Modal, StyleSheet, Text, Pressable, View, StatusBar, KeyboardAvoidingView, Platform } from "react-native";
 import gStyles, { hp, wp } from "../styles/globalStyle";
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { moderateScale } from "../styles/ResponsiveDimentions";
@@ -16,9 +16,9 @@ type Props = {
     children: JSX.Element;
     title: string;
     height: number;
-    bgColor:string | "default"
+    bgColor: string | "default"
 }
-const ButtomMeueModal = ({bgColor , height, modalVisible, togleModal, setModalVisible, children, title }: Props) => {
+const ButtomMeueModal = ({ bgColor, height, modalVisible, togleModal, setModalVisible, children, title }: Props) => {
     // const [modalVisible, setModalVisible] = useState(false);
     const fulllHeight = height === 100
     return (
@@ -35,31 +35,32 @@ const ButtomMeueModal = ({bgColor , height, modalVisible, togleModal, setModalVi
             // onDismiss={}
             >
 
-                <StatusBar animated={false} backgroundColor={bgColor === "default" ? "#bbb" :bgColor} />
+                <StatusBar animated={false} backgroundColor={bgColor === "default" ? "#bbb" : bgColor} />
+                
+                    <View style={{ height: hp(100), backgroundColor: bgColor === "default" ? "#bbb" : bgColor, flex: 1, }}>
+                        <View style={[styles.modalView, fulllHeight && styles.border_0, {
+                            top: hp(100 - height),
+                            height: hp(height),
+                            flex: 1,
+                            maxHeight:hp(height),
+                        }]}>
+                            {/* <View style={styles.menuIcon}></View> */}
 
-               <View style={{ height:hp(100) , backgroundColor:bgColor === "default" ? "#bbb" :bgColor , flex:1 ,}}>
-               <View style={[styles.modalView, fulllHeight && styles.border_0, {
-                    top: hp(100 - height),
-                    height: hp(height),
-                    flex:1
-                }]}>
-                    {/* <View style={styles.menuIcon}></View> */}
+                            <View style={[gStyles.row, gStyles.spaceBetwen, { paddingHorizontal: moderateScale(5), paddingVertical: 10, }]}>
+                                <View style={[{ width: "90%" }]}>
+                                    <Text style={[gStyles.h3, gStyles.text_Bold, gStyles.text_center]}>{title}</Text>
 
-                    <View style={[gStyles.row, gStyles.spaceBetwen, { paddingHorizontal: moderateScale(5), paddingVertical: 10, }]}>
-                        <View style={[{ width: "90%" }]}>
-                            <Text style={[gStyles.h3, gStyles.text_Bold, gStyles.text_center]}>{title}</Text>
+                                </View>
+                                {!fulllHeight && <Pressable onPress={() => setModalVisible(false)} style={({ pressed }) => [{ alignSelf: 'flex-end', padding: moderateScale(2), backgroundColor: pressed ? "#fff" : "#F3F3F3", borderRadius: moderateScale(50), }]}>
+                                    <AntDesign name="down" size={fontSizes.font18} />
+                                </Pressable>}
 
+                            </View>
+                            <ScrollView style={{ flex: 1, }}>
+                                {children}
+                            </ScrollView>
                         </View>
-                        {!fulllHeight && <Pressable onPress={() => setModalVisible(false)} style={({ pressed }) => [{ alignSelf: 'flex-end', padding: moderateScale(2), backgroundColor: pressed ? "#fff" : "#F3F3F3", borderRadius: moderateScale(50), }]}>
-                            <AntDesign name="down" size={fontSizes.font18} />
-                        </Pressable>}
-
                     </View>
-                    <ScrollView style={{ flex:1 ,  }}>
-                    {children}
-                    </ScrollView>
-                </View>
-               </View>
             </Modal>
         </Pressable>
     );

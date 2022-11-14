@@ -12,7 +12,7 @@ import fontSizes from '../../../../styles/fontSizes';
 import FastImage from 'react-native-fast-image';
 import Colors from '../../../../styles/colors';
 import gStyles from '../../../../styles/globalStyle';
-import { Avatar, Divider } from 'react-native-paper';
+import { ActivityIndicator, Avatar, Divider } from 'react-native-paper';
 import Button from '../../../../common/Button';
 import IconButton from '../../../../common/IconButton';
 import Feather from 'react-native-vector-icons/Feather';
@@ -31,6 +31,9 @@ import OutOfCridit from '../../../Search/OutOfCridit';
 import CustomButtomMeueModal from '../../../../components/AuthModal';
 import ButtomMeueModal from '../../../../common/ButtomMeueModal';
 import { ShowModal } from '../../../../Redux/reducers/AuthModalReducer';
+import AddToFavourit from './AddToFavourit';
+import Loading from '../../../../common/Loading';
+import { deleteCatFromFavouritCollectionApi } from '../../../../Api/Favourits';
 
 // import PieChart from 'react-native-pie-chart';
 
@@ -48,24 +51,14 @@ const ProductDetails = (props: Props) => {
     const [modalVisible, setModalVisible] = useState(false);
     const series = [productDetails?.pd, productDetails?.pt, productDetails.rh]
     const sliceColor = [Colors.palladiumOrang, Colors.RhodiumGreen, Colors.platinumBlue,]
-    const togleModal = (show: boolean,) => {
-        setModalVisible(show)
-    }
-
+    const [isFavourit , setIsFavourit] = useState(false)
     const [total, setTotal] = useState<number>(0)
     const [serverError, setServerError] = useState<{ error: boolean; msg: string }>({ error: false, msg: "" })
     const [noCriditmodalVisible, setNoCriditModalVisible] = useState(false);
-    const togleNoCriditModal = (show: boolean,) => {
-        setNoCriditModalVisible(show)
-    }
-
-    // const prs =  (productDetails?.pd /total) * 100
-    // console.log((productDetails?.pd /total)* 100, Math.round( (productDetails?.pd /total * 100) * 100) /100)
-    // console.log((productDetails?.pt /total)* 100, Math.round( (productDetails?.pt /total * 100) * 100)/100)
-    // console.log((productDetails?.rh /total)* 100, Math.round( (productDetails?.rh /total * 100) * 100)/100)
 
 
-    // useDrower("Product Details")
+    const togleNoCriditModal = (show: boolean,) => {setNoCriditModalVisible(show) }
+    const togleModal = (show: boolean,) => { setModalVisible(show) }
 
     // ===========================
     //feach Product Details Data
@@ -77,6 +70,7 @@ const ProductDetails = (props: Props) => {
         const product = productDetails.data.body
         setProductDetails(product)
         setTotal(product?.pd + product?.pt + product.rh)
+        setIsFavourit(product?.inFavorite)
     }
     useEffect(() => {
         try {
@@ -138,13 +132,47 @@ const ProductDetails = (props: Props) => {
         if (token) setServerError({ error: false, msg: "" })
     }, [token])
 
+
+    // =================
+    //Add To favourits
+    //=================
+    const [favouritModalShow , setFavouritModalShow] = useState<boolean>(false)
+    const [favLoading , setFavLoading] = useState<boolean>(false)
+    const togeleFavouritModalShow = (value:boolean)=>{setFavouritModalShow(value)}
+    const addToFavourit = async()=>{
+        if(token){
+            if(!isFavourit){
+                setFavouritModalShow(true)
+            }else{
+                setFavLoading(true)
+               try {
+                const res = await deleteCatFromFavouritCollectionApi({data:{catId:productDetails.catId} ,token:token})
+                if (res.data.header.httpStatusCode === 200){
+                    setIsFavourit(true)
+                   
+                }
+                setFavLoading(false)
+               } catch (error) {
+                console.log("error")
+                setFavLoading(false)
+               }
+            }
+        }else{
+            dispatch(ShowModal(true))
+            //setServerError({ error: true, msg: 'to Add a Product to your favorites please login' })
+        }
+    }
+    
     return (
         <>
             <MainView data={productDetails} loading={loading} overLayLoading={false} style={styles.screen}>
                 {productDetails.catId && <ScrollView>
                     <View style={[styles.imageContainer]}>
                         <View style={[gStyles.row, gStyles.spaceBetwen, gStyles.pb_6]} >
-                            <AntDesign name="hearto" color={Colors.primary} size={fontSizes.font20} />
+                            {!favLoading &&<Pressable onPress={addToFavourit}>
+                            <AntDesign name={isFavourit ? "heart" :"hearto"} color={Colors.primary} size={fontSizes.font20} />
+                            </Pressable>}
+                            {favLoading &&<ActivityIndicator color={Colors.primaryPresedButton} size={fontSizes.font20} />}
                             <Pressable onPress={() => togleModal(true)} style={[gStyles.row]} >
                                 <Text style={[gStyles.text_Primary, gStyles.h6]} >Metal Details </Text>
                                 <AntDesign color={Colors.primary} name='arrowright' size={fontSizes.font12} />
@@ -254,9 +282,17 @@ const ProductDetails = (props: Props) => {
                 </>
             </ButtomMeueModal>
 
+            {/* start no cridit modal */}
             <CustomButtomMeueModal bgColor='rgba(0, 0, 0, 0.6)' height={65} title="out of credits" togleModal={togleNoCriditModal} modalVisible={noCriditmodalVisible} setModalVisible={togleNoCriditModal}>
                 <OutOfCridit cancelNoCriditeModal={() => { setNoCriditModalVisible(false) }} />
             </CustomButtomMeueModal>
+            {/* end no cridit modal */}
+
+            {/* start Favourits modal */}
+            <CustomButtomMeueModal bgColor='rgba(0, 0, 0, 0.6)' height={40} title="Add to favourites" togleModal={togeleFavouritModalShow} modalVisible={favouritModalShow} setModalVisible={togeleFavouritModalShow}>
+                <AddToFavourit setIsFavourit={setIsFavourit} catId={ productDetails.catId} cancelModal={() => { setFavouritModalShow(false) }} />
+            </CustomButtomMeueModal>
+            {/* end Favourits modal */}
             {overLayloading && <OverLayLoading />}
         </>
     );
