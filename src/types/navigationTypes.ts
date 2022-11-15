@@ -19,7 +19,7 @@ export type RootStack = {
     Search: undefined | {search:boolean};
     BrandsCats: { catId: string };
     ProductDetails: { catID: string };
-    OrderCompleted: undefined;
+    OrderCompleted: {orderNo:string};
     BayerList: undefined;
     ProfileScreen: undefined;
     CountryScreen: undefined;
@@ -36,6 +36,7 @@ export type RootStack = {
     OnBoarding1:undefined;
     OnBoarding2:undefined;
     OnBoarding3:undefined;
+    SearchResults:{search:string}
 };
 
 

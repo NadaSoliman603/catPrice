@@ -123,9 +123,9 @@ const ProductDetails = (props: Props) => {
     const dispatch = useDispatch()
     const onAddToCart = async () => {
         // console.log(quantity,productDetails)
-        const cartData = await addCartDataToLocalStorag({ catData: productDetails, catQuantity: quantity })
+        // const cartData = await addCartDataToLocalStorag({ catData: productDetails, catQuantity: quantity })
         // console.log(cartData)
-        dispatch(AddToCart({ quantity: cartData.quantity, item: cartData.data }))
+        // dispatch(AddToCart({ quantity: cartData.quantity, item: cartData.data }))
     }
 
     useEffect(() => {

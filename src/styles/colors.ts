@@ -15,6 +15,7 @@ const Colors = {
     palladiumOrang : '#DD6420', //palladium orang
     RhodiumGreen:'#198754', // Rhodium green
     platinumBlue:'#3B92C2', // platinum blue
+
 };
 
 export default Colors;

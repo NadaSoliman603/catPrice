@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Text, Pressable, ScrollView, Keyboard } from 'react-native';
+import { StyleSheet, View, Text, Pressable, ScrollView, Keyboard , Dimensions} from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 import fontSizes from '../../styles/fontSizes';
 import gStyles, { hp, wp } from '../../styles/globalStyle';
@@ -24,6 +24,7 @@ import AddToFavourit from '../Products/Screens/ProductDetails/AddToFavourit';
 type Props = {};
 type ScreenRouteProp = RouteProp<RootStack, 'Search'>;
 
+const { height } = Dimensions.get('window');
 
 
 const Search = (props: Props) => {
@@ -42,7 +43,7 @@ const Search = (props: Props) => {
   
     //outoComplet
     const [searchOutoComplete, setSearchOutoComplete] = useState<string>("")
-    const [outoCompletData, setOutoCompletData] = useState<null | any[]>(null)
+    const [outoCompletData, setOutoCompletData] = useState<null | any[]>([])
     const [loadingOutoComplete, setLoadingOutoComplete] = useState<boolean>(false);
     const [showOutoComplete, setshowOutoComplete] = useState(true)
 
@@ -83,14 +84,19 @@ const Search = (props: Props) => {
             const res = await searchCatdApi({ search: search, limit: limit.toString() });
             const catsData = res.data.body;
             if (catsData.length === 0) {
+
                 // setNoSearchResult(true)
             } else {
                 // setNoSearchResult(false)
             }
-            console.log(catsData, { mount })
+            // console.log(catsData, { mount })
             if (mount) {
-                // console.log(catsData)
-                setOutoCompletData(catsData);
+                if (catsData.length === 0){
+                    console.log("no data")
+                    setOutoCompletData(null)
+                }else{
+                    setOutoCompletData(catsData);
+                }
                 setLoadingOutoComplete(false)
             }
         } catch (error) {
@@ -99,51 +105,19 @@ const Search = (props: Props) => {
         }
     };
 
-
-
-    // ========================
-    //get Search result
-    //========================
-    const geSearchData = async ({ search, limit }: { search: string; limit: string }) => {
-        try {
-            setLoading(true)
-            const res = await searchCatdApi({ search: search, limit: limit.toString() });
-            const catsData = res.data.body;
-            if (catsData.length === 0) { setNoSearchResult(true) } else { setNoSearchResult(false) }
-            if (catsData.length < 10) setFlatLisloading(false)
-            console.log(mount)
-            if (mount) {
-                // console.log(catsData)
-                setCats(catsData);
-                setLoading(false)
-            }
-        } catch (error) {
-            console.log(error);
-            setLoading(false)
-        }
-    };
-
-
-    const params = routs.params
-    useEffect(() => {
-        // navigation.setOptions({
-        //     headerTitle: 'Search',
-        // });
-
-        if (!params?.search) {
-            geSearchData({ search: search, limit: limit.toString() });
-        }
-
-        return () => { };
-    }, []);
+    const [maxHeight , setMaxHight] = useState(hp(70))
 
     useEffect(() => {
-
-        const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+        const showSubscription = Keyboard.addListener("keyboardDidShow", (e) => {
             setshowOutoComplete(true)
+            console.log("keyBoardHight" , e.endCoordinates.height , height , height- e.endCoordinates.height)
+            
+            setMaxHight(height - e.endCoordinates.height - hp(23))
+
         });
         const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-            // setshowOutoComplete(false)
+            setshowOutoComplete(true)
+            setMaxHight(hp(70))
         });
 
         return () => {
@@ -153,37 +127,11 @@ const Search = (props: Props) => {
         };
     }, []);
 
-    // ======================================
-    //get more Search result if scroll end
-    //=======================================
     useEffect(() => {
-        const geSearchData = async ({ search, limit }: { search: string; limit: string }) => {
-            try {
-                setFlatLisloading(true)
-                const res = await searchCatdApi({ search: search, limit: limit.toString() });
-                const catsData = res.data.body;
-                if (catsData.length === 0) { setNoSearchResult(true) } else { setNoSearchResult(false) }
-                if (mount) {
-                    setCats(catsData);
-                    setFlatLisloading(false)
-                    if (catsData.length < 10) setFlatLisloading(false)
-
-                }
-            } catch (error) {
-                console.log(error);
-                setFlatLisloading(false)
-            }
-        };
-
-        if (limit !== 10 && limit <= 30) geSearchData({ search: search, limit: limit.toString() });
-
-    }, [limit]);
-
-    useEffect(() => {
-        return () => { setMount(false); }
+        // return () => { setMount(false); }
     }, [])
 
-    console.log({outoCompletData}, typeof(outoCompletData))
+    // console.log({outoCompletData}, typeof(outoCompletData))
     return (
         <>
             <MainView data={[{}]} loading={false} overLayLoading={false} style={[]}>
@@ -198,30 +146,38 @@ const Search = (props: Props) => {
                             onChangeText={text => setSearch(text)}
                             right={
                                 <TextInput.Icon
-                                    icon={() => <Pressable onPress={() => { geSearchData({ search: search, limit: limit.toString() }) }}>
+                                    icon={() => <Pressable onPress={() => { 
+                                        //geSearchData({ search: search, limit: limit.toString() })
+                                        navigation.navigate("SearchResults" , {search:search}) 
+                                        }}>
                                         <Feather name={'search'} size={fontSizes.font18} />
                                     </Pressable>}
                                 />
                             }
                             onSubmitEditing={() => {
-                                geSearchData({ search: search, limit: limit.toString() });
+                                navigation.navigate("SearchResults" , {search:search})
+                                // geSearchData({ search: search, limit: limit.toString() });
+                                
                             }}
-                            autoFocus={params?.search}
+                            autoFocus={true}
                             activeOutlineColor={Colors.lightGray}
                             // accessibilityLabel={""}
                             activeUnderlineColor={Colors.textLightGray}
                         />
-                        {showOutoComplete && <View style={styles.outoCompletContainer}>
+                        {showOutoComplete && <View style={[styles.outoCompletContainer , {minHeight:maxHeight}]}>
                             {search.length < 3 && <Text style={[gStyles.h6, gStyles.text_center]}>for autocomplete you must at least write 3 characters</Text>}
                             {loadingOutoComplete && <ActivityIndicator color={Colors.primaryPresedButton} size="small" style={[gStyles.p_2]} />}
+                            {outoCompletData === null && <NoFoundData title='No Srearch Result'/>}
                             <FlatList
                                 data={outoCompletData}
                                 renderItem={({ item }) => <AoutoCompletCard onPress={(item) => {
-                                    console.log("presed")
-                                    setshowOutoComplete(false)
-                                    setSearch((item?.catNo && item?.catNo !== "0") ? item?.catNo : item?.catSn)
-                                    setOutoCompletData((item?.catNo && item?.catNo !== "0") ? item?.catNo : item?.catSn)
-                                    geSearchData({ limit: "10", search: (item?.catNo && item?.catNo !== "0") ? item?.catNo : item?.catSn })
+                                    // console.log("presed")
+                                    //setshowOutoComplete(false)
+                                        const outoComplet:string = (item?.catNo && item?.catNo !== "0") ? item?.catNo : item?.catSn
+                                    //setSearch((item?.catNo && item?.catNo !== "0") ? item?.catNo : item?.catSn)
+                                    //setSearchOutoComplete(outoComplet.toString())
+                                    navigation.navigate('SearchResults' , {search: (item?.catNo && item?.catNo !== "0") ? item?.catNo : item?.catSn })
+                                    // geSearchData({ limit: "10", search: (item?.catNo && item?.catNo !== "0") ? item?.catNo : item?.catSn })
 
                                 }} item={item} />}
                                 keyExtractor={item => item?.catId}
@@ -229,10 +185,11 @@ const Search = (props: Props) => {
                                     // setLimit(limit + 10)
                                 }}
                             />
+
                         </View>}
                     </View>
 
-                    {loading && <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />}
+                    {/* {loading && <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />}
 
                     {noSearchResult && <NoFoundData title={'No cat With This ID'} />}
 
@@ -243,7 +200,7 @@ const Search = (props: Props) => {
                         onEndReached={() => {
                             setLimit(limit + 10)
                         }}
-                    />}
+                    />} */}
                     <>
 
                     </>
@@ -251,9 +208,9 @@ const Search = (props: Props) => {
                     {/* <ActivityIndicator color={Colors.primary} size="small"  style={[gStyles.p_2]}/> */}
                 </View>
             </MainView>
-            <ButtomMeueModal bgColor='rgba(0, 0, 0, 0.6)' height={65} title="out of credits" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={togleModal}>
+            {/* <ButtomMeueModal bgColor='rgba(0, 0, 0, 0.6)' height={65} title="out of credits" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={togleModal}>
                  <OutOfCridit cancelNoCriditeModal={()=>{setModalVisible(false)}}/>
-            </ButtomMeueModal>
+            </ButtomMeueModal> */}
 
          
         </>
@@ -331,15 +288,16 @@ const styles = StyleSheet.create({
         height: hp(25),
     },
     outoCompletContainer: {
-        maxHeight: hp(40),
-        minHeight: hp(10),
+        // maxHeight: hp(40),
+        // minHeight: hp(40),
         marginTop: moderateScale(-1),
         borderWidth: moderateScale(0.5),
         backgroundColor: Colors.white,
         borderColor: Colors.lightGray,
         borderBottomRightRadius: moderateScale(3),
         borderBottomLeftRadius: moderateScale(3),
-        zIndex: 10000
+        zIndex: 10000,
+        // marginBottom:moderateScale(10)
     }
 });
 

@@ -32,6 +32,7 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
     const [overLayloading, setOverLayLoading] = useState(false)
     const [price, setPrice] = useState<null | string>(null)
     const [serverError, setServerError] = useState<{ error: boolean; msg: string }>({ error: false, msg: "" })
+    const [brandsModalshow, setBrandOdalShow] = useState<boolean>(false)
     //favourits
     const [isFavourit, setIsFavourit] = useState(item?.inFavorite)
 
@@ -66,7 +67,7 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
         }
     }
 
-
+    const togelebrandsModalshow = (value: boolean) => { setBrandOdalShow(value) }
     // =================
     //Add To favourits
     //=================
@@ -106,14 +107,16 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
     }
     return (
         <>
-            <View key={item.catId}>
+            <View style={styles.screen} key={item.catId}>
                 <Pressable onPress={() => navigation.navigate("ProductDetails", { catID: item.catId })} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.primaryPresedButton : Colors.white }, styles.brandContainer]}>
                     <View style={[gStyles.row, gStyles.spaceBetwen]}>
                         <View style={[gStyles.row]}>
-                            <View
-                                style={[styles.brandLogoContainer, gStyles.center]}>
-                                <FastImage resizeMode='contain' source={{ uri: item.brands?.[0]?.makerImage }} style={styles.brandImg}
-                                />
+                            <View style={[item.brands.length > 1 && styles.brandLogoContainer1, item.brands.length > 1 && gStyles.center]}>
+                                <Pressable onPress={()=>setBrandOdalShow(true)}
+                                    style={[styles.brandLogoContainer, gStyles.center]}>
+                                    <FastImage resizeMode='contain' source={{ uri: item.brands?.[0]?.makerImage }} style={styles.brandImg}
+                                    />
+                                </Pressable>
                             </View>
                             <Text
                                 style={[gStyles.text_Bold, gStyles.text_black, gStyles.pl_3,
@@ -154,14 +157,37 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
                 </Pressable>
             </View>
 
-            <CustomButtomMeueModal bgColor='rgba(0, 0, 0, 0.6)' height={40} title="Add to favourites" togleModal={togeleFavouritModalShow} modalVisible={favouritModalShow} setModalVisible={togeleFavouritModalShow}>
+            <CustomButtomMeueModal bgColor='rgba(0, 0, 0, 0.7)' height={40} title="Add to favourites" togleModal={togeleFavouritModalShow} modalVisible={favouritModalShow} setModalVisible={togeleFavouritModalShow}>
                 <AddToFavourit setIsFavourit={setIsFavourit} catId={item.catId} cancelModal={() => { setFavouritModalShow(false) }} />
-            </CustomButtomMeueModal></>
+            </CustomButtomMeueModal>
+
+
+            <CustomButtomMeueModal bgColor='rgba(0, 0, 0, 0.7)' height={40} title="Car Brands" togleModal={togelebrandsModalshow} modalVisible={brandsModalshow} setModalVisible={togelebrandsModalshow}>
+                <View style={{ padding: moderateScale(6),  }}>
+                    {item.brands.map((item: any) => {
+                        return (
+                            <View style={{ flexDirection: "row" , flex:1}} >                                    
+                                <Pressable
+                                    style={[styles.brandLogoContainer, gStyles.center , {justifyContent: "center", alignContent: "center", alignItems: "center", alignSelf: "center" }]}>
+                                    <FastImage resizeMode='contain' source={{ uri: item.makerImage }} style={styles.brandModalImg}
+                                    />
+                                </Pressable>
+                                <Text style={styles.brandName}> {item.makerName}</Text>
+                            </View>
+                        )
+                    })}
+                </View>
+            </CustomButtomMeueModal>
+
+        </>
     );
 }
 
 const styles = StyleSheet.create({
-    screen: {},
+    screen: {
+        // flex: 1,
+        // padding:moderateScale(6)
+    },
     brandContainer: {
         borderWidth: moderateScale(1),
         borderColor: '#eee',
@@ -190,13 +216,25 @@ const styles = StyleSheet.create({
         height: moderateScale(10),
         alignSelf: 'center',
     },
+    brandLogoContainer1: {
+        borderColor: 'rgba(0, 0, 0, 0.15)',
+        borderWidth: moderateScale(0.5),
+        // padding: moderateScale(1),
+        borderRadius: moderateScale(50),
+        width: moderateScale(18),
+        height: moderateScale(18),
+        // top:20
+    },
     brandLogoContainer: {
-        borderColor: '#eee',
-        borderWidth: moderateScale(1),
+        borderColor: 'rgba(0, 0, 0, 0.15)',
+        borderWidth: moderateScale(0.5),
         padding: moderateScale(1),
         borderRadius: moderateScale(50),
         width: moderateScale(18),
         height: moderateScale(18),
+        top: moderateScale(2),
+        zIndex: 100,
+        backgroundColor: Colors.white
     },
     showInfo: {
         width: moderateScale(8),
@@ -229,6 +267,16 @@ const styles = StyleSheet.create({
     },
     flatListEndLoder: {
         height: hp(15),
+    },
+    brandModalImg: {
+        width: moderateScale(13),
+        height: moderateScale(15),
+        // alignSelf: 'center',
+    },
+    brandName: {
+        justifyContent: "center", alignContent: "center", alignItems: "center", alignSelf: "center" ,
+        fontWeight:"500",
+        color:Colors.textBlack
     }
 });
 

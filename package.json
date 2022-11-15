@@ -23,6 +23,7 @@
     "axios": "^0.26.0",
     "fix": "^0.0.6",
     "jest-mock-axios": "^4.7.0-beta",
+    "moment": "^2.29.4",
     "react": "18.1.0",
     "react-hook-form": "^7.37.0",
     "react-native": "0.70.3",

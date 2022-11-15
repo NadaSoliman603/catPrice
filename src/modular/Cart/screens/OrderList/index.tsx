@@ -1,4 +1,4 @@
-import React , {useEffect , useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import NoFoundData from '../../../../common/NoDataFound';
@@ -18,116 +18,154 @@ import { Drower } from '../../../../Redux/reducers/DrowerNavigation';
 import useDrower from '../useDrower';
 import IconButton from '../../../../common/IconButton';
 import fontSizes from '../../../../styles/fontSizes';
-import { onDeletCartItems } from '../../../../Redux/actions/CartAction';
-import { DeletItemsFromCart } from '../../../../Redux/reducers/CartReducer';
+import addCartDataToLocalStorag, { onDeletCartItems } from '../../../../Redux/actions/CartAction';
+import { AddToCart, DeletItemsFromCart } from '../../../../Redux/reducers/CartReducer';
 import { OrderData } from '../../../../types/types';
+import OverLayLoading from '../../../../common/OverLayLoading';
+import { newOrderApi } from '../../../../Api/Auth';
+import { ShowModal } from '../../../../Redux/reducers/AuthModalReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 type Props = {}
 
 const OrderList = (props: Props) => {
     const navigation = useNavigation<NavigationType>()
     const cart = useSelector((state: RootState) => state.Cart)
+    const token = useSelector((state: RootState) => state.Auth.token)
+    const user = useSelector((state: RootState) => state.Auth.user)
+    const [loading, setLoading] = useState<boolean>(false)
+
+
     useDrower("Card")
 
-    const [selectedItem , setScllected] = useState<{ids:number[] , quantity:number}>(
-       { ids:[],
-        quantity:0
-    }
+    const [selectedItem, setScllected] = useState<{ ids: number[], quantity: number }>(
+        {
+            ids: [],
+            quantity: 0
+        }
     )
 
 
     const dispatch = useDispatch()
 
-    const deleteItem = (selectedItem:{ids:number[] , quantity:number})=>{
-        dispatch(DeletItemsFromCart({catData:cart , deleteArray:selectedItem}))
+    const deleteItem = (selectedItem: { ids: number[], quantity: number }) => {
+        dispatch(DeletItemsFromCart({ catData: cart, deleteArray: selectedItem }))
     }
 
-    const handelChecked = ({item,checked} :{item:{id:number , quantity:number}  , checked:boolean})=>{
-       console.log(item.quantity)
-        if(checked){
-            const newIds:number[] = [...selectedItem?.ids , item.id]
-            const newQuantity:number = selectedItem.quantity + item.quantity
+    const handelChecked = ({ item, checked }: { item: { id: number, quantity: number }, checked: boolean }) => {
+        console.log(item.quantity)
+        if (checked) {
+            const newIds: number[] = [...selectedItem?.ids, item.id]
+            const newQuantity: number = selectedItem.quantity + item.quantity
             setScllected({
-                ids:newIds,
-                quantity:newQuantity
+                ids: newIds,
+                quantity: newQuantity
             })
-        }else{
+        } else {
 
-            const index = selectedItem.ids.findIndex((el)=>  el === item.id)
-            if(index !== -1){
+            const index = selectedItem.ids.findIndex((el) => el === item.id)
+            if (index !== -1) {
                 const ids = selectedItem.ids
-                ids.splice(index,1)
-                const newQuantity:number = selectedItem.quantity - item.quantity
+                ids.splice(index, 1)
+                const newQuantity: number = selectedItem.quantity - item.quantity
                 setScllected({
-                    ids:ids,
-                    quantity:newQuantity
+                    ids: ids,
+                    quantity: newQuantity
                 })
             }
 
         }
-    
+
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         navigation.setOptions({
-            headerRight : ()=><IconButton  title={null}  onPress={()=>deleteItem(selectedItem)} icon={
-                <Feather size={fontSizes.font22}  name='trash-2' color={Colors.primary}/>
+            headerRight: () => <IconButton title={null} onPress={() => deleteItem(selectedItem)} icon={
+                <Feather size={fontSizes.font22} name='trash-2' color={Colors.primary} />
             } />
         })
 
-    },[selectedItem])
+    }, [selectedItem])
 
 
-    const compelteOrder = async() => {
-        // const orderData:OrderData = cart.data.map((item:any)=>{
-        //     return {
-        //         catId:item.cat
-        //     }
-        // })
-        // console.log(cart.data)
-        navigation.navigate("OrderCompleted")
+    const compelteOrder = async () => {
+        const orderData: OrderData[] = cart.data.map((item: any) => {
+            return {
+                catId: item.item.catId,
+                qty: item.quantity,
+                catPrice: "33.74",
+            }
+        })
+        console.log(orderData)
+        if (token) {
+            setLoading(true)
+            try {
+                const res = await newOrderApi({
+                    currency: user.defCurrency,
+                    data: orderData,
+                    token: token
+                })
+                if (res.data.header.httpStatusCode === 200) {
+                    AsyncStorage.removeItem("cartData")
+                    dispatch(AddToCart({ quantity: 0, item: [] }))
+                    navigation.navigate("OrderCompleted" , {orderNo:res.data.body.orderNo})
+                } else {
+                    console.log({ res })
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            setLoading(false)
+
+        } else { dispatch(ShowModal(true)) }
+
+        //navigation.navigate("OrderCompleted")
     }
 
 
 
-    if (cart.quantity === 0  ) {
+    if (cart.quantity === 0) {
         return <NoFoundData title='Your Cart Is Empty' />
     }
 
 
 
 
-    
+
     return (
-        <ScrollView style={styles.screen}>
-     
-            <View style={[gStyles.p_6 ,]}>
-                {cart?.data.map((item: any) => (<CartItemCart selectedItem={selectedItem} handelChecked={handelChecked} item={item} key={item.item.catId} />))}
-            </View>
+        <>
+            <ScrollView style={styles.screen}>
+
+                <View style={[gStyles.p_6,]}>
+                    {cart?.data.map((item: any) => (<CartItemCart selectedItem={selectedItem} handelChecked={handelChecked} item={item} key={item.item.catId} />))}
+                </View>
 
 
-            <View style={[styles.orderCartContainer]}>
-                {cart?.data.map((item: any) => (<View key={item.item.catId}>
+                <View style={[styles.orderCartContainer]}>
+                    {cart?.data.map((item: any) => (<View key={item.item.catId}>
+                        <View style={[gStyles.row, gStyles.spaceBetwen, { paddingVertical: moderateScale(4) }]}>
+                            <Text style={[gStyles.text_Bold, gStyles.text_black]}>{item.item.catNo}</Text>
+                            <Text><Text style={[]}>{item.quantity}<Text style={[gStyles.h6]}>X</Text></Text> {item.item.catSn}</Text>
+                        </View>
+                        <Divider />
+                        <Divider />
+                    </View>))}
+
                     <View style={[gStyles.row, gStyles.spaceBetwen, { paddingVertical: moderateScale(4) }]}>
-                        <Text style={[gStyles.text_Bold, gStyles.text_black]}>{item.item.catNo}</Text>
-                        <Text><Text style={[]}>{item.quantity}<Text style={[gStyles.h6]}>X</Text></Text> {item.item.catSn}</Text>
+                        <Text style={[gStyles.text_Bold, gStyles.text_black]}>{"Total"}</Text>
+                        <Text style={[gStyles.text_Bold, gStyles.text_Primary]}>{"SAR 225.76"}</Text>
                     </View>
                     <Divider />
                     <Divider />
-                </View>))}
-
-                <View style={[gStyles.row, gStyles.spaceBetwen, { paddingVertical: moderateScale(4) }]}>
-                    <Text style={[gStyles.text_Bold, gStyles.text_black]}>{"Total"}</Text>
-                    <Text style={[gStyles.text_Bold, gStyles.text_Primary]}>{"SAR 225.76"}</Text>
                 </View>
-                <Divider />
-                <Divider />
-            </View>
 
-            <OutLineButton textStyle={{  }} title='Complete Order' style={{}} icon={<Text></Text>} onPress={compelteOrder} outline={true} />
+                <OutLineButton textStyle={{}} title='Complete Order' style={{}} icon={<Text></Text>} onPress={compelteOrder} outline={true} />
 
-            <View style={{ height: moderateScale(20) }}></View>
+                <View style={{ height: moderateScale(20) }}></View>
 
-        </ScrollView>
+            </ScrollView>
+
+            {loading && <OverLayLoading />}
+        </>
     );
 }
 
@@ -148,13 +186,13 @@ const styles = StyleSheet.create({
         borderRadius: moderateScale(10),
         borderColor: "#eee",
         paddingHorizontal: moderateScale(10),
-        borderBottomWidth: 0, 
+        borderBottomWidth: 0,
     },
-    cartItemcontainer:{
-        maxHeight:hp(42),
+    cartItemcontainer: {
+        maxHeight: hp(42),
     },
-    orderContainerScroleView:{
-        maxHeight:hp(20),
+    orderContainerScroleView: {
+        maxHeight: hp(20),
     }
 });
 

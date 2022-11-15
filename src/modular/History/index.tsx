@@ -1,7 +1,7 @@
-import * as React from 'react';
+import  React , {useEffect , useState} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import MainView from '../../common/MainView';
-import { Button, SegmentedButtons } from 'react-native-paper';
+import { ActivityIndicator, Button, SegmentedButtons } from 'react-native-paper';
 import ButtonGroup from '../../common/ButtonGroup';
 import { Label } from '../../types/types';
 import OrderCard from './components/OrderCard';
@@ -11,19 +11,54 @@ import gStyles from '../../styles/globalStyle';
 import CreditCard from './components/CreditCard';
 import planData from '../Cridits/dumyData';
 import SearchCard from './components/SearchCard';
+import Loading from '../../common/Loading';
+import Colors from '../../styles/colors';
+import { useFocusEffect } from '@react-navigation/native';
+import {  orderHistoryApi } from '../../Api/Auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../Redux/store/store';
+import { ShowModal } from '../../Redux/reducers/AuthModalReducer';
+import { moderateScale } from '../../styles/ResponsiveDimentions';
 
 type Props = {}
-const buttonGropValu: Label[] = [
+const buttonGropValu: {label:string; value:HistoryValue}[] = [
     { label: "Search", value: "search" },
     { label: "Order", value: "order" },
     { label: "Credits", value: "credits" },
 ]
+export type HistoryValue = "search" | "order"  | "credits"
 const History = (props: Props) => {
-    const [value, setValue] = React.useState<string | number>('search');
+    const user = useSelector((state:RootState)=>state.Auth.user)
+    const token = useSelector((state:RootState)=>state.Auth.token)
+    const [value, setValue] = useState<HistoryValue >('search');
+    const [loading , setLoading] = useState(false)
+    const [orders , setOrders] = useState<any[]>([])
 
-    const onChangeButtomValue = (value: string | number) => {
+    const dispatch = useDispatch()
+    const onChangeButtomValue = (value: HistoryValue ) => {
         setValue(value)
     }
+
+    const getOrderData = async()=>{
+       
+            try {
+                if(token){
+                    setLoading(true)
+                    const res = await orderHistoryApi({currency:user.defCurrency,  token:token,})
+                    if(res.data.header.httpStatusCode === 200){
+                        setOrders(res.data.body)
+                    }
+                }else{
+                    dispatch(ShowModal(true))
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            setLoading(false) 
+    }
+    useEffect(()=>{
+        if(value === "order")getOrderData()
+    },[value])
     return (
         <MainView data={[]} loading={false} overLayLoading={false} style={styles.screen}>
             <>
@@ -31,10 +66,12 @@ const History = (props: Props) => {
                     <ButtonGroup buttonGropLables={buttonGropValu} value={value} onChange={onChangeButtomValue} />
 
                 </View>
+                {loading && <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />}
+
                 {value === "order" && <FlatList
-                    data={favorites}
+                    data={orders}
                     renderItem={({ item }) => <OrderCard item={item} cancelled={item.catId === 165353} />}
-                    keyExtractor={(item) => item.catId.toString()}
+                    keyExtractor={(item) => item.orderId.toString()}
                 />}
 
                 {value === "search" && <FlatList
@@ -48,6 +85,7 @@ const History = (props: Props) => {
                     renderItem={({ item }) => <CreditCard item={item} cancelled={item.planId === 2} />}
                     keyExtractor={(item) => item.planId.toString()}
                 />}
+                 <View style={{ height:moderateScale(15) }}></View>
             </>
         </MainView>
     );

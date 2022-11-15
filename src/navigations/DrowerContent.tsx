@@ -48,6 +48,10 @@ const DrowerContent = ({ props }: Props) => {
         try {
             //toggleDrawer
             dispatch(ShowModal(true))
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Home' }],
+            })
             //navigation.navigate('Login')
         } catch (error) {
             console.log(error)

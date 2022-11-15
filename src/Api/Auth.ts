@@ -139,7 +139,7 @@ export const getLocationdApi = () => {
 
 export const newOrderApi = ({data , token , currency}:{data:OrderData[] , token:string , currency:string})=>{
   return axios
-  .post('http://floridatrading.online:8010/apis/v1/user/forgot-password', JSON.stringify(data), {
+  .post(`${END_POINT}/api/v1/order/save-order`, JSON.stringify(data), {
     headers: {
       'Content-Type': 'application/json',
       "Authorization": `Bearer ${token}`,
@@ -150,7 +150,7 @@ export const newOrderApi = ({data , token , currency}:{data:OrderData[] , token:
 }
 
 
-export const orderHistory =  ({ token , currency}:{ token:string , currency:string})=>{
+export const orderHistoryApi =  ({ token , currency}:{ token:string , currency:string})=>{
   return axios.get(`${END_POINT}/api/v1/order/get-orders?status=NEW` , {
     headers: {
       'Content-Type': 'application/json',

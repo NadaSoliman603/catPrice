@@ -25,8 +25,13 @@ const addCartDataToLocalStorag = async ({catData , catQuantity} :{catData:any , 
         //   quantity:cartElement.quantity + catQuantity ,
         //   item: catData
         // }
-        userCartData.data[isExsisted].quantity = userCartData.data[isExsisted].quantity + catQuantity
-        userCartData.quantity= userCartData.quantity + catQuantity
+        
+        userCartData.quantity= userCartData.quantity - userCartData.data[isExsisted].quantity + catQuantity
+        userCartData.data[isExsisted].quantity =  catQuantity
+        console.log({
+          data: userCartData.data,
+          quantity:userCartData.quantity 
+        })
         
         AsyncStorage.setItem('cartData', JSON.stringify(userCartData))
         // //=====================

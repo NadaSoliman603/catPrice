@@ -9,6 +9,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import fontSizes from '../../../styles/fontSizes';
 import AntDesign  from 'react-native-vector-icons/AntDesign';
 import Octicons  from 'react-native-vector-icons/Octicons';
+import moment from 'moment';
 type Props = {
     item: any;
     cancelled:boolean;
@@ -20,21 +21,21 @@ const OrderCard = ({ item  , cancelled}: Props) => {
             <View style={[styles.buttomBorder ,]}>
                 <View style={[styles.headerContiner]}>
                     <View>
-                        <Text style={[gStyles.text_Bold, gStyles.text_black, gStyles.h3, styles.textSpace]}>WFFGGV</Text>
-                        <Text style={gStyles.text_lightGray}>x1 ssjddj</Text>
+                        <Text style={[gStyles.text_Bold, gStyles.text_black, gStyles.h3, styles.textSpace]}>{item.orderNo}</Text>
+                        {/* <Text style={gStyles.text_lightGray}>x1 ssjddj</Text> */}
                     </View>
                     <View>
-                        <Avatar.Image style={{ backgroundColor:Colors.white }} size={moderateScale(16)} source={{ uri: item.images[0].fullImageURL }} />
+                        {/* <Avatar.Image style={{ backgroundColor:Colors.white }} size={moderateScale(16)} source={{ uri: item.images[0].fullImageURL }} /> */}
                     </View>
                 </View>
             </View>
 
             <View style={[styles.footer]}>
-                <IconText style={styles.textIcon} title='26/5/22' color={Colors.textLightGray} icon={<Feather name='calendar' color={Colors.textLightGray} size={fontSizes.font18} />} />
-                <IconText style={styles.textIcon} title='03:05 PM' color={Colors.textLightGray} icon={<AntDesign name='clockcircleo' color={Colors.textLightGray} size={fontSizes.font14} />} />
-                {!cancelled && <IconText style={{  }} title='Completed' color={Colors.primary}  icon={<Octicons name='check-circle-fill' color={Colors.primary} size={fontSizes.font14} />} />}
-                {cancelled && <IconText  style={{  }} title='Cancelled' color={Colors.error}  icon={<Octicons name='x-circle-fill' color={Colors.error} size={fontSizes.font12} />} />}
-
+                <IconText style={styles.textIcon} title={moment(item.createdAt).format('DD/MM/YY ')} color={Colors.textLightGray} icon={<Feather name='calendar' color={Colors.textLightGray} size={fontSizes.font18} />} />
+                <IconText style={styles.textIcon} title={moment(item.createdAt).format('LT')} color={Colors.textLightGray} icon={<AntDesign name='clockcircleo' color={Colors.textLightGray} size={fontSizes.font14} />} />
+                {item.orderStatus === "COMPLETED" && <IconText style={{  }} title='Completed' color={Colors.primary}  icon={<Octicons name='check-circle-fill' color={Colors.primary} size={fontSizes.font14} />} />}
+                {item.orderStatus === "CANCELLED" &&<IconText  style={{  }} title='Cancelled' color={Colors.error}  icon={<Octicons name='x-circle-fill' color={Colors.error} size={fontSizes.font12} />} />}
+                {item.orderStatus === "NEW" && <IconText  style={{  }} title='new' color={Colors.palladiumOrang}  icon={<Octicons name='check-circle-fill' color={Colors.palladiumOrang} size={fontSizes.font14} />} />}
             </View>
         </View>
     );

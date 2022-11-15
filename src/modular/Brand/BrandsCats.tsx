@@ -26,6 +26,10 @@ const BrandsCats = (props: Props) => {
 
     const [search, setSearch] = useState<string>('');
 
+       //no Cirdits
+       const [modalVisible , setModalVisible ] = useState<boolean>(false)
+       const togleModal = (show:boolean)=>{setModalVisible(show)}
+
     const brand = route.params?.catId
     //=====================
     //get Brand Data
@@ -78,7 +82,7 @@ const BrandsCats = (props: Props) => {
                         if(item.loader) {
                             return <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />
                         }
-                        return (<CatCard item={item} flatListLoading={flatListLoading} />)
+                        return (<CatCard showNoCriditModal={()=>{true}} item={item} flatListLoading={flatListLoading} />)
                     }}
                     keyExtractor={item => item?.catId}
                     onEndReached={() => {

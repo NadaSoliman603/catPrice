@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
+import { HistoryValue } from '../modular/History';
 import Colors from '../styles/colors';
 import gStyles from '../styles/globalStyle';
 import {moderateScale} from '../styles/ResponsiveDimentions';
@@ -7,9 +8,9 @@ import {Label} from '../types/types';
 import OutLineButton from './OutLineButton';
 
 type Props = {
-  value: any;
-  onChange: (value:string|number) => void;
-  buttonGropLables: Label[];
+  value: HistoryValue;
+  onChange: (value:HistoryValue) => void;
+  buttonGropLables: {label:string; value:HistoryValue}[];
 };
 
 const ButtonGroup = ({value, onChange, buttonGropLables}: Props) => {

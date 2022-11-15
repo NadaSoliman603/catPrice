@@ -22,7 +22,7 @@ const ButtomMeueModal = ({ bgColor, height, modalVisible, togleModal, setModalVi
     // const [modalVisible, setModalVisible] = useState(false);
     const fulllHeight = height === 100
     return (
-        <Pressable onPress={() => console.log("pressed")} style={[styles.centeredView, modalVisible && styles.showModelStyle]}>
+        // <Pressable onPress={() => console.log("pressed")} style={[styles.centeredView, modalVisible && styles.showModelStyle]}>
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -62,7 +62,7 @@ const ButtomMeueModal = ({ bgColor, height, modalVisible, togleModal, setModalVi
                         </View>
                     </View>
             </Modal>
-        </Pressable>
+        // </Pressable>
     );
 }
 

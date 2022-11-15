@@ -27,10 +27,7 @@ const CartItemCart = ({ item , handelChecked , selectedItem }: Props) => {
 
     const dispatch = useDispatch()
     const onChangeQuantit = async(value:number)=>{
-        console.log({value})
-
         const cartData = await addCartDataToLocalStorag({ catData: item.item, catQuantity: value })
-        console.log({cartData})
         dispatch(AddToCart({ quantity: cartData.quantity, item: cartData.data }))
     
     }
