@@ -21,9 +21,9 @@ export const cartSlice = createSlice({
   reducers: {
     AddToCart: (state, action: PayloadAction<{ quantity: number, item: any }>) => {
       const quantity = action.payload.quantity;
-      const item = action.payload.item
+      const item = [...action.payload.item]
       return{
-            data:item,
+            data:[...item],
             quantity:quantity
           }
     },

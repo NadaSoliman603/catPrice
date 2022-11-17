@@ -32,6 +32,7 @@ const UserSettingScreen = () => {
 
     useDrower("User Setting")
     const user = useSelector((state: RootState) => state.Auth.user)
+    console.log({ user })
     const token = useSelector((state: RootState) => state.Auth.token)
     const { control, register, handleSubmit, watch, formState: { errors } } = useForm({
         defaultValues: {
@@ -41,34 +42,40 @@ const UserSettingScreen = () => {
         },
     });
     const [image, setImage] = useState<any>(null)
-    const loction = useSelector((state: RootState) => state.Location)
-    const [countryCode, setCountryCode] = useState<any>(loction);
+    const location = useSelector((state: RootState) => state.Location)
+    const [countryCode, setCountryCode] = useState<any>({
+        cca2: user?.countryCode.toUpperCase(),
+        currency: [user.defCurrency],
+        callingCode: [user.mobileCode],
+        name:  user.countryEn
+    });
+    console.log({location})
     const [show, setShow] = useState(false);
-    const [overlayLoading , setOverlayLoading] = useState(false)
-
+    const [overlayLoading, setOverlayLoading] = useState(false)
+    console.log({countryCode})
     //Submit User Seting  Data
-    const onSubmit =  async(data: any) => {
+    const onSubmit = async (data: any) => {
         let imageData = new FormData();
 
         setOverlayLoading(true)
         const userData = {
             countryCode: countryCode.callingCode[0],
-            country:countryCode.name,
-            fullName:data?.fullName,
-            defCurrency:countryCode.currency[0],
-            image:image?.path ? image?.path:null
+            country: countryCode?.name,
+            fullName: data?.fullName,
+            defCurrency: countryCode.currency[0],
+            image: image?.path ? image?.path : null
         }
         try {
-            if(token){
-                const res = await userUpdatInfApi({data:userData , token:token})
+            if (token) {
+                const res = await userUpdatInfApi({ data: userData, token: token })
                 console.log(res)
-            }else{
+            } else {
                 console.log("no Token")
             }
         } catch (error) {
             console.log(error)
         }
-      setOverlayLoading(false)
+        setOverlayLoading(false)
     }
 
 
@@ -116,79 +123,79 @@ const UserSettingScreen = () => {
     const imgUri = "https://img.freepik.com/free-photo/handsome-confident-smiling-man-with-hands-crossed-chest_176420-18743.jpg?w=2000"
 
     return (
-      <>
-        <ScrollView style={styles.screen}>
-           <View style={[styles.container]}>
-           <Pressable onPress={pickImage} style={[gStyles.row, gStyles.pb_6]}>
-                <View style={[styles.profilImg]}>
-                    <Avatar.Image size={moderateScale(25)} source={(image !== null && image?.path !== undefined) ? { uri: image?.path } : imgs.userIcon} />
-                    <Avatar.Image style={[styles.editButton, { backgroundColor: Colors.white }]} size={moderateScale(8)} source={imgs.edit} />
-                </View>
-                <View style={[styles.userInfoContainer]}>
-                    <Text style={[gStyles.text_black, gStyles.text_Bold, styles.userInfo]}>{user?.fullNameAr ? user?.fullNameAr :"User Name"} </Text>
-                    <Text style={[gStyles.h6, gStyles.text_lightGray, styles.userInfo]}>Standered User</Text>
-                </View>
-            </Pressable>
+        <>
+            <ScrollView style={styles.screen}>
+                <View style={[styles.container]}>
+                    <Pressable onPress={pickImage} style={[gStyles.row, gStyles.pb_6]}>
+                        <View style={[styles.profilImg]}>
+                            <Avatar.Image size={moderateScale(25)} source={(image !== null && image?.path !== undefined) ? { uri: image?.path } : imgs.userIcon} />
+                            <Avatar.Image style={[styles.editButton, { backgroundColor: Colors.white }]} size={moderateScale(8)} source={imgs.edit} />
+                        </View>
+                        <View style={[styles.userInfoContainer]}>
+                            <Text style={[gStyles.text_black, gStyles.text_Bold, styles.userInfo]}>{user?.fullNameAr ? user?.fullNameAr : "User Name"} </Text>
+                            <Text style={[gStyles.h6, gStyles.text_lightGray, styles.userInfo]}>Standered User</Text>
+                        </View>
+                    </Pressable>
 
 
-            <CustomTextInput
-                label='Name'
-                control={control}
-                error={errors.fullName}
-                name="fullName"
-                icon={() => <Feather name='user' color={Colors.textLightGray} size={fontSizes.font20} />}
-                rightIcon={false}
-                keyboard={false}
-                secureTextEntry={false}
-                rules={{
-                    require:true
-                }}
-            />
-            <CustomTextInput
-                secureTextEntry={false}
-                keyboard={"number-pad"}
-                label='Phone Number'
-                control={control}
-                error={errors.phone}
-                name="phone"
-                icon={() => <Feather name='phone' size={fontSizes.font20} />}
-                rightIcon={() => <Pressable onPress={() => { setShow(true) }} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.bg : "#fff" }, gStyles.py_2, gStyles.row_Center]}>
-                    <Ionicons name='caret-down-outline' size={fontSizes.font12} />
-                    <CountryPicker
-                        countryCode={countryCode.cca2}
-                        withFilter={true}
-                        withFlag={true}
-                        // withCountryNameButton={true}
-                        withAlphaFilter={true}
-                        withCallingCode={true}
-                        withEmoji={true}
-                        onSelect={(country: any) => {
-                            setCountryCode(country)
+                    <CustomTextInput
+                        label='Name'
+                        control={control}
+                        error={errors.fullName}
+                        name="fullName"
+                        icon={() => <Feather name='user' color={Colors.textLightGray} size={fontSizes.font20} />}
+                        rightIcon={false}
+                        keyboard={false}
+                        secureTextEntry={false}
+                        rules={{
+                            require: true
                         }}
-                        // withCurrency={true}
-                        visible={show}
-                        containerButtonStyle={{ width: moderateScale(10) }}
                     />
-                </Pressable>}
-                rules={{ required: true, }}
-            />
-            <CustomTextInput
-                    label='Email'
-                    control={control}
-                    error={errors.email}
-                    name="email"
-                    icon={() => <Feather name='mail' color={Colors.textLightGray} size={fontSizes.font20} />}
-                    rightIcon={false}
-                    keyboard={false}
-                    secureTextEntry={false}
-                    rules={{}}
-                />
+                    <CustomTextInput
+                        secureTextEntry={false}
+                        keyboard={"number-pad"}
+                        label='Phone Number'
+                        control={control}
+                        error={errors.phone}
+                        name="phone"
+                        icon={() => <Feather name='phone' size={fontSizes.font20} />}
+                        rightIcon={() => <Pressable onPress={() => { setShow(true) }} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.bg : "#fff" }, gStyles.py_2, gStyles.row_Center]}>
+                            <Ionicons name='caret-down-outline' size={fontSizes.font12} />
+                            <CountryPicker
+                                countryCode={countryCode?.cca2}
+                                withFilter={true}
+                                withFlag={true}
+                                // withCountryNameButton={true}
+                                withAlphaFilter={true}
+                                withCallingCode={true}
+                                withEmoji={true}
+                                onSelect={(country: any) => {
+                                    setCountryCode(country)
+                                }}
+                                // withCurrency={true}
+                                visible={show}
+                                containerButtonStyle={{ width: moderateScale(10) }}
+                            />
+                        </Pressable>}
+                        rules={{ required: true, }}
+                    />
+                    <CustomTextInput
+                        label='Email'
+                        control={control}
+                        error={errors.email}
+                        name="email"
+                        icon={() => <Feather name='mail' color={Colors.textLightGray} size={fontSizes.font20} />}
+                        rightIcon={false}
+                        keyboard={false}
+                        secureTextEntry={false}
+                        rules={{}}
+                    />
 
-            <OutLineButton textStyle={{  }} title='Update' style={{}} icon={<Text></Text>} onPress={handleSubmit(onSubmit)} outline={true} />
+                    <OutLineButton textStyle={{}} title='Update' style={{}} icon={<Text></Text>} onPress={handleSubmit(onSubmit)} outline={true} />
 
-           </View>
-        </ScrollView>
-        {overlayLoading && <OverLayLoading/>}
+                </View>
+            </ScrollView>
+            {overlayLoading && <OverLayLoading />}
         </>
     );
 }
@@ -216,7 +223,7 @@ const styles = StyleSheet.create({
         paddingVertical: moderateScale(1),
     },
     imgIcon: { height: moderateScale(7.4), width: moderateScale(7.4) },
-    container:{
+    container: {
         // minHeight:hp(100),
         // justifyContent:"center",
     }

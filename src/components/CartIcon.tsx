@@ -18,9 +18,11 @@ const CartIcon = (props:Props) => {
     const navigation = useNavigation<NavigationType>()
 
     return (
-        <Pressable style={{ paddingHorizontal: 20 }} onPress={() => navigation.navigate(
-           props.navigationScreen === "default" ? "OrderStack" : props.navigationScreen
-            )} >
+        <Pressable style={{ paddingHorizontal: 20 }} onPress={() => {
+            //navigation.navigate( props.navigationScreen === "default" ? "OrderStack" : props.navigationScreen)
+            navigation.navigate( "OrderStack")
+            navigation.replace(props.navigationScreen === "default" ? "OrderStack" : props.navigationScreen)
+        }} >
         {cart >0 &&<Badge style={{ backgroundColor:"#AD1F1F" , left: moderateScale(3) , top: moderateScale(2) }} size={moderateScale(5)}>{cart}</Badge>}
         <Feather color={Colors.primary} name='shopping-cart' size={fontSizes.font22} />
     </Pressable>

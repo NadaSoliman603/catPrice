@@ -33,10 +33,11 @@ const OrderList = (props: Props) => {
     const token = useSelector((state: RootState) => state.Auth.token)
     const user = useSelector((state: RootState) => state.Auth.user)
     const [loading, setLoading] = useState<boolean>(false)
-
+    const [cartData , setcatrtData] = useState(cart?.data)
 
     useDrower("Card")
 
+   
     const [selectedItem, setScllected] = useState<{ ids: number[], quantity: number }>(
         {
             ids: [],
@@ -136,12 +137,16 @@ const OrderList = (props: Props) => {
             <ScrollView style={styles.screen}>
 
                 <View style={[gStyles.p_6,]}>
-                    {cart?.data.map((item: any) => (<CartItemCart selectedItem={selectedItem} handelChecked={handelChecked} item={item} key={item.item.catId} />))}
+                    {cartData.map((item: any) => (
+                    <>
+                    <CartItemCart selectedItem={selectedItem} handelChecked={handelChecked} item={item} key={item.item.catId} />
+                    </>
+                    ))}
                 </View>
-
+                <Text>{cart.quantity}</Text>
 
                 <View style={[styles.orderCartContainer]}>
-                    {cart?.data.map((item: any) => (<View key={item.item.catId}>
+                    {cart?.data.map((item: any ) => (<View key={item.item.catId}>
                         <View style={[gStyles.row, gStyles.spaceBetwen, { paddingVertical: moderateScale(4) }]}>
                             <Text style={[gStyles.text_Bold, gStyles.text_black]}>{item.item.catNo}</Text>
                             <Text><Text style={[]}>{item.quantity}<Text style={[gStyles.h6]}>X</Text></Text> {item.item.catSn}</Text>

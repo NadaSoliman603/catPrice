@@ -39,14 +39,12 @@ gradlew app:assembleRelease
 ===============================================
 1- new order ===> add quantity
     --order ==> want to show all order in one request (canceled , new , completed)
-    --order ==> empity array
 
 4-change password (no UI for it)
 5- forget password (no UI for it)
 6- user balance  (no UI for it)
 7- favourit collection  (no UI for it)
 8- in profile curancy == > not show all currancy
-6-not login modal
 
 
 

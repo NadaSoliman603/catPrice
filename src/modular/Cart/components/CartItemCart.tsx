@@ -11,7 +11,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NavigationType } from '../../../types/navigationTypes';
 import addCartDataToLocalStorag from '../../../Redux/actions/CartAction';
 import { AddToCart } from '../../../Redux/reducers/CartReducer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../Redux/store/store';
 type Props = {
     item: any,
     handelChecked: ({item,checked} :{item:{id:number , quantity:number}  , checked:boolean}) => void,
@@ -19,15 +20,16 @@ type Props = {
 }
 
 
-const CartItemCart = ({ item , handelChecked , selectedItem }: Props) => {
+const CartItemCart = ({ item , handelChecked , selectedItem ,  }: Props) => {
     const navigation = useNavigation<NavigationType>()
-
+    const cart = useSelector((state: RootState) => state.Cart)
     const [quantity, setQuantity] = useState(item.quantity)
     const checked:boolean = selectedItem.ids.includes(item.item.catId)
+    console.log(item)
 
     const dispatch = useDispatch()
     const onChangeQuantit = async(value:number)=>{
-        const cartData = await addCartDataToLocalStorag({ catData: item.item, catQuantity: value })
+        const cartData = await addCartDataToLocalStorag({ catData: item.item, catQuantity: value ,icreaseBy:false})
         dispatch(AddToCart({ quantity: cartData.quantity, item: cartData.data }))
     
     }

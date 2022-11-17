@@ -13,6 +13,8 @@ import { moderateScale } from '../../styles/ResponsiveDimentions';
 import { NavigationType, RootStack } from '../../types/navigationTypes';
 import OutOfCridit from './OutOfCridit';
 import Feather  from 'react-native-vector-icons/Feather';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../Redux/store/store';
 
 
 type ScreenRouteProp = RouteProp<RootStack, 'SearchResults'>;
@@ -27,6 +29,8 @@ const SearchResults = () => {
     const [limit, setLimit] = useState(10)
     const [mount, setMount] = useState(true);
     const navigation = useNavigation<NavigationType>()
+    const token = useSelector((state:RootState)=>state.Auth.token)
+    
     
     //no Cirdits
     const [modalVisible, setModalVisible] = useState<boolean>(false)
@@ -39,7 +43,7 @@ const SearchResults = () => {
         const geSearchData = async ({ search, limit }: { search: string; limit: string }) => {
             try {
                 if(cats.length >=10) setFlatLisloading(true)
-                const res = await searchCatdApi({ search: search, limit: limit.toString() });
+                const res = await searchCatdApi({ search: search, limit: limit.toString() , token:token });
                 const catsData = res.data.body;
                 if (catsData.length === 0) { setNoSearchResult(true) } else { setNoSearchResult(false) }
                 if (mount) {

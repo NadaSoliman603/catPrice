@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
-const addCartDataToLocalStorag = async ({catData , catQuantity} :{catData:any , catQuantity:number}) => {
+const addCartDataToLocalStorag = async ({catData , catQuantity , icreaseBy} :{catData:any , catQuantity:number , icreaseBy:boolean}) => {
     const cartData = await AsyncStorage.getItem("cartData")
 
     console.log({catData})
@@ -25,7 +25,23 @@ const addCartDataToLocalStorag = async ({catData , catQuantity} :{catData:any , 
         //   quantity:cartElement.quantity + catQuantity ,
         //   item: catData
         // }
-        
+        if(icreaseBy){
+          userCartData.quantity= userCartData.quantity  + catQuantity
+          userCartData.data[isExsisted].quantity =  catQuantity + userCartData.data[isExsisted].quantity
+          
+          console.log({
+            data: userCartData.data,
+            quantity:userCartData.quantity 
+          })
+          
+          AsyncStorage.setItem('cartData', JSON.stringify(userCartData))
+          // //=====================
+          // //update state Reducer
+         return  {
+            data: userCartData.data,
+            quantity:userCartData.quantity 
+          }
+        }
         userCartData.quantity= userCartData.quantity - userCartData.data[isExsisted].quantity + catQuantity
         userCartData.data[isExsisted].quantity =  catQuantity
         console.log({

@@ -36,7 +36,8 @@ export type RootStack = {
     OnBoarding1:undefined;
     OnBoarding2:undefined;
     OnBoarding3:undefined;
-    SearchResults:{search:string}
+    SearchResults:{search:string},
+    FavouriteCollectionDetails:{id:string}
 };
 
 

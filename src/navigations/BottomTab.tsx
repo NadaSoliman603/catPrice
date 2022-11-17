@@ -46,6 +46,7 @@ import type { NativeStackNavigationOptions } from '@react-navigation/native-stac
 import CreditsScreen from '../modular/Cridits';
 import HeaderMenue from '../components/HeaderMenue';
 import SearchResults from '../modular/Search/SearchResult';
+import FavouriteCollectionDetails from '../modular/Favourites/FavouriteCollectionDetails';
 
 
 const Tab = createBottomTabNavigator();
@@ -141,6 +142,8 @@ const AppStack = () => {
             <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
             <Stack.Screen options={{headerRight: () => <CartIcon navigationScreen='default' />  , title:"Cridits"}} name="CreditsSearchStack" component={CreditsScreen} />
             <Stack.Screen options={{ title: "Credits", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="CreditsScreen" component={CreditsScreen} />
+            
+            <Stack.Screen options={{ title: "Favourites", headerShown: true,  headerLeft: () => <BackBotton /> }} name="FavouriteCollectionDetails" component={FavouriteCollectionDetails} />
 
         </Stack.Navigator>
     )
@@ -161,6 +164,7 @@ const BrandStack = () => {
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
         <Stack.Screen options={{ title: "Product Details", headerRight: () => <CartIcon navigationScreen='default' />, headerLeft: () => <BackBotton /> }} name="ProductDetails" component={ProductDetails} />
         <Stack.Screen options={{ title: "Credits", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="CreditsScreen" component={CreditsScreen} />
+        <Stack.Screen options={{ title: "Favourites", headerShown: true,  headerLeft: () => <BackBotton /> }} name="FavouriteCollectionDetails" component={FavouriteCollectionDetails} />
 
     </Stack.Navigator>)
 }
@@ -182,6 +186,8 @@ const BrofileStack = () => {
         <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
         <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
+        <Stack.Screen options={{ title: "Favourites", headerShown: true,  headerLeft: () => <BackBotton /> }} name="FavouriteCollectionDetails" component={FavouriteCollectionDetails} />
+
     </Stack.Navigator>)
 }
 
@@ -196,10 +202,12 @@ const SearchStack = () => {
         <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' /> }} name="History" component={History} />
         <Stack.Screen options={{ title: "Home", headerRight: () => <CartIcon navigationScreen='default' /> }} name="HomeScreen" component={Home} />
         <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
+        
         <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
         <Stack.Screen options={{headerRight: () => <CartIcon navigationScreen='default' />  , title:"Cridits"}} name="CreditsSearchStack" component={CreditsScreen} />
         <Stack.Screen options={{ title: "Credits", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="CreditsScreen" component={CreditsScreen} />
+        <Stack.Screen options={{ title: "Favourites", headerShown: true,  headerLeft: () => <BackBotton /> }} name="FavouriteCollectionDetails" component={FavouriteCollectionDetails} />
 
         {/* <Stack.Screen options={{ headerShown: true }} name="TermsAndConditions" component={TermsAndConditions} />
         <Stack.Screen options={{ headerShown: true }} name="Login" component={Login} />
@@ -210,8 +218,8 @@ const SearchStack = () => {
 }
 
 const OrderStack = () => {
-    return (<Stack.Navigator screenOptions={stackOption} initialRouteName='OrderList'>
-        <Stack.Screen options={{ headerShown: true, animationDuration: 0, headerTitleAlign: "center" , title: "Order List",}} name="OrderList" component={OrderList} />
+    return (<Stack.Navigator screenOptions={{ ...stackOption  ,  freezeOnBlur:false ,}} initialRouteName='OrderList'>
+        <Stack.Screen options={{freezeOnBlur:false , headerShown: true, animationDuration: 0, headerTitleAlign: "center" , title: "Order List",}} name="OrderList" component={OrderList} />
         <Stack.Screen options={{ headerShown: true, title: "Order Completed", headerRight: () => <CartIcon navigationScreen='OrderList' />, headerLeft: () => <BackBotton /> }} name="OrderCompleted" component={OrderCompleted} />
         <Stack.Screen options={{ headerShown: true, title: "Bayers List", headerRight: () => <CartIcon navigationScreen='OrderList' />, headerLeft: () => <BackBotton /> }} name="BayerList" component={BayerList} />
     </Stack.Navigator>)
@@ -231,6 +239,9 @@ const Credits = () => {
         <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
         <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
+        <Stack.Screen options={{freezeOnBlur:false , headerShown: true, animationDuration: 0, headerTitleAlign: "center" , title: "Order List",}} name="OrderList" component={OrderList} />
+        <Stack.Screen options={{ title: "Favourites", headerShown: true,  headerLeft: () => <BackBotton /> }} name="FavouriteCollectionDetails" component={FavouriteCollectionDetails} />
+
     </Stack.Navigator>)
 }
 

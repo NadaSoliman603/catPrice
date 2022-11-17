@@ -29,10 +29,11 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
 
     const navigation = useNavigation<NavigationType>()
     const token = useSelector((state: RootState) => state.Auth.token)
+    const user  = useSelector((state: RootState) => state.Auth.user)
     const [overLayloading, setOverLayLoading] = useState(false)
     const [price, setPrice] = useState<null | string>(null)
     const [serverError, setServerError] = useState<{ error: boolean; msg: string }>({ error: false, msg: "" })
-    const [brandsModalshow, setBrandOdalShow] = useState<boolean>(false)
+    const [brandsModalshow, setBrandModalShow] = useState<boolean>(false)
     //favourits
     const [isFavourit, setIsFavourit] = useState(item?.inFavorite)
 
@@ -48,7 +49,7 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
         if (token) {
             console.log(token, productDetails.catId)
             setOverLayLoading(true)
-            const res = await showPriceApi({ catId: productDetails.catId, token: token })
+            const res = await showPriceApi({ catId: productDetails.catId, token: token , currency:user?.defCurrency })
             console.log(res.data)
             const price = res.data.body?.formattedPrice
             setOverLayLoading(false)
@@ -56,7 +57,8 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
                 showNoCriditModal()
                 //navigation.navigate('Login')
             } else {
-                const priceText = "SAR " + price
+                console.log(res.data.body)
+                const priceText = user.defCurrency+ " " + price
                 setPrice(priceText)
             }
 
@@ -67,7 +69,7 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
         }
     }
 
-    const togelebrandsModalshow = (value: boolean) => { setBrandOdalShow(value) }
+    const togelebrandsModalshow = (value: boolean) => { setBrandModalShow(value) }
     // =================
     //Add To favourits
     //=================
@@ -75,6 +77,7 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
     const [favLoading, setFavLoading] = useState<boolean>(false)
     const togeleFavouritModalShow = (value: boolean) => { setFavouritModalShow(value) }
     const addToFavourit = async () => {
+       
         if (token) {
             if (!isFavourit) {
                 setFavouritModalShow(true)
@@ -82,13 +85,14 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
                 setFavLoading(true)
                 try {
                     const res = await deleteCatFromFavouritCollectionApi({ data: { catId: item.catId }, token: token })
+                    console.log("fave" , item.catId)
+                    console.log({res})
                     if (res.data.header.httpStatusCode === 200) {
                         setIsFavourit(false)
-
                     }
                     setFavLoading(false)
                 } catch (error) {
-                    console.log("error")
+                    console.log("error" , error)
                     setFavLoading(false)
                 }
             }
@@ -112,7 +116,7 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
                     <View style={[gStyles.row, gStyles.spaceBetwen]}>
                         <View style={[gStyles.row]}>
                             <View style={[item.brands.length > 1 && styles.brandLogoContainer1, item.brands.length > 1 && gStyles.center]}>
-                                <Pressable onPress={()=>setBrandOdalShow(true)}
+                                <Pressable onPress={()=>setBrandModalShow(true)}
                                     style={[styles.brandLogoContainer, gStyles.center]}>
                                     <FastImage resizeMode='contain' source={{ uri: item.brands?.[0]?.makerImage }} style={styles.brandImg}
                                     />
@@ -166,7 +170,7 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
                 <View style={{ padding: moderateScale(6),  }}>
                     {item.brands.map((item: any) => {
                         return (
-                            <View style={{ flexDirection: "row" , flex:1}} >                                    
+                            <View style={{ flexDirection: "row" , flex:1 , marginVertical:moderateScale(3)}} >                                    
                                 <Pressable
                                     style={[styles.brandLogoContainer, gStyles.center , {justifyContent: "center", alignContent: "center", alignItems: "center", alignSelf: "center" }]}>
                                     <FastImage resizeMode='contain' source={{ uri: item.makerImage }} style={styles.brandModalImg}

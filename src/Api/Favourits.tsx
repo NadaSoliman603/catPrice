@@ -25,6 +25,18 @@ export const addFavouritCollectionApi = ({data , token }:{data:{collectionName:s
       },
     })
   }
+
+
+  export const getFavouritCollectionsDetailsApi = ({token , id }:{token:string , id:string})=>{
+    return axios
+    .get(`${END_POINT}/api/v1/favorites/collections/get-favorites-details?collectionId=${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${token}`,
+      },
+    })
+  }
+  
   
 
   

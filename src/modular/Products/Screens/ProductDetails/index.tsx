@@ -65,7 +65,7 @@ const ProductDetails = (props: Props) => {
     //============================
     const getProductDetails = async () => {
         const catId = route?.params?.catID
-        const productDetails = await getCatDetailsApi({ catID: catId })
+        const productDetails = await getCatDetailsApi({ catID: catId ,  token: token })
         setLoading(false)
         const product = productDetails.data.body
         setProductDetails(product)
@@ -89,13 +89,13 @@ const ProductDetails = (props: Props) => {
     const navigation = useNavigation<NavigationType>();
     const [overLayloading, setOverLayLoading] = useState(false)
     const [price, setPrice] = useState<null | string>(null)
-
+    const user = useSelector((state: RootState) => state.Auth.user)
     const onShowprice = async () => {
         console.log({ token })
         if (token) {
             console.log(token, productDetails.catId)
             setOverLayLoading(true)
-            const res = await showPriceApi({ catId: productDetails.catId, token: token })
+            const res = await showPriceApi({ catId: productDetails.catId, token: token , currency:user?.defCurrency})
             console.log(res.data)
             const price = res.data.body?.formattedPrice
             setOverLayLoading(false)
@@ -123,9 +123,9 @@ const ProductDetails = (props: Props) => {
     const dispatch = useDispatch()
     const onAddToCart = async () => {
         // console.log(quantity,productDetails)
-        // const cartData = await addCartDataToLocalStorag({ catData: productDetails, catQuantity: quantity })
-        // console.log(cartData)
-        // dispatch(AddToCart({ quantity: cartData.quantity, item: cartData.data }))
+        const cartData = await addCartDataToLocalStorag({ catData: productDetails, catQuantity: quantity , icreaseBy:true  })
+        console.log(cartData)
+        dispatch(AddToCart({ quantity: cartData.quantity, item: [...cartData.data ] }))
     }
 
     useEffect(() => {

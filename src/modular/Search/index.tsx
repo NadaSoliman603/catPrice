@@ -21,6 +21,8 @@ import AoutoCompletCard from './AoutoCompletCard';
 import ButtomMeueModal from '../../components/AuthModal';
 import OutOfCridit from './OutOfCridit';
 import AddToFavourit from '../Products/Screens/ProductDetails/AddToFavourit';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../Redux/store/store';
 type Props = {};
 type ScreenRouteProp = RouteProp<RootStack, 'Search'>;
 
@@ -46,7 +48,7 @@ const Search = (props: Props) => {
     const [outoCompletData, setOutoCompletData] = useState<null | any[]>([])
     const [loadingOutoComplete, setLoadingOutoComplete] = useState<boolean>(false);
     const [showOutoComplete, setshowOutoComplete] = useState(true)
-
+    const token = useSelector((state:RootState)=>state.Auth.token)
    
 
     //==============
@@ -81,7 +83,7 @@ const Search = (props: Props) => {
     const getOutoCompletData = async ({ search, limit }: { search: string; limit: string }) => {
         try {
             setLoadingOutoComplete(true)
-            const res = await searchCatdApi({ search: search, limit: limit.toString() });
+            const res = await searchCatdApi({ search: search, limit: limit.toString() , token:token});
             const catsData = res.data.body;
             if (catsData.length === 0) {
 
@@ -105,7 +107,7 @@ const Search = (props: Props) => {
         }
     };
 
-    const [maxHeight , setMaxHight] = useState(hp(70))
+    const [maxHeight , setMaxHight] = useState(hp(40))
 
     useEffect(() => {
         const showSubscription = Keyboard.addListener("keyboardDidShow", (e) => {
@@ -117,7 +119,7 @@ const Search = (props: Props) => {
         });
         const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
             setshowOutoComplete(true)
-            setMaxHight(hp(70))
+            // setMaxHight(hp(70))
         });
 
         return () => {
@@ -164,7 +166,7 @@ const Search = (props: Props) => {
                             // accessibilityLabel={""}
                             activeUnderlineColor={Colors.textLightGray}
                         />
-                        {showOutoComplete && <View style={[styles.outoCompletContainer , {minHeight:maxHeight}]}>
+                        {showOutoComplete && <View style={[styles.outoCompletContainer ,{maxHeight:maxHeight}]}>
                             {search.length < 3 && <Text style={[gStyles.h6, gStyles.text_center]}>for autocomplete you must at least write 3 characters</Text>}
                             {loadingOutoComplete && <ActivityIndicator color={Colors.primaryPresedButton} size="small" style={[gStyles.p_2]} />}
                             {outoCompletData === null && <NoFoundData title='No Srearch Result'/>}
@@ -288,8 +290,8 @@ const styles = StyleSheet.create({
         height: hp(25),
     },
     outoCompletContainer: {
-        // maxHeight: hp(40),
-        // minHeight: hp(40),
+        maxHeight: hp(40),
+        minHeight: hp(7),
         marginTop: moderateScale(-1),
         borderWidth: moderateScale(0.5),
         backgroundColor: Colors.white,
