@@ -1,6 +1,6 @@
 // In App.js in a new project
 
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -17,10 +17,14 @@ import ForgetPassword from './src/modular/Auth/screens/ForgetPassword';
 import OTPVeritfication from './src/modular/Auth/screens/OTPVeritfication';
 import { moderateScale } from './src/styles/ResponsiveDimentions';
 import AuthStack from './src/modular/Auth';
+import { StripeProvider } from '@stripe/stripe-react-native';
+import OfferCart from './src/modular/Cridits/Component/OfferCart';
+
 const Stack = createNativeStackNavigator();
 
-
 function App() {
+  const [publishableKey, setpublishableKey] = useState('')
+
   const theme = {
     ...DefaultTheme,
     colors: {
@@ -31,16 +35,22 @@ function App() {
     },
     dark: false
   };
-  
+
+
 
   return (<>
-    <Provider store={store}>
-      <PaperProvider settings={{ icon: (props) => <Feather {...props} /> }} theme={theme}>
-        <StatusBar animated={true} backgroundColor={Colors.white} />
-        <MainNavigation />
-        <AuthStack />
-      </PaperProvider>
-    </Provider>
+    <StripeProvider
+      publishableKey={"pk_test_51M52uZJPH93PAwz93BclTtIrXbuNwDhIdCrnTjd4NqDGM7qfi7IJbKjqGQxfwsLJABHtKZ5CtRhuzdjt6PwNY3fZ00epgcjm8n"}
+     merchantIdentifier='merchant.com.catPrice'
+      >
+      <Provider store={store}>
+        <PaperProvider settings={{ icon: (props) => <Feather {...props} /> }} theme={theme}>
+          <StatusBar animated={true} backgroundColor={Colors.white} />
+          <MainNavigation />
+          <AuthStack />
+        </PaperProvider>
+      </Provider>
+    </StripeProvider>
   </>);
 }
 

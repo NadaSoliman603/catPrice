@@ -1,18 +1,22 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable, } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Avatar } from 'react-native-paper';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getPlanApi } from '../../Api/Auth';
 import imgs from '../../assets/images';
 import Loading from '../../common/Loading';
+import NoFoundData from '../../common/NoDataFound';
 import OutLineButton from '../../common/OutLineButton';
 import DashedTitle from '../../components/DashedTitle';
+import { ShowModal } from '../../Redux/reducers/AuthModalReducer';
 import { RootState } from '../../Redux/store/store';
 import Colors from '../../styles/colors';
 import fontSizes from '../../styles/fontSizes';
 import gStyles from '../../styles/globalStyle';
 import { moderateScale } from '../../styles/ResponsiveDimentions';
+import { NavigationType } from '../../types/navigationTypes';
 import OfferCart from './Component/OfferCart';
 import PlanItem from './Component/PlanItem';
 // import planData from './dumyData';
@@ -25,7 +29,8 @@ const CreditsScreen = (props: Props) => {
     const [mount, setMount] = useState(true)
     const [loading, setLoading] = useState<boolean>(true)
     const token = useSelector((state:RootState)=>state.Auth.token)
-
+    const navigation = useNavigation<NavigationType>()
+    const dispatch = useDispatch()
     const onShowPlan = (plan: any) => {
         setShowPlan(plan)
     }
@@ -39,13 +44,15 @@ const CreditsScreen = (props: Props) => {
             const res = await getPlanApi({ path: "", token: token })
        
             const plans = res?.data?.body
-           
+            console.log({res})
             if (mount && plans) {
                 setPlans(plans)
                 console.log(plans[0])
                 setShowPlan(plans[0])
                 setLoading(false)
             }
+        }else{
+            // dispatch(ShowModal(true))
         }
        
     }
@@ -59,11 +66,21 @@ const CreditsScreen = (props: Props) => {
         return () => { setMount(false) }
     }, [plans])
 
+
+    const checkout = ()=>{
+        navigation.navigate("CheckoutScreen" , {plan:showPlan})
+        if(token){
+            navigation.navigate("CheckoutScreen" , {plan:showPlan})
+        }else{
+
+        }
+    }
+
     return (
         <View style={styles.screen}>
-             {loading && <Loading />}
-            <ScrollView >
-                
+             {/* {loading && <Loading />} */}
+             {/* {token === null && <NoFoundData title='Please login'/> } */}
+            {/* <ScrollView >
                 {plans !== null && showPlan && <View style={[gStyles.row, gStyles.space_around, { marginBottom: moderateScale(30) }]}>
                     {plans?.map((item) => {
                         const active = item.planName === showPlan.planName
@@ -86,7 +103,8 @@ const CreditsScreen = (props: Props) => {
                 </View>
                 }
             </ScrollView>
-            {plans !== null && <OutLineButton textStyle={styles.button} style={{ marginBottom: moderateScale(20) }} title='Buy Now' outline={true} icon={<></>} onPress={() => { }} />}
+            {plans !== null && <OutLineButton textStyle={styles.button} style={{ marginBottom: moderateScale(20) }} title='Buy Now' outline={true} icon={<></>} onPress={checkout} />} */}
+            <OutLineButton textStyle={styles.button} style={{ marginBottom: moderateScale(20) }} title='Buy Now' outline={true} icon={<></>} onPress={checkout} />
         </View>
     );
 }

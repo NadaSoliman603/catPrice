@@ -1,6 +1,7 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
+import { Plan } from './types';
 
 export type RootStack = {
     Home: undefined;
@@ -36,8 +37,9 @@ export type RootStack = {
     OnBoarding1:undefined;
     OnBoarding2:undefined;
     OnBoarding3:undefined;
-    SearchResults:{search:string},
-    FavouriteCollectionDetails:{id:string}
+    SearchResults:{search:string},      
+    FavouriteCollectionDetails:{id:string},
+    CheckoutScreen:{plan:Plan}
 };
 
 

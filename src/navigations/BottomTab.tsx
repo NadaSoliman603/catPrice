@@ -47,6 +47,7 @@ import CreditsScreen from '../modular/Cridits';
 import HeaderMenue from '../components/HeaderMenue';
 import SearchResults from '../modular/Search/SearchResult';
 import FavouriteCollectionDetails from '../modular/Favourites/FavouriteCollectionDetails';
+import CheckoutScreen from '../modular/Cridits/screens/Checkout';
 
 
 const Tab = createBottomTabNavigator();
@@ -241,6 +242,7 @@ const Credits = () => {
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
         <Stack.Screen options={{freezeOnBlur:false , headerShown: true, animationDuration: 0, headerTitleAlign: "center" , title: "Order List",}} name="OrderList" component={OrderList} />
         <Stack.Screen options={{ title: "Favourites", headerShown: true,  headerLeft: () => <BackBotton /> }} name="FavouriteCollectionDetails" component={FavouriteCollectionDetails} />
+        <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' /> ,headerLeft: () => <BackBotton /> , title:"Billing"}} name="CheckoutScreen" component={CheckoutScreen} />
 
     </Stack.Navigator>)
 }

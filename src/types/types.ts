@@ -48,5 +48,20 @@ export type MetalPrice = {
     fdPtPrice: number;
     fdPdPrice: number;
     fdRhPrice: number;
-    currancy:string;
+    currancy: string;
+}
+
+
+export type Plan = {
+    planId: number;
+    planName: string;
+    planCode: string;
+    planDescription: string;
+    planCredit: number;
+    planPrice: number;
+    validDays: number;
+    planImage: null | string;
+    createdAt: Date;
+    updatedAt: Date;
+    planStatus: string
 }
