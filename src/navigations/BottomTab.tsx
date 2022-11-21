@@ -48,6 +48,7 @@ import HeaderMenue from '../components/HeaderMenue';
 import SearchResults from '../modular/Search/SearchResult';
 import FavouriteCollectionDetails from '../modular/Favourites/FavouriteCollectionDetails';
 import CheckoutScreen from '../modular/Cridits/screens/Checkout';
+import CurrentPlan from '../modular/Profile/Screens/CurrentPlan';
 
 
 const Tab = createBottomTabNavigator();
@@ -188,6 +189,7 @@ const BrofileStack = () => {
         <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
         <Stack.Screen options={{ title: "Favourites", headerShown: true,  headerLeft: () => <BackBotton /> }} name="FavouriteCollectionDetails" component={FavouriteCollectionDetails} />
+        <Stack.Screen options={{ title: "Current Plan", headerShown: true,  headerLeft: () => <BackBotton /> }} name="CurrentPlan" component={CurrentPlan} />
 
     </Stack.Navigator>)
 }

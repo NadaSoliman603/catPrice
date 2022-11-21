@@ -6,12 +6,13 @@ import ButtomMeueModal from '../../components/AuthModal';
 import { ShowModal } from '../../Redux/reducers/AuthModalReducer';
 import { RootState } from '../../Redux/store/store';
 import { moderateScale } from '../../styles/ResponsiveDimentions';
+import CreateNewPassword from './screens/CreateNewPassword';
 import ForgetPassword from './screens/ForgetPassword';
 import Login from './screens/Login';
 import OTPVeritfication from './screens/OTPVeritfication';
 import Register from './screens/Register';
 
-export type AuthCustomNav = "Login" | "Register" | "ForgetPassword" | "OTPVeritfication" | "HideModal"
+export type AuthCustomNav = "CreateNewPassword"|"Login" | "Register" | "ForgetPassword" | "OTPVeritfication" | "HideModal"
 export type Phone =  {mobileCode: string, phone: string}
 type Props = {}
 const AuthStack = (props: Props) => {
@@ -50,6 +51,8 @@ const AuthStack = (props: Props) => {
                 {authScreen === "Register" && <Register handelPhonNumber={handelPhonNumber} handelAuthScreens={handelAuthScreens} />}
                 {authScreen === "ForgetPassword" && <ForgetPassword handelAuthScreens={handelAuthScreens} />}
                 {authScreen === "OTPVeritfication" && <OTPVeritfication phone={phone} handelAuthScreens={handelAuthScreens} />}
+                {authScreen === "CreateNewPassword" && <CreateNewPassword  handelAuthScreens={handelAuthScreens}/>}
+
                 <View  style={{ height:moderateScale(25) }}></View>
             </>
         </ButtomMeueModal>

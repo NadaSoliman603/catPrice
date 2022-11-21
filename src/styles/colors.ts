@@ -15,6 +15,8 @@ const Colors = {
     palladiumOrang : '#DD6420', //palladium orang
     RhodiumGreen:'#198754', // Rhodium green
     platinumBlue:'#3B92C2', // platinum blue
+    lightGreen:"#D4FFE2",
+    bg_Error:"#FED7D7"
 
 };
 

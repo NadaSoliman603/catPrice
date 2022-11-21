@@ -15,6 +15,7 @@ import Colors from '../../styles/colors';
 import { NavigationType } from '../../types/navigationTypes';
 import { getSystemSettingApi } from '../../Api/Auth';
 import { MetalPrice } from '../../types/types';
+import FastImage from 'react-native-fast-image';
 type Props = {}
 
 const Home = (props: Props) => {
@@ -55,7 +56,7 @@ const Home = (props: Props) => {
     return (
         // <MainView>
         <ScrollView style={[styles.screen,]}>
-            <Image source={imgs.logo} style={styles.logo} />
+            <FastImage   resizeMode='contain' source={imgs.logo} style={styles.logo} />
             <View style={[gStyles.p_6, gStyles.selfCenter]}>
                 <Text style={[gStyles.text_Bold, gStyles.h1, gStyles.text_black, gStyles.text_center, gStyles.mh_15]}>Search Catalytic Converters for price  </Text>
             </View>

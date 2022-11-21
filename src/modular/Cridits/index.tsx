@@ -68,7 +68,6 @@ const CreditsScreen = (props: Props) => {
 
 
     const checkout = ()=>{
-        navigation.navigate("CheckoutScreen" , {plan:showPlan})
         if(token){
             navigation.navigate("CheckoutScreen" , {plan:showPlan})
         }else{
@@ -78,9 +77,9 @@ const CreditsScreen = (props: Props) => {
 
     return (
         <View style={styles.screen}>
-             {/* {loading && <Loading />} */}
-             {/* {token === null && <NoFoundData title='Please login'/> } */}
-            {/* <ScrollView >
+             {loading && <Loading />}
+             {token === null && <NoFoundData title='Please login'/> }
+            <ScrollView >
                 {plans !== null && showPlan && <View style={[gStyles.row, gStyles.space_around, { marginBottom: moderateScale(30) }]}>
                     {plans?.map((item) => {
                         const active = item.planName === showPlan.planName
@@ -103,8 +102,8 @@ const CreditsScreen = (props: Props) => {
                 </View>
                 }
             </ScrollView>
-            {plans !== null && <OutLineButton textStyle={styles.button} style={{ marginBottom: moderateScale(20) }} title='Buy Now' outline={true} icon={<></>} onPress={checkout} />} */}
-            <OutLineButton textStyle={styles.button} style={{ marginBottom: moderateScale(20) }} title='Buy Now' outline={true} icon={<></>} onPress={checkout} />
+            {plans !== null && <OutLineButton textStyle={styles.button} style={{ marginBottom: moderateScale(20) }} title='Buy Now' outline={true} icon={<></>} onPress={checkout} />}
+        
         </View>
     );
 }

@@ -34,6 +34,7 @@ import { ShowModal } from '../../../../Redux/reducers/AuthModalReducer';
 import AddToFavourit from './AddToFavourit';
 import Loading from '../../../../common/Loading';
 import { deleteCatFromFavouritCollectionApi } from '../../../../Api/Favourits';
+import Error from '../../../../common/Error';
 
 // import PieChart from 'react-native-pie-chart';
 
@@ -99,6 +100,7 @@ const ProductDetails = (props: Props) => {
             console.log(res.data)
             const price = res.data.body?.formattedPrice
             setOverLayLoading(false)
+            setServerError({ error: false, msg: '' })
             if (!price) {
                 if (res.data.header.headerMessage === "NO_ACTIVE_PLAN") {
                     //navigation.navigate('CreditsSearchStack')
@@ -123,9 +125,14 @@ const ProductDetails = (props: Props) => {
     const dispatch = useDispatch()
     const onAddToCart = async () => {
         // console.log(quantity,productDetails)
-        const cartData = await addCartDataToLocalStorag({ catData: productDetails, catQuantity: quantity , icreaseBy:true  })
-        console.log(cartData)
-        dispatch(AddToCart({ quantity: cartData.quantity, item: [...cartData.data ] }))
+        if(price){
+            const cartData = await addCartDataToLocalStorag({ catData: productDetails, catQuantity: quantity , icreaseBy:true  })
+            console.log(cartData)
+            dispatch(AddToCart({ quantity: cartData.quantity, item: [...cartData.data ] }))
+        }else{
+            setServerError({ error: true, msg: 'noPrice' })
+        }
+       
     }
 
     useEffect(() => {
@@ -248,9 +255,10 @@ const ProductDetails = (props: Props) => {
 
                         <OutLineButton textStyle={{}} outline={false} style={{}} title={price ? price : 'Show Price '} onPress={price === null ? onShowprice : () => { }} icon={
                             price ? <></> : <Feather name="eye" size={fontSizes.font16} color={Colors.primary} />} />
-                        {serverError.error && <Button textStyle={[gStyles.h6, { color: Colors.error }]} style={[gStyles.alignCenter, { padding: 0 }]} onPress={() => {
+                        {serverError.error && serverError.msg !== "noPrice"&& <Button textStyle={[gStyles.h6, { color: Colors.error }]} style={[gStyles.alignCenter, { padding: 0 }]} onPress={() => {
                             dispatch(ShowModal(true))
                         }} title={serverError.msg} />}
+                        {serverError.error && serverError.msg === "noPrice" &&<Error message={'to add product to the cart Please show the  Peice'}/>}
 
                         <View style={[gStyles.row, gStyles.spaceBetwen]}>
                             <View>

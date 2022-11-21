@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Alert } from 'react-native';
-import { StripeProvider } from '@stripe/stripe-react-native';
-import { CardField, useStripe, CardFieldInput, useConfirmPayment, BillingDetails, } from '@stripe/stripe-react-native';
+import { CardForm, StripeProvider } from '@stripe/stripe-react-native';
+import { CardField, useStripe, CardFieldInput, useConfirmPayment, BillingDetails} from '@stripe/stripe-react-native';
 import Colors from '../../../styles/colors';
 import { moderateScale } from '../../../styles/ResponsiveDimentions';
 import OutLineButton from '../../../common/OutLineButton';
@@ -45,11 +45,12 @@ export function CheckoutScreen() {
         },
       },
       {
-        setupFutureUsage: undefined,
+        // setupFutureUsage: undefined,
       }
     );
 
     if (error) {
+      console.log(error)
       Alert.alert(`Error code: ${error.code}`, error.message);
       console.log('Payment confirmation error', error.message);
       console.log(error)
@@ -99,6 +100,9 @@ export function CheckoutScreen() {
         }}
       />
 
+
+      {/* <CardForm  style={styles.cardForm}/> */}
+
       <OutLineButton textStyle={styles.button} style={{ marginBottom: moderateScale(20) }} title='Pay' outline={true} icon={<></>} onPress={checkout} />
 
     </View>
@@ -116,6 +120,10 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.font16,
     fontWeight: '500',
     letterSpacing: moderateScale(0.4)
+  },
+  cardForm:{
+    width:"90%",
+    height:170
   }
 });
 

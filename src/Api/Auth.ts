@@ -187,3 +187,25 @@ export const userUpdatInfApi =  ({ token , data}:{ token:string , data:any})=>{
     },
   })
 }
+
+
+export const userBalanceApi =  ({ token }:{ token:string })=>{
+  return axios.get(`${END_POINT}/api/v1/balance/user-balance` , {
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+}
+
+
+export const getCatsPriceApi =  ({ token , currency , data}:{ token:string , currency:string , data:any})=>{
+  return axios.post(`${END_POINT}/api/v1/cart/check-cats-prices` ,JSON.stringify(data), {
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${token}`,
+      "Currency": currency
+
+    },
+  })
+}

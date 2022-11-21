@@ -15,24 +15,32 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../Redux/store/store';
 type Props = {
     item: any,
-    handelChecked: ({item,checked} :{item:{id:number , quantity:number}  , checked:boolean}) => void,
-    selectedItem:{ids:number[] , quantity:number},
+    handelChecked: ({item,checked} :{item:{id:number , quantity:number}  , checked:boolean}) => void;
+    selectedItem:{ids:number[] ; quantity:number};
+    price:number | string;
+    catSPrice:any;
+    handelTotalPrice:(cartData:any)=>void;
 }
 
 
-const CartItemCart = ({ item , handelChecked , selectedItem ,  }: Props) => {
+const CartItemCart = ({ item , handelChecked , selectedItem ,price , handelTotalPrice }: Props) => {
     const navigation = useNavigation<NavigationType>()
     const cart = useSelector((state: RootState) => state.Cart)
     const [quantity, setQuantity] = useState(item.quantity)
     const checked:boolean = selectedItem.ids.includes(item.item.catId)
-    console.log(item)
 
     const dispatch = useDispatch()
     const onChangeQuantit = async(value:number)=>{
         const cartData = await addCartDataToLocalStorag({ catData: item.item, catQuantity: value ,icreaseBy:false})
         dispatch(AddToCart({ quantity: cartData.quantity, item: cartData.data }))
+        handelTotalPrice(cartData.data)
     
     }
+    // if(typeof(price) === "number"){
+    //     handelTotalPrice(quantity * price )
+    //     //console.log()
+    // }
+    
     return (
         <View style={[gStyles.row, styles.container]}>
             <Pressable onPress={() => { handelChecked({item:{id:item.item.catId  , quantity:item.quantity},  checked:!checked}) }}>
@@ -47,7 +55,7 @@ const CartItemCart = ({ item , handelChecked , selectedItem ,  }: Props) => {
                     <View style={[gStyles.pl_3]}>
                         <Text style={[gStyles.text_Bold, gStyles.text_black]}>{item.item.catNo}</Text>
                         <Text><Text style={[gStyles.text_Primary]}>{quantity}<Text style={[gStyles.h6]}>X</Text></Text> {item.item.catSn}</Text>
-                        <Text style={[gStyles.text_Primary, gStyles.text_Bold, gStyles.h5]}>SAR 112.88</Text>
+                        <Text style={[gStyles.text_Primary, gStyles.text_Bold, gStyles.h5]}>{price}</Text>
                     </View>
                 </View>
                 <View style={[styles.buttomContainer]}>

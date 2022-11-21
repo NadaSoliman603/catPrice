@@ -37,9 +37,9 @@ const Profile = (props: Props) => {
         <View style={styles.screen}>
             <View>
                 <Pressable onPress={() => {
-                    navigation.navigate('CreditsPrfileScreen')
+                    navigation.navigate('CurrentPlan')
                     }} style={planStyle}  >
-                    <Text style={[gStyles.h4]}>Currunt Plan</Text>
+                    <Text style={[gStyles.h4]}>Current Plan</Text>
                     <Avatar.Image size={moderateScale(10)} style={{ backgroundColor: Colors.white }} source={imgs.golodOffer} />
                 </Pressable>
 

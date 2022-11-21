@@ -2,8 +2,10 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { useDispatch } from 'react-redux';
 import imgs from '../../../../assets/images';
 import OutLineButton from '../../../../common/OutLineButton';
+import { AddToCart } from '../../../../Redux/reducers/CartReducer';
 import gStyles from '../../../../styles/globalStyle';
 import { moderateScale } from '../../../../styles/ResponsiveDimentions';
 import { NavigationType, RootStack } from '../../../../types/navigationTypes';
@@ -16,7 +18,10 @@ const OrderCompleted = (props: Props) => {
     const showBuyerList = () => {
         navigation.navigate("BayerList")
     }
-
+    // const dispatch = useDispatch()
+    // React.useEffect(()=>{
+    //     //dispatch(AddToCart({ quantity: 0, item: [] }))
+    // },[])
     return (
         <View style={[styles.screen, gStyles.center]}>
             <FastImage resizeMode='contain' source={imgs.orderdone} style={styles.img} />

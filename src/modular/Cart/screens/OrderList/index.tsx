@@ -22,7 +22,7 @@ import addCartDataToLocalStorag, { onDeletCartItems } from '../../../../Redux/ac
 import { AddToCart, DeletItemsFromCart } from '../../../../Redux/reducers/CartReducer';
 import { OrderData } from '../../../../types/types';
 import OverLayLoading from '../../../../common/OverLayLoading';
-import { newOrderApi } from '../../../../Api/Auth';
+import { getCatsPriceApi, newOrderApi } from '../../../../Api/Auth';
 import { ShowModal } from '../../../../Redux/reducers/AuthModalReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 type Props = {}
@@ -33,11 +33,13 @@ const OrderList = (props: Props) => {
     const token = useSelector((state: RootState) => state.Auth.token)
     const user = useSelector((state: RootState) => state.Auth.user)
     const [loading, setLoading] = useState<boolean>(false)
-    const [cartData , setcatrtData] = useState(cart?.data)
-
+    const [loadingPrice, setLoadingPrice] = useState<boolean>(false)
+    const [cartData, setcatrtData] = useState(cart?.data)
+    const [catSPrice, setCatsPrice] = useState<null | any>(null)
+    const [totalPrice, setTotalPrice] = useState<number>(0)
     useDrower("Card")
 
-   
+
     const [selectedItem, setScllected] = useState<{ ids: number[], quantity: number }>(
         {
             ids: [],
@@ -88,15 +90,19 @@ const OrderList = (props: Props) => {
     }, [selectedItem])
 
 
+
+
+
     const compelteOrder = async () => {
         const orderData: OrderData[] = cart.data.map((item: any) => {
+            const price = catSPrice?.find((el: any) => item.item.catId === el.catId).price
+
             return {
                 catId: item.item.catId,
                 qty: item.quantity,
-                catPrice: "33.74",
+                catPrice: price,
             }
         })
-        console.log(orderData)
         if (token) {
             setLoading(true)
             try {
@@ -108,7 +114,8 @@ const OrderList = (props: Props) => {
                 if (res.data.header.httpStatusCode === 200) {
                     AsyncStorage.removeItem("cartData")
                     dispatch(AddToCart({ quantity: 0, item: [] }))
-                    navigation.navigate("OrderCompleted" , {orderNo:res.data.body.orderNo})
+                    navigation.navigate("OrderCompleted", { orderNo: res.data.body.orderNo })
+                    //dispatch(AddToCart({ quantity: 0, item: [] }))
                 } else {
                     console.log({ res })
                 }
@@ -118,52 +125,101 @@ const OrderList = (props: Props) => {
             setLoading(false)
 
         } else { dispatch(ShowModal(true)) }
-
+        setLoading(false)
+       
         //navigation.navigate("OrderCompleted")
     }
 
+
+
+   
+
+    const getPriceData = async () => {
+       const data = cartData?.map((item: any) => item.item)
+        if (token) {
+            try {
+                const res = await getCatsPriceApi({ token: token, currency: user?.defCurrency, data })
+                console.log({ res })
+                if (res.data?.header?.httpStatusCode === 200) {
+                    const prices = res?.data?.body
+                    setCatsPrice(prices)
+                    setLoadingPrice(false)
+                    console.log({ prices })
+                } else {
+
+                }
+            } catch (error) {
+                console.log(error)
+            }
+            console.log({ data })
+        }
+
+    }
+
+    const getTotalPrice = (cartData:any)=>{
+        let totalPrice = 0
+        cartData?.map((item: any) => {
+            const price = catSPrice?.find((el: any) => item.item.catId === el.catId).price
+            totalPrice = totalPrice + item.quantity * price
+            //setTotalPrice((item.quantity * price) + totalPrice)
+        })
+        setTotalPrice(totalPrice)
+        console.log(totalPrice)
+    }
+
+
+
+
+
+  useEffect(() => {
+    getPriceData()
+    }, [])
+    useEffect(() => {
+        getTotalPrice(cartData)
+    }, [catSPrice])
 
 
     if (cart.quantity === 0) {
         return <NoFoundData title='Your Cart Is Empty' />
     }
 
-
-
-
-
     return (
         <>
             <ScrollView style={styles.screen}>
 
                 <View style={[gStyles.p_6,]}>
-                    {cartData.map((item: any) => (
-                    <>
-                    <CartItemCart selectedItem={selectedItem} handelChecked={handelChecked} item={item} key={item.item.catId} />
-                    </>
-                    ))}
+                    {cart?.data.map((item: any) => {
+                        const price = catSPrice?.find((el: any) => item.item.catId === el.catId).price  
+                        return (
+                            <CartItemCart handelTotalPrice={(cartData: any) => { getTotalPrice (cartData) }} catSPrice={catSPrice} price={loadingPrice ? "Loading Price ..." : price} selectedItem={selectedItem} handelChecked={handelChecked} item={item} key={item.item.catId} />
+                        )
+                    }
+                    )}
                 </View>
-                <Text>{cart.quantity}</Text>
 
                 <View style={[styles.orderCartContainer]}>
-                    {cart?.data.map((item: any ) => (<View key={item.item.catId}>
-                        <View style={[gStyles.row, gStyles.spaceBetwen, { paddingVertical: moderateScale(4) }]}>
-                            <Text style={[gStyles.text_Bold, gStyles.text_black]}>{item.item.catNo}</Text>
-                            <Text><Text style={[]}>{item.quantity}<Text style={[gStyles.h6]}>X</Text></Text> {item.item.catSn}</Text>
-                        </View>
-                        <Divider />
-                        <Divider />
-                    </View>))}
+                    {cart?.data.map((item: any) => {
+                        const price = catSPrice?.find((el: any) => item.item.catId === el.catId).price
+                        return (<View key={item.item.catId}>
+                            <View style={[gStyles.row, gStyles.spaceBetwen, { paddingVertical: moderateScale(4) }]}>
+                                <Text style={[gStyles.text_Bold, gStyles.text_black]}>{item.item.catNo}</Text>
+                                <Text><Text style={[]}>{item.quantity}<Text style={[gStyles.h6]}>X</Text></Text> {loadingPrice ? "Loading Price..." : price}</Text>
+                            </View>
+                            <Divider />
+                            <Divider />
+                        </View>)
+                    }
+                    )}
 
                     <View style={[gStyles.row, gStyles.spaceBetwen, { paddingVertical: moderateScale(4) }]}>
                         <Text style={[gStyles.text_Bold, gStyles.text_black]}>{"Total"}</Text>
-                        <Text style={[gStyles.text_Bold, gStyles.text_Primary]}>{"SAR 225.76"}</Text>
+                        <Text style={[gStyles.text_Bold, gStyles.text_Primary]}>{loadingPrice ? "Loading Price ..." : totalPrice + " "+user?.defCurrency}</Text>
                     </View>
                     <Divider />
                     <Divider />
                 </View>
 
-                <OutLineButton textStyle={{}} title='Complete Order' style={{}} icon={<Text></Text>} onPress={compelteOrder} outline={true} />
+                <OutLineButton textStyle={{}} title='Complete Order' style={loadingPrice ? { backgroundColor: Colors.primaryPresedButton, borderColor: Colors.primaryPresedButton } : {}} icon={<Text></Text>} onPress={loadingPrice ? () => { } : compelteOrder} outline={true} />
 
                 <View style={{ height: moderateScale(20) }}></View>
 

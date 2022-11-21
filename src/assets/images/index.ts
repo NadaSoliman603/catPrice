@@ -23,6 +23,7 @@ const imgs = {
     onBoarding1 : require('./imgs/onBoarding1.png'),
     frame1 : require('./imgs/Frame1.png'),
     frame2 : require('./imgs/Frame2.png'),
+    balance_icon:require('./imgs/balance_icon.png'),
 }
 
 export default imgs;

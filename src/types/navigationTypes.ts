@@ -39,7 +39,8 @@ export type RootStack = {
     OnBoarding3:undefined;
     SearchResults:{search:string},      
     FavouriteCollectionDetails:{id:string},
-    CheckoutScreen:{plan:Plan}
+    CheckoutScreen:{plan:Plan},
+    CurrentPlan:undefined
 };
 
 
