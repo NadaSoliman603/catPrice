@@ -19,10 +19,11 @@ import { RootState } from '../../../../Redux/store/store';
 import { moderateScale } from '../../../../styles/ResponsiveDimentions';
 import Ionicons  from 'react-native-vector-icons/Ionicons';
 import CountryPicker from 'react-native-country-picker-modal'
-import { AuthCustomNav } from '../..';
+import { AuthCustomNav, Phone } from '../..';
 
 type Props = {
-    handelAuthScreens:(screen :AuthCustomNav)=>void
+    handelAuthScreens:(screen :AuthCustomNav)=>void,
+    handelPhonNumber:(phone:Phone)=>void;
 }
 
 const ForgetPassword = (props: Props) => {
@@ -34,8 +35,9 @@ const ForgetPassword = (props: Props) => {
     const [countryCode, setCountryCode] = React.useState<any>(loction);
 
     //Submit ForgetPassword Data
-    const onSubmit = (data: object) => {
-        console.log({ data })
+    const onSubmit = (data: any) => {
+        console.log( data.phone )
+        props.handelPhonNumber({mobileCode: countryCode.callingCode[0], phone:data.phone ,screen:'ForgetPassword'})
         props.handelAuthScreens("OTPVeritfication")
         // navigation.navigate('OTPVeritfication' ,{mobileCode:"20", phone:"1128859098"})
     }

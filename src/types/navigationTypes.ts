@@ -40,7 +40,8 @@ export type RootStack = {
     SearchResults:{search:string},      
     FavouriteCollectionDetails:{id:string},
     CheckoutScreen:{plan:Plan},
-    CurrentPlan:undefined
+    CurrentPlan:undefined;
+    Changepassword:undefined
 };
 
 

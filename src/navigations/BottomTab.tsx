@@ -49,6 +49,7 @@ import SearchResults from '../modular/Search/SearchResult';
 import FavouriteCollectionDetails from '../modular/Favourites/FavouriteCollectionDetails';
 import CheckoutScreen from '../modular/Cridits/screens/Checkout';
 import CurrentPlan from '../modular/Profile/Screens/CurrentPlan';
+import Changepassword from '../modular/Products/Screens/Changepassword';
 
 
 const Tab = createBottomTabNavigator();
@@ -190,7 +191,7 @@ const BrofileStack = () => {
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
         <Stack.Screen options={{ title: "Favourites", headerShown: true,  headerLeft: () => <BackBotton /> }} name="FavouriteCollectionDetails" component={FavouriteCollectionDetails} />
         <Stack.Screen options={{ title: "Current Plan", headerShown: true,  headerLeft: () => <BackBotton /> }} name="CurrentPlan" component={CurrentPlan} />
-
+        <Stack.Screen options={{ title: "Change password", headerShown: true,  headerLeft: () => <BackBotton /> }} name="Changepassword" component={Changepassword} />
     </Stack.Navigator>)
 }
 

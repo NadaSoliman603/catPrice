@@ -24,6 +24,7 @@ export type RegisterData = {
 export type OTPRegiserActivationData = {
     mobileNo: string;
     mobileCode: string;
+    path:"api/v1/sms/register-otp" | "apis/v1/user/forgot-password"
 }
 
 

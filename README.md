@@ -9,7 +9,6 @@ gradlew app:assembleRelease
 ====================================
 1-Plan payment
 3-history 
-
     --new order == > server error (api/v1/order/save-order)
     -- search ==> no Api For it
     -- cridits ==> _image not found , _api response and ui (not the same)

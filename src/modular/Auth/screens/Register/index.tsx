@@ -87,7 +87,7 @@ const Register = (props: Props) => {
                 console.log(user)
                 // AsyncStorage.setItem('user', JSON.stringify(user))
                 // dispatch(Login({user:user , token:user.to}))
-                props.handelPhonNumber({mobileCode: countryCode.callingCode[0], phone:data.phone})
+                props.handelPhonNumber({mobileCode: countryCode.callingCode[0], phone:data.phone , screen:'Register'})
                 props.handelAuthScreens("OTPVeritfication")
                 // navigation.navigate("OTPVeritfication" , {mobileCode: countryCode.callingCode[0], phone:data.phone})
                 if (mount) setLoading(false)

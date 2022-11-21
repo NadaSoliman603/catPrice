@@ -13,13 +13,15 @@ import OTPVeritfication from './screens/OTPVeritfication';
 import Register from './screens/Register';
 
 export type AuthCustomNav = "CreateNewPassword"|"Login" | "Register" | "ForgetPassword" | "OTPVeritfication" | "HideModal"
-export type Phone =  {mobileCode: string, phone: string}
+export type Phone =  {mobileCode: string, phone: string , screen:"Register"| "ForgetPassword"  }
+export type  CreatePassdVeritfication = {otp:string , otpToken:string}
 type Props = {}
 const AuthStack = (props: Props) => {
     const modalVisible = useSelector((state:RootState)=> state.ShowModal.showen)
     const [authScreen, setAuthScreen] = React.useState<AuthCustomNav>("Login")
     const [modalHeight, setModalHeight] = React.useState<number>(95)
     const [phone , setPhone] = React.useState<Phone | null>(null)
+    const [createPassdVeritfication , setCreatePassdVeritfication] = React.useState <null | CreatePassdVeritfication>(null)
     const dispatch = useDispatch()
     const togleModal = (show: boolean,) => {
         // setModalVisible(show)
@@ -42,6 +44,9 @@ const AuthStack = (props: Props) => {
     const handelPhonNumber = (phone:Phone)=>{
         setPhone(phone)
     }
+    const handelForgetPassowd = (data:CreatePassdVeritfication)=>{
+        setCreatePassdVeritfication(data)
+    }
     return (
         // <ButtomMeueModal height={100} title="" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={togleModal}>
 
@@ -49,9 +54,9 @@ const AuthStack = (props: Props) => {
             <>
                 {authScreen === "Login" && <Login handelPhonNumber={handelPhonNumber}  handelAuthScreens={handelAuthScreens} />}
                 {authScreen === "Register" && <Register handelPhonNumber={handelPhonNumber} handelAuthScreens={handelAuthScreens} />}
-                {authScreen === "ForgetPassword" && <ForgetPassword handelAuthScreens={handelAuthScreens} />}
-                {authScreen === "OTPVeritfication" && <OTPVeritfication phone={phone} handelAuthScreens={handelAuthScreens} />}
-                {authScreen === "CreateNewPassword" && <CreateNewPassword  handelAuthScreens={handelAuthScreens}/>}
+                {authScreen === "ForgetPassword" && <ForgetPassword handelPhonNumber={handelPhonNumber}  handelAuthScreens={handelAuthScreens} />}
+                {authScreen === "OTPVeritfication" && <OTPVeritfication handelForgetPassowd={(data:CreatePassdVeritfication)=>handelForgetPassowd(data)}  phone={phone} handelAuthScreens={handelAuthScreens} />}
+                {authScreen === "CreateNewPassword" && <CreateNewPassword createPassdVeritfication={createPassdVeritfication}  handelAuthScreens={handelAuthScreens}/>}
 
                 <View  style={{ height:moderateScale(25) }}></View>
             </>

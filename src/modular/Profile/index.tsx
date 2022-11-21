@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import BackBotton from '../../components/BackBotton';
 import { Drower } from '../../Redux/reducers/DrowerNavigation';
 import { RootState } from '../../Redux/store/store';
+import { ShowModal } from '../../Redux/reducers/AuthModalReducer';
 type Props = {}
 
 const Profile = (props: Props) => {
@@ -48,13 +49,24 @@ const Profile = (props: Props) => {
                 <ProfileItem value='English' title='Language' onChange={() => {navigation.navigate('LanguageScreen') }} />
 
 
-                <Pressable onPress={() => {user? navigation.navigate('UserSettingScreen') : navigation.navigate('Login') }} style={planStyle}  >
+                
+
+                <Pressable onPress={() => {user? navigation.navigate('Changepassword') : dispatch(ShowModal(true)) }} style={planStyle}  >
+                    <View style={[gStyles.row]}>
+                        {/* <Avatar.Image size={moderateScale(10)} source={{ uri: imgUri }} /> */}
+                        <Text> Change Password</Text>
+                    </View>
+                    <Entypo style={[gStyles.text_Bold]} color={Colors.primary} name="chevron-small-right" size={moderateScale(10)} />
+                </Pressable>
+
+                <Pressable onPress={() => {user? navigation.navigate('UserSettingScreen') : dispatch(ShowModal(true)) }} style={planStyle}  >
                     <View style={[gStyles.row]}>
                         <Avatar.Image size={moderateScale(10)} source={{ uri: imgUri }} />
                         <Text> User</Text>
                     </View>
                     <Entypo style={[gStyles.text_Bold]} color={Colors.primary} name="chevron-small-right" size={moderateScale(10)} />
                 </Pressable>
+
             </View>
         </View>
     );

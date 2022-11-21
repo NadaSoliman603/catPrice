@@ -122,8 +122,18 @@ export const OTPUserActivationApi = ({ activationCode, activationToken }: OTPUse
 };
 
 
+export const changePasswordApi = ({ data, token  }: { data: any; token: string }) => {
+  console.log(token)
+  return axios
+    .post(`${END_POINT}/apis/v1/user/change-password`,JSON.stringify(data)  , {
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${token}`,
+      },
+    })
+};
 
-export const OTPRegiserActivationApi = ({ mobileCode, mobileNo }: OTPRegiserActivationData) => {
+export const OTPRegiserActivationApi = ({ mobileCode, mobileNo , path}: OTPRegiserActivationData) => {
   console.log("Api request",{
     mobileCode: mobileCode,
     mobileNo: mobileNo,
@@ -133,9 +143,19 @@ export const OTPRegiserActivationApi = ({ mobileCode, mobileNo }: OTPRegiserActi
     mobileNo: mobileNo,
   }
   return axios
-    .post('http://floridatrading.online:8010/api/v1/sms/register-otp', JSON.stringify(data), {
+    .post(`http://floridatrading.online:8010/${path}`, JSON.stringify(data), {
       headers: {
         'Content-Type': 'application/json',
+      },
+    })
+};
+
+export const ForgetPasswordApi = ({ data}: any) => {
+  return axios
+    .post(`${END_POINT}/apis/v1/user/validation-forgot-password`, JSON.stringify(data), {
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhYmRhYnVnaGF6YWxlaEBob3RtYWlsLmNvbSIsImV4cCI6MTY2OTM5NDM0NSwiaWF0IjoxNjY5MDM0MzQ1fQ.30zWBnMidKt2NYDGEZEfpkjTS64F_LBntjwNEQCxxtfwIQSOff9XHqO73jMo5Z2Kq4PP766NT2jIDsrXmlHspg"}`,
       },
     })
 };
