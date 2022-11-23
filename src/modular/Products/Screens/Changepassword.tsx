@@ -19,6 +19,8 @@ import { NavigationType } from '../../../types/navigationTypes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Login } from '../../../Redux/reducers/AuthReducer';
 import { ShowModal } from '../../../Redux/reducers/AuthModalReducer';
+import SweetAlert from 'react-native-sweet-alert';
+
 type Props = {}
 
 const Changepassword = (props: Props) => {
@@ -28,7 +30,10 @@ const Changepassword = (props: Props) => {
     const token = useSelector((state: RootState) => state.Auth.token)
     const dispatch = useDispatch()
     const navigation = useNavigation<NavigationType>()
+
+
     const onSubmit = async (data: any) => {
+        
         const confairmPass: boolean = data.password === data.passwordConfairmatin
         if (!confairmPass) {
             setValidation({ confairmPass: confairmPass, msg: "Password should be match" })
@@ -42,17 +47,39 @@ const Changepassword = (props: Props) => {
                 }
                 if (token) {
                     const res = await changePasswordApi({ data: passwordData, token: token })
-                    console.log( "change Password", {res} ,res.data?.header?.httpStatusCode )
+                    console.log("change Password", { res }, res.data?.header?.httpStatusCode)
                     if (res.data?.header?.httpStatusCode === 200) {
                         await AsyncStorage.removeItem("user")
                         dispatch(Login({
                             token: null,
                             user: null
                         }))
-                        dispatch(ShowModal(true))
-                        navigation.goBack()
+                        SweetAlert.showAlertWithOptions({
+                            title: 'password change successfully',
+                            subTitle: 'please login again',
+                            confirmButtonTitle: 'OK',
+                            otherButtonTitle: 'Cancel',
+                            style: 'success',
+                            cancellable: false,
+
+                        },
+                            (callback: any) => {
+                                dispatch(ShowModal(true))
+                                navigation.goBack()
+                            });
+
                     } else {
-                        setValidation({ confairmPass: false, msg: res.data?.header.headerMessage })
+                        SweetAlert.showAlertWithOptions({
+                            title: res.data?.header.headerMessage ,
+                            subTitle: 'try again',
+                            confirmButtonTitle: '',
+                            style: 'error',
+                            // cancellable: true,
+
+                        },
+                            (callback: any) => {
+                            });
+                        setValidation({ confairmPass: true, msg:"" })
                     }
                 }
             } catch (error) {

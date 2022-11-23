@@ -35,6 +35,10 @@ import AddToFavourit from './AddToFavourit';
 import Loading from '../../../../common/Loading';
 import { deleteCatFromFavouritCollectionApi } from '../../../../Api/Favourits';
 import Error from '../../../../common/Error';
+import { ImageSlider } from "react-native-image-slider-banner";
+import Slider from './Slider';
+import SliderImageCustom from './SliderImageCustom';
+import SweetAlert from 'react-native-sweet-alert';
 
 // import PieChart from 'react-native-pie-chart';
 
@@ -52,13 +56,13 @@ const ProductDetails = (props: Props) => {
     const [modalVisible, setModalVisible] = useState(false);
     const series = [productDetails?.pd, productDetails?.pt, productDetails.rh]
     const sliceColor = [Colors.palladiumOrang, Colors.RhodiumGreen, Colors.platinumBlue,]
-    const [isFavourit , setIsFavourit] = useState(false)
+    const [isFavourit, setIsFavourit] = useState(false)
     const [total, setTotal] = useState<number>(0)
     const [serverError, setServerError] = useState<{ error: boolean; msg: string }>({ error: false, msg: "" })
     const [noCriditmodalVisible, setNoCriditModalVisible] = useState(false);
 
 
-    const togleNoCriditModal = (show: boolean,) => {setNoCriditModalVisible(show) }
+    const togleNoCriditModal = (show: boolean,) => { setNoCriditModalVisible(show) }
     const togleModal = (show: boolean,) => { setModalVisible(show) }
 
     // ===========================
@@ -66,9 +70,10 @@ const ProductDetails = (props: Props) => {
     //============================
     const getProductDetails = async () => {
         const catId = route?.params?.catID
-        const productDetails = await getCatDetailsApi({ catID: catId ,  token: token })
+        const productDetails = await getCatDetailsApi({ catID: catId, token: token })
         setLoading(false)
         const product = productDetails.data.body
+        console.log("images", product?.images.length)
         setProductDetails(product)
         setTotal(product?.pd + product?.pt + product.rh)
         setIsFavourit(product?.inFavorite)
@@ -96,11 +101,26 @@ const ProductDetails = (props: Props) => {
         if (token) {
             console.log(token, productDetails.catId)
             setOverLayLoading(true)
-            const res = await showPriceApi({ catId: productDetails.catId, token: token , currency:user?.defCurrency})
+            const res = await showPriceApi({ catId: productDetails.catId, token: token, currency: user?.defCurrency })
             console.log(res.data)
             const price = res.data.body?.formattedPrice
             setOverLayLoading(false)
             setServerError({ error: false, msg: '' })
+
+            if (res.data?.header?.httpStatusCode === 500){
+
+                SweetAlert.showAlertWithOptions({
+                    title: res.data?.header.httpStatus ,
+                    // subTitle: 'try again',
+                    confirmButtonTitle: '',
+                    style: 'error',
+                    // cancellable: true,
+
+                },
+                    (callback: any) => {
+                    });
+            }
+
             if (!price) {
                 if (res.data.header.headerMessage === "NO_ACTIVE_PLAN") {
                     //navigation.navigate('CreditsSearchStack')
@@ -125,14 +145,14 @@ const ProductDetails = (props: Props) => {
     const dispatch = useDispatch()
     const onAddToCart = async () => {
         // console.log(quantity,productDetails)
-        if(price){
-            const cartData = await addCartDataToLocalStorag({ catData: productDetails, catQuantity: quantity , icreaseBy:true  })
+        if (price) {
+            const cartData = await addCartDataToLocalStorag({ catData: productDetails, catQuantity: quantity, icreaseBy: true })
             console.log(cartData)
-            dispatch(AddToCart({ quantity: cartData.quantity, item: [...cartData.data ] }))
-        }else{
+            dispatch(AddToCart({ quantity: cartData.quantity, item: [...cartData.data] }))
+        } else {
             setServerError({ error: true, msg: 'noPrice' })
         }
-       
+
     }
 
     useEffect(() => {
@@ -143,50 +163,64 @@ const ProductDetails = (props: Props) => {
     // =================
     //Add To favourits
     //=================
-    const [favouritModalShow , setFavouritModalShow] = useState<boolean>(false)
-    const [favLoading , setFavLoading] = useState<boolean>(false)
-    const togeleFavouritModalShow = (value:boolean)=>{setFavouritModalShow(value)}
-    const addToFavourit = async()=>{
-        if(token){
-            if(!isFavourit){
+    const [favouritModalShow, setFavouritModalShow] = useState<boolean>(false)
+    const [favLoading, setFavLoading] = useState<boolean>(false)
+    const togeleFavouritModalShow = (value: boolean) => { setFavouritModalShow(value) }
+    const addToFavourit = async () => {
+        if (token) {
+            if (!isFavourit) {
                 setFavouritModalShow(true)
-            }else{
+            } else {
                 setFavLoading(true)
-               try {
-                const res = await deleteCatFromFavouritCollectionApi({data:{catId:productDetails.catId} ,token:token})
-                if (res.data.header.httpStatusCode === 200){
-                    setIsFavourit(false)
-                   
+                try {
+                    const res = await deleteCatFromFavouritCollectionApi({ data: { catId: productDetails.catId }, token: token })
+                    if (res.data.header.httpStatusCode === 200) {
+                        setIsFavourit(false)
+
+                    }
+                    setFavLoading(false)
+                } catch (error) {
+                    console.log("error")
+                    setFavLoading(false)
                 }
-                setFavLoading(false)
-               } catch (error) {
-                console.log("error")
-                setFavLoading(false)
-               }
             }
-        }else{
+        } else {
             dispatch(ShowModal(true))
             //setServerError({ error: true, msg: 'to Add a Product to your favorites please login' })
         }
     }
-    
+
     return (
         <>
             <MainView data={productDetails} loading={loading} overLayLoading={false} style={styles.screen}>
                 {productDetails.catId && <ScrollView>
                     <View style={[styles.imageContainer]}>
                         <View style={[gStyles.row, gStyles.spaceBetwen, gStyles.pb_6]} >
-                            {!favLoading &&<Pressable onPress={addToFavourit}>
-                            <AntDesign name={isFavourit ? "heart" :"hearto"} color={Colors.primary} size={fontSizes.font20} />
+                            {!favLoading && <Pressable onPress={addToFavourit}>
+                                <AntDesign name={isFavourit ? "heart" : "hearto"} color={Colors.primary} size={fontSizes.font20} />
                             </Pressable>}
-                            {favLoading &&<ActivityIndicator color={Colors.primaryPresedButton} size={fontSizes.font20} />}
+                            {favLoading && <ActivityIndicator color={Colors.primaryPresedButton} size={fontSizes.font20} />}
                             <Pressable onPress={() => togleModal(true)} style={[gStyles.row]} >
                                 <Text style={[gStyles.text_Primary, gStyles.h6]} >Metal Details </Text>
                                 <AntDesign color={Colors.primary} name='arrowright' size={fontSizes.font12} />
                             </Pressable>
                         </View>
                         {/* <FastImage  source={{ uri: productDetails.images[0].fullImageURL}} style={[styles.img]} /> */}
-                        <AppImage imgWidth={moderateScale(120)} style={styles.img} uri={productDetails.images[0].fullImageURL} />
+                        {/* <AppImage imgWidth={moderateScale(120)} style={styles.img} uri={productDetails?.images[0]?.fullImageURL} /> */}
+                        {/* <ImageSlider
+                            data={productDetails?.images.map((item: any) => { return { img: item.fullImageURL } })}
+                            autoPlay={false}
+                            onItemChanged={(item) => console.log("item", item)}
+                            closeIconColor={Colors.primary}
+                            caroselImageStyle={{ resizeMode: 'cover' }}
+                            activeIndicatorStyle={{ 
+                                backgroundColor:Colors.primary,
+                             }}
+                             indicatorContainerStyle={{top: 50}}
+
+                        /> */}
+                        <Slider imgs={productDetails?.images.map((item: any) => { return { img: item.fullImageURL } })}/>
+                        {/* <SliderImageCustom images={productDetails?.images.map((item: any) =>  item.fullImageURL)} /> */}
                     </View>
 
                     <View style={[gStyles.pv_6]}>
@@ -217,6 +251,32 @@ const ProductDetails = (props: Props) => {
                             <Divider />
                         </>}
 
+                        {(productDetails.catSn && <>
+                            <View style={[gStyles.row, { justifyContent: "space-between", paddingVertical: moderateScale(4) }]}>
+                                <View style={[{ width: '35%', }]}>
+                                    <Text style={[gStyles.text_black]}>CatSn:</Text>
+                                </View>
+                                <View style={[{ width: '35%', alignItems: "flex-end", alignSelf: "flex-end" }]}>
+                                    <Text style={[gStyles.text_darkGray, { textAlign: "right" }]}>{productDetails.catSn}</Text>
+                                </View>
+                            </View>
+                            <Divider />
+                        </>)
+                            ||
+                            (productDetails.catNo && <>
+                                <View style={[gStyles.row, { justifyContent: "space-between", paddingVertical: moderateScale(4) }]}>
+                                    <View style={[{ width: '35%', }]}>
+                                        <Text style={[gStyles.text_black]}>CatNo:</Text>
+                                    </View>
+                                    <View style={[{ width: '35%', alignItems: "flex-end", alignSelf: "flex-end" }]}>
+                                        <Text style={[gStyles.text_darkGray, { textAlign: "right" }]}>{productDetails.catNo}</Text>
+                                    </View>
+                                </View>
+                                <Divider />
+                            </>)
+
+                        }
+
                         {productDetails.brand && <>
                             <View style={[gStyles.row, { justifyContent: "space-between", paddingVertical: moderateScale(4), }]}>
 
@@ -228,7 +288,7 @@ const ProductDetails = (props: Props) => {
 
                                     {productDetails.brands.map((item: any) => (
                                         <View style={[gStyles.row]} key={item.brandId}>
-                                            <Text style={[gStyles.text_Primary, { textAlign: "right" }]}>{item.makerName}</Text>
+                                            <Text style={[gStyles.text_Primary, { textAlign: "right" }]}>{item.makerName} </Text>
                                             <View style={[gStyles.circle, { borderWidth: 1, padding: 2, borderColor: "#eee" }]}>
                                                 <AppImage imgWidth={moderateScale(4)} style={{ padding: moderateScale(3) }} uri={item.makerImage} />
                                             </View>
@@ -253,12 +313,24 @@ const ProductDetails = (props: Props) => {
                             <Divider />
                         </>}
 
+                        {productDetails.type && <>
+                            <View style={[gStyles.row, { justifyContent: "space-between", paddingVertical: moderateScale(4) }]}>
+                                <View style={[{ width: '35%', }]}>
+                                    <Text style={[gStyles.text_black]}>Ceramic:</Text>
+                                </View>
+                                <View style={[{ width: '35%', alignItems: "flex-end", alignSelf: "flex-end" }]}>
+                                    <Text style={[gStyles.text_Primary, { textAlign: "right" }]}>{productDetails.type}</Text>
+                                </View>
+                            </View>
+                            <Divider />
+                        </>}
+
                         <OutLineButton textStyle={{}} outline={false} style={{}} title={price ? price : 'Show Price '} onPress={price === null ? onShowprice : () => { }} icon={
                             price ? <></> : <Feather name="eye" size={fontSizes.font16} color={Colors.primary} />} />
-                        {serverError.error && serverError.msg !== "noPrice"&& <Button textStyle={[gStyles.h6, { color: Colors.error }]} style={[gStyles.alignCenter, { padding: 0 }]} onPress={() => {
+                        {serverError.error && serverError.msg !== "noPrice" && <Button textStyle={[gStyles.h6, { color: Colors.error }]} style={[gStyles.alignCenter, { padding: 0 }]} onPress={() => {
                             dispatch(ShowModal(true))
                         }} title={serverError.msg} />}
-                        {serverError.error && serverError.msg === "noPrice" &&<Error message={'to add product to the cart Please show the  Peice'}/>}
+                        {serverError.error && serverError.msg === "noPrice" && <Error message={'to add product to the cart Please show the  Peice'} />}
 
                         <View style={[gStyles.row, gStyles.spaceBetwen]}>
                             <View>
@@ -298,7 +370,7 @@ const ProductDetails = (props: Props) => {
 
             {/* start Favourits modal */}
             <CustomButtomMeueModal bgColor='rgba(0, 0, 0, 0.6)' height={40} title="Add to favourites" togleModal={togeleFavouritModalShow} modalVisible={favouritModalShow} setModalVisible={togeleFavouritModalShow}>
-                <AddToFavourit setIsFavourit={setIsFavourit} catId={ productDetails.catId} cancelModal={() => { setFavouritModalShow(false) }} />
+                <AddToFavourit setIsFavourit={setIsFavourit} catId={productDetails.catId} cancelModal={() => { setFavouritModalShow(false) }} />
             </CustomButtomMeueModal>
             {/* end Favourits modal */}
             {overLayloading && <OverLayLoading />}

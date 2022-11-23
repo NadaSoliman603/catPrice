@@ -19,11 +19,14 @@ import { moderateScale } from './src/styles/ResponsiveDimentions';
 import AuthStack from './src/modular/Auth';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import OfferCart from './src/modular/Cridits/Component/OfferCart';
+import { useNetInfo } from "@react-native-community/netinfo";
+import InternetConection from './src/common/InternetConection';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   const [publishableKey, setpublishableKey] = useState('')
+  const netInfo = useNetInfo();
 
   const theme = {
     ...DefaultTheme,
@@ -36,18 +39,20 @@ function App() {
     dark: false
   };
 
-
+console.log({netInfo})
 
   return (<>
     <StripeProvider
       publishableKey={"pk_test_51M52uZJPH93PAwz93BclTtIrXbuNwDhIdCrnTjd4NqDGM7qfi7IJbKjqGQxfwsLJABHtKZ5CtRhuzdjt6PwNY3fZ00epgcjm8n"}
-     merchantIdentifier='merchant.com.catPrice'
-      >
+      merchantIdentifier='merchant.com.catPrice'
+    >
       <Provider store={store}>
         <PaperProvider settings={{ icon: (props) => <Feather {...props} /> }} theme={theme}>
           <StatusBar animated={true} backgroundColor={Colors.white} />
           <MainNavigation />
           <AuthStack />
+          <InternetConection netInfo={netInfo} />
+
         </PaperProvider>
       </Provider>
     </StripeProvider>

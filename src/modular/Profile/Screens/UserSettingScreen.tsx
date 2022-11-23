@@ -24,12 +24,15 @@ import CountryPicker from 'react-native-country-picker-modal'
 import OutLineButton from '../../../common/OutLineButton';
 import { userUpdatInfApi } from '../../../Api/Auth';
 import OverLayLoading from '../../../common/OverLayLoading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Login } from '../../../Redux/reducers/AuthReducer';
+import useAlertSucsses from '../../../common/useAlertSucsses';
 
 type Props = {}
 
 const UserSettingScreen = () => {
     const navigation = useNavigation<NavigationType>()
-
+    const dispatch = useDispatch()
     useDrower("User Setting")
     const user = useSelector((state: RootState) => state.Auth.user)
     console.log({ user })
@@ -69,6 +72,18 @@ const UserSettingScreen = () => {
             if (token) {
                 const res = await userUpdatInfApi({ data: userData, token: token })
                 console.log(res)
+                if (res.status === 200) {
+                    let newUser = { ...user }
+                    newUser.fullNameEn = data?.fullName
+                    AsyncStorage.setItem('user', JSON.stringify(newUser))
+                    dispatch(Login({ user: newUser, token: token }))
+                    useAlertSucsses({
+                        title:"User updated successfully",
+                        collback:()=>{navigation.goBack()},
+                        subTitle:""
+                    })
+                }
+
             } else {
                 console.log("no Token")
             }
