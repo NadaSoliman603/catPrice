@@ -134,6 +134,7 @@ const Search = (props: Props) => {
     }, [])
 
     // console.log({outoCompletData}, typeof(outoCompletData))
+    
     return (
         <>
             <MainView data={[{}]} loading={false} overLayLoading={false} style={[]}>
@@ -172,7 +173,7 @@ const Search = (props: Props) => {
                             {outoCompletData === null && <NoFoundData title='No Srearch Result'/>}
                             <FlatList
                                 data={outoCompletData}
-                                renderItem={({ item }) => <AoutoCompletCard onPress={(item) => {
+                                renderItem={({ item }) => <AoutoCompletCard key={item.catId} onPress={(item) => {
                                     // console.log("presed")
                                     //setshowOutoComplete(false)
                                         const outoComplet:string = (item?.catNo && item?.catNo !== "0") ? item?.catNo : item?.catSn

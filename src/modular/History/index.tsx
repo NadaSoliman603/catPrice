@@ -1,4 +1,4 @@
-import  React , {useEffect , useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import MainView from '../../common/MainView';
 import { ActivityIndicator, Button, SegmentedButtons } from 'react-native-paper';
@@ -13,79 +13,138 @@ import planData from '../Cridits/dumyData';
 import SearchCard from './components/SearchCard';
 import Loading from '../../common/Loading';
 import Colors from '../../styles/colors';
-import { useFocusEffect } from '@react-navigation/native';
-import {  orderHistoryApi } from '../../Api/Auth';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { criditsHistoryApi, orderHistoryApi } from '../../Api/Auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../Redux/store/store';
 import { ShowModal } from '../../Redux/reducers/AuthModalReducer';
 import { moderateScale } from '../../styles/ResponsiveDimentions';
+import useAlert from '../../common/useAlertSucsses';
+import { NavigationType } from '../../types/navigationTypes';
+import useNotLogin from '../../common/useNotLogin';
+import NoFoundData from '../../common/NoDataFound';
 
 type Props = {}
-const buttonGropValu: {label:string; value:HistoryValue}[] = [
+const buttonGropValu: { label: string; value: HistoryValue }[] = [
     { label: "Search", value: "search" },
     { label: "Order", value: "order" },
     { label: "Credits", value: "credits" },
 ]
-export type HistoryValue = "search" | "order"  | "credits"
+export type HistoryValue = "search" | "order" | "credits"
 const History = (props: Props) => {
-    const user = useSelector((state:RootState)=>state.Auth.user)
-    const token = useSelector((state:RootState)=>state.Auth.token)
-    const [value, setValue] = useState<HistoryValue >('search');
-    const [loading , setLoading] = useState(false)
-    const [orders , setOrders] = useState<any[]>([])
-
+    const user = useSelector((state: RootState) => state.Auth.user)
+    const token = useSelector((state: RootState) => state.Auth.token)
+    const [value, setValue] = useState<HistoryValue>('search');
+    const [loading, setLoading] = useState(true)
+    const [orders, setOrders] = useState<any[]>([])
+    const [cridits, setCridits] = useState<any[]>([])
+    const navigation = useNavigation<NavigationType>()
     const dispatch = useDispatch()
-    const onChangeButtomValue = (value: HistoryValue ) => {
+    const onChangeButtomValue = (value: HistoryValue) => {
         setValue(value)
     }
 
-    const getOrderData = async()=>{
-       
-            try {
-                if(token){
-                    setLoading(true)
-                    const res = await orderHistoryApi({currency:user.defCurrency,  token:token,})
-                    if(res.data.header.httpStatusCode === 200){
-                        setOrders(res.data.body)
-                    }
-                }else{
-                    dispatch(ShowModal(true))
+
+    if (!token) useNotLogin()
+
+    const getOrderData = async () => {
+
+        try {
+            if (token) {
+                setLoading(true)
+                const res = await orderHistoryApi({ currency: user.defCurrency, token: token, })
+                if (res.data.header.httpStatusCode === 200) {
+                    setOrders(res.data.body)
                 }
-            } catch (error) {
-                console.log(error)
+                if (res.data.header.httpStatusCode === 500) {
+                    useAlert({
+                        collback: () => { navigation.goBack() },
+                        subTitle: "",
+                        success: false,
+                        title: res,
+                    })
+                }
+            } else {
+                dispatch(ShowModal(true))
+
             }
-            setLoading(false) 
+        } catch (error) {
+            console.log(error)
+        }
+        setLoading(false)
     }
-    useEffect(()=>{
-        if(value === "order")getOrderData()
-    },[value])
+
+    const getCriditsData = async () => {
+        try {
+            if (token) {
+                setLoading(true)
+                const res = await criditsHistoryApi({ currency: user.defCurrency, token: token, })
+                
+                if (res.data.header.httpStatusCode === 200) {
+                    setCridits(res.data.body)
+                    console.log(res.data.body)
+                } else {
+                    useAlert({
+                        collback: () => { navigation.goBack() },
+                        subTitle: "",
+                        success: false,
+                        title: res,
+                    })
+                }
+            } else {
+                useNotLogin()
+            }
+        } catch (error:any) {
+            useAlert({
+                collback: () => { navigation.goBack() },
+                subTitle: "",
+                success: false,
+                title: "Request Failed",
+            })
+        }
+        setLoading(false)
+    }
+    useEffect(() => {
+        if (value === "order") getOrderData()
+        if (value === "credits") getCriditsData()
+    }, [value])
     return (
         <MainView data={[]} loading={false} overLayLoading={false} style={styles.screen}>
             <>
                 <View style={[gStyles.p_6]}>
                     <ButtonGroup buttonGropLables={buttonGropValu} value={value} onChange={onChangeButtomValue} />
-
                 </View>
+
                 {loading && <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />}
 
-                {value === "order" && <FlatList
-                    data={orders}
-                    renderItem={({ item }) => <OrderCard item={item} cancelled={item.catId === 165353} />}
-                    keyExtractor={(item) => item.orderId.toString()}
-                />}
+                {value === "order" && <>
+                    <FlatList
+                        data={orders}
+                        renderItem={({ item }) => <OrderCard item={item} cancelled={item.catId === 165353} />}
+                        keyExtractor={(item) => item.orderId.toString()}
+                    />
+                    {!loading && orders.length === 0 && <NoFoundData title='NO Order History' />}
+                </>
 
-                {value === "search" && <FlatList
+                }
+
+                {value === "search" && <><FlatList
                     data={favorites}
                     renderItem={({ item }) => <SearchCard item={item} />}
-                    keyExtractor={(item) => item.catId.toString()}
-                />}
+                    keyExtractor={(item) => item?.catId?.toString()}
+                />
+                {!loading && favorites.length === 0 && <NoFoundData title='NO Favorites History' />}
+                </>
+                }
 
-                {value === "credits" && <FlatList
-                    data={planData}
+                {value === "credits" && <><FlatList
+                    data={cridits}
                     renderItem={({ item }) => <CreditCard item={item} cancelled={item.planId === 2} />}
-                    keyExtractor={(item) => item.planId.toString()}
-                />}
-                 <View style={{ height:moderateScale(15) }}></View>
+                    keyExtractor={(item) => item?.historyId?.toString()}
+                />
+                {!loading && cridits.length === 0 && <NoFoundData title='NO Cridits History' />}
+                </>}
+                <View style={{ height: moderateScale(15) }}></View>
             </>
         </MainView>
     );

@@ -10,6 +10,7 @@ import fontSizes from '../../../styles/fontSizes';
 import AntDesign  from 'react-native-vector-icons/AntDesign';
 import Octicons  from 'react-native-vector-icons/Octicons';
 import imgs from '../../../assets/images';
+import moment from 'moment';
 type Props = {
     item: any;
     cancelled:boolean;
@@ -23,20 +24,20 @@ const CreditCard = ({ item  , cancelled}: Props) => {
             <View style={[styles.buttomBorder ,]}>
                 <View style={[styles.headerContiner]}>
                     <View>
-                        <Text style={[gStyles.text_Bold, gStyles.text_black, gStyles.h3, styles.textSpace ]}>{item.planName}</Text>
-                        <Text style={gStyles.text_lightGray}>Pay pal</Text>
+                        <Text style={[gStyles.text_Bold, gStyles.text_black, gStyles.h3, styles.textSpace ]}>{item.searchFor}</Text>
+                        <Text style={gStyles.text_lightGray}>{`catSerial: ${item ?.catSerial}` || `catNo: ${item ?.catNo}`}</Text>
                     </View>
                     <View>
-                        <Avatar.Image style={{ backgroundColor:Colors.white }} size={moderateScale(16)} source={ img } />
+                        <Avatar.Image style={{ backgroundColor:Colors.lightGray }} size={moderateScale(16)} source={ {uri:item.fullImageURL} } />
                     </View>
                 </View>
             </View>
 
             <View style={[styles.footer]}>
-                <IconText style={{  }} title='26/5/22' color={Colors.textLightGray} icon={<Feather name='calendar' color={Colors.textLightGray} size={fontSizes.font18} />} />
-                <IconText style={{  }} title='03:05 PM' color={Colors.textLightGray} icon={<AntDesign name='clockcircleo' color={Colors.textLightGray} size={fontSizes.font14} />} />
-                {!cancelled && <IconText style={{  }} title='Successful' color={Colors.primary}  icon={<Octicons name='check-circle-fill' color={Colors.primary} size={fontSizes.font14} />} />}
-                {cancelled && <IconText style={{  }} title='Declined' color={Colors.error}  icon={<Octicons name='x-circle-fill' color={Colors.error} size={fontSizes.font12} />} />}
+                <IconText style={{  }} title={moment(item?.createdAt).format('DD/MM/YY ')} color={Colors.textLightGray} icon={<Feather name='calendar' color={Colors.textLightGray} size={fontSizes.font18} />} />
+                <IconText style={{  }} title={moment(item?.createdAt).format('LT')} color={Colors.textLightGray} icon={<AntDesign name='clockcircleo' color={Colors.textLightGray} size={fontSizes.font14} />} />
+                {/* {!cancelled && <IconText style={{  }} title='Successful' color={Colors.primary}  icon={<Octicons name='check-circle-fill' color={Colors.primary} size={fontSizes.font14} />} />} */}
+                {/* {cancelled && <IconText style={{  }} title='Declined' color={Colors.error}  icon={<Octicons name='x-circle-fill' color={Colors.error} size={fontSizes.font12} />} />} */}
 
             </View>
         </View>

@@ -109,6 +109,7 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
             </View>
         )
     }
+    
     return (
         <>
             <View style={styles.screen} key={item.catId}>
@@ -170,7 +171,7 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
                 <View style={{ padding: moderateScale(6),  }}>
                     {item.brands.map((item: any) => {
                         return (
-                            <View style={{ flexDirection: "row" , flex:1 , marginVertical:moderateScale(3)}} >                                    
+                            <View key={item.brandId } style={{ flexDirection: "row" , flex:1 , marginVertical:moderateScale(3)}} >                                    
                                 <Pressable
                                     style={[styles.brandLogoContainer, gStyles.center , {justifyContent: "center", alignContent: "center", alignItems: "center", alignSelf: "center" }]}>
                                     <FastImage resizeMode='contain' source={{ uri: item.makerImage }} style={styles.brandModalImg}

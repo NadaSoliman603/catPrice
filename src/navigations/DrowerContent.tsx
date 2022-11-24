@@ -83,6 +83,7 @@ const DrowerContent = ({ props }: Props) => {
                 <IconButton  icon={<Feather color={Colors.primary} name='home' size={fontSizes.font20} />} onPress={() => { 
                     // navigation.getParent()?.navigate("AppStack")
                     // console.log(navigation.getParent())
+                    navigation.navigate("HomeScreen")
                     
                  }} title="Home" />
                 <IconButton icon={<Feather color={Colors.primary} name='users' size={fontSizes.font20} />} onPress={() => {  navigation.navigate("BayerList") }} title="Buyers List" />

@@ -21,7 +21,7 @@ const FavouriteCollectionDetails = (props: Props) => {
     type ScreenRouteProp = RouteProp<RootStack, 'FavouriteCollectionDetails'>;
 
     const onPress = (id:number)=>{
-           // navigation.navigate("FavouriteCollectionDetails" , {id:id.toString()})
+           navigation.navigate("ProductDetails" , {catID:id.toString()})
     }
 
     const getFavouritCollectionData = async()=>{

@@ -31,7 +31,16 @@ const Slider = (props: Props) => {
                 }}
                 showIndicator={false}
             // indicatorContainerStyle={{ top: 50 }}
+            previewImageContainerStyle	={{ 
+                // backgroundColor:"red"
+             }}
 
+             previewImageStyle={{ 
+                // backgroundColor:"red",
+                width:"100%",
+                height:"100%", 
+              }}
+              blurRadius={60}
             />
 
             <FlatList

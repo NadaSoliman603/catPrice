@@ -1,7 +1,7 @@
 
 import { RouteProp, useNavigation, useRoute, } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, View, Text, Pressable , Alert} from 'react-native';
 import { getCatDetailsApi, showPriceApi } from '../../../../Api/Auth';
 import AppImage from '../../../../common/AppImage';
 import MainView from '../../../../common/MainView';
@@ -88,6 +88,20 @@ const ProductDetails = (props: Props) => {
     }, [])
 
 
+    const notLogin = ()=>{
+        Alert.alert("" , "Please login" ,  [
+            {
+                text: "Cancel",
+                onPress: () => {},
+                style: "cancel"
+              },
+            { text: "OK", onPress: () => {
+                //
+                dispatch(ShowModal(true))
+                //navigation.goBack()
+            } }
+          ])
+    }
     // ===========================
     //Show Price
     //============================
@@ -97,24 +111,18 @@ const ProductDetails = (props: Props) => {
     const [price, setPrice] = useState<null | string>(null)
     const user = useSelector((state: RootState) => state.Auth.user)
     const onShowprice = async () => {
-        console.log({ token })
         if (token) {
-            console.log(token, productDetails.catId)
             setOverLayLoading(true)
             const res = await showPriceApi({ catId: productDetails.catId, token: token, currency: user?.defCurrency })
-            console.log(res.data)
             const price = res.data.body?.formattedPrice
             setOverLayLoading(false)
             setServerError({ error: false, msg: '' })
 
             if (res.data?.header?.httpStatusCode === 500){
-
                 SweetAlert.showAlertWithOptions({
                     title: res.data?.header.httpStatus ,
-                    // subTitle: 'try again',
                     confirmButtonTitle: '',
                     style: 'error',
-                    // cancellable: true,
 
                 },
                     (callback: any) => {
@@ -135,7 +143,8 @@ const ProductDetails = (props: Props) => {
 
         } else {
             //navigation.navigate('Login')
-            setServerError({ error: true, msg: 'to show Price you have to login' })
+            // setServerError({ error: true, msg: 'to show Price you have to login' })
+            notLogin()
         }
     }
 

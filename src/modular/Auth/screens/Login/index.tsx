@@ -70,7 +70,7 @@ const Login = (props: Props) => {
             if (user === null) {
                 const headerMessage = res.data.header.headerMessage
                 if (headerMessage === "User No Active Mobile") {
-                    props.handelPhonNumber({ mobileCode:countryCode.callingCode[0], phone:authData.phone})
+                    props.handelPhonNumber({ mobileCode:countryCode.callingCode[0], phone:authData.phone , screen:"Register"})
                     props.handelAuthScreens("OTPVeritfication")
                     console.log("login creen " ,{ mobileCode:countryCode.callingCode[0], phone:authData.phone})
                     // navigation.navigate("OTPVeritfication" , {mobileCode:countryCode.callingCode[0], phone:authData.phone,}) 

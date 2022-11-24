@@ -16,6 +16,8 @@ import { NavigationType } from '../../types/navigationTypes';
 import { getSystemSettingApi } from '../../Api/Auth';
 import { MetalPrice } from '../../types/types';
 import FastImage from 'react-native-fast-image';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../Redux/store/store';
 type Props = {}
 
 const Home = (props: Props) => {
@@ -23,21 +25,24 @@ const Home = (props: Props) => {
     const [metalPrice, setmetalPrice] = useState<null |MetalPrice>(null)
     const [loading , setLoading] = useState<boolean>(true)
     const navigation = useNavigation<NavigationType>()
+    const user = useSelector((state:RootState)=>state.Auth.user)
+    const loction = useSelector((state: RootState) => state.Location)
 
 
     //================
     //get MetalPrice
     //================
     const getMetalPrice = async () => {
+        const  currency= user?.defCurrency || loction.currency
         try {
             setLoading(true)
-            const res = await getSystemSettingApi()
-            const metalPrice = res.data.body
+            const res = await getSystemSettingApi({currency:currency})
+            const metalPrice = res?.data?.body
             console.log({metalPrice})
             console.log(metalPrice)
             console.log(metalPrice.fdPdPrice)
             if(mount)  setmetalPrice({
-                currancy:"SAR",
+                currancy:currency,
                 fdPdPrice:metalPrice.fdPdPrice,
                 fdPtPrice:metalPrice.fdPtPrice,
                 fdRhPrice:metalPrice.fdRhPrice

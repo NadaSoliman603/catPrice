@@ -1,6 +1,6 @@
 
 import  React , {useEffect} from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, View, Text, Pressable , Alert} from 'react-native';
 import fontSizes from '../../styles/fontSizes';
 import gStyles from '../../styles/globalStyle';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -17,11 +17,12 @@ import BackBotton from '../../components/BackBotton';
 import { Drower } from '../../Redux/reducers/DrowerNavigation';
 import { RootState } from '../../Redux/store/store';
 import { ShowModal } from '../../Redux/reducers/AuthModalReducer';
+import useNotLogin from '../../common/useNotLogin';
 type Props = {}
 
 const Profile = (props: Props) => {
     const navigation = useNavigation<NavigationType>()
-    const imgUri = "https://img.freepik.com/free-photo/handsome-confident-smiling-man-with-hands-crossed-chest_176420-18743.jpg?w=2000"
+    const imgUri = "https://img.freepik.com/free-photo/-hands-st_176420-18743.jpg?w=2000"
     const dispatch = useDispatch()
     const user = useSelector((state: RootState) => state.Auth.token)
     const userData = useSelector((state: RootState) => state.Auth.user)
@@ -31,27 +32,40 @@ const Profile = (props: Props) => {
         // dispatch(Drower({title:"Profile" , headerShown:true}))  
     },)
 
-    
+    const notLogin = ()=>{
+        Alert.alert("" , "Please login" ,  [
+            {
+                text: "Cancel",
+                onPress: () => {},
+                style: "cancel"
+              },
+            { text: "OK", onPress: () => {
+                //
+                dispatch(ShowModal(true))
+                //navigation.goBack()
+            } }
+          ])
+    }
    
 
     return (
         <View style={styles.screen}>
             <View>
                 <Pressable onPress={() => {
-                    navigation.navigate('CurrentPlan')
+                   user?  navigation.navigate('CurrentPlan') :notLogin()
                     }} style={planStyle}  >
                     <Text style={[gStyles.h4]}>Current Plan</Text>
                     <Avatar.Image size={moderateScale(10)} style={{ backgroundColor: Colors.white }} source={imgs.golodOffer} />
                 </Pressable>
 
-                <ProfileItem value={userData?.countryEn || ""} title='Country/region' onChange={() => { user? navigation.navigate('CountryScreen') :  navigation.navigate("Login")}} />
-                <ProfileItem value={userData?.defCurrency || ""} title='Currency' onChange={() => {navigation.navigate('CurrencyScreen') }} />
-                <ProfileItem value='English' title='Language' onChange={() => {navigation.navigate('LanguageScreen') }} />
+                <ProfileItem value={userData?.countryEn || ""} title='Country/region' onChange={() => { user? navigation.navigate('CountryScreen') :  notLogin()}} />
+                <ProfileItem value={userData?.defCurrency || ""} title='Currency' onChange={() => {user ? navigation.navigate('CurrencyScreen') :notLogin()}} />
+                <ProfileItem value='English' title='Language' onChange={() => {user?navigation.navigate('LanguageScreen') :notLogin()}} />
 
 
                 
 
-                <Pressable onPress={() => {user? navigation.navigate('Changepassword') : dispatch(ShowModal(true)) }} style={planStyle}  >
+                <Pressable onPress={() => {user? navigation.navigate('Changepassword') : notLogin() }} style={planStyle}  >
                     <View style={[gStyles.row]}>
                         {/* <Avatar.Image size={moderateScale(10)} source={{ uri: imgUri }} /> */}
                         <Text> Change Password</Text>
@@ -59,9 +73,9 @@ const Profile = (props: Props) => {
                     <Entypo style={[gStyles.text_Bold]} color={Colors.primary} name="chevron-small-right" size={moderateScale(10)} />
                 </Pressable>
 
-                <Pressable onPress={() => {user? navigation.navigate('UserSettingScreen') : dispatch(ShowModal(true)) }} style={planStyle}  >
+                <Pressable onPress={() => {user? navigation.navigate('UserSettingScreen') : notLogin() }} style={planStyle}  >
                     <View style={[gStyles.row]}>
-                        <Avatar.Image size={moderateScale(10)} source={{ uri: imgUri }} />
+                        <Avatar.Image   style={{ backgroundColor:Colors.lightGray }} size={moderateScale(10)} source={{ uri: "https://img" }} />
                         <Text> User</Text>
                     </View>
                     <Entypo style={[gStyles.text_Bold]} color={Colors.primary} name="chevron-small-right" size={moderateScale(10)} />

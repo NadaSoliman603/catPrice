@@ -72,7 +72,7 @@ const UserSettingScreen = () => {
             if (token) {
                 const res = await userUpdatInfApi({ data: userData, token: token })
                 console.log(res)
-                if (res.status === 200) {
+                if (res.data?.header?.httpStatusCode === 200) {
                     let newUser = { ...user }
                     newUser.fullNameEn = data?.fullName
                     AsyncStorage.setItem('user', JSON.stringify(newUser))
@@ -80,7 +80,16 @@ const UserSettingScreen = () => {
                     useAlertSucsses({
                         title:"User updated successfully",
                         collback:()=>{navigation.goBack()},
-                        subTitle:""
+                        subTitle:"",
+                        success:true
+                    })
+                }
+                if (res.data?.header?.httpStatusCode === 500){
+                    useAlertSucsses({
+                        title:res,
+                        collback:()=>{},
+                        subTitle:"",
+                        success:false
                     })
                 }
 

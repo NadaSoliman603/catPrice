@@ -55,6 +55,7 @@ const Register = (props: Props) => {
 
     const onSubmit = async (data: any) => {
         const confairmPass: boolean = data.password === data.passwordConfairmatin
+       try {
         if (!confairmPass || !agreeTermsOfUse) {
             setValidation({
                 confairmPass: confairmPass,
@@ -69,7 +70,7 @@ const Register = (props: Props) => {
             const res = await registerApi({
                 countryCode: countryCode.cca2,
                 countryEn: countryCode.name,
-                defCurrency: currancy.callingCode[0],
+                defCurrency: currancy.currency[0],
                 fullNameEn: data.name,
                 mobileCode: countryCode.callingCode[0],
                 mobileNo: data.phone,
@@ -80,7 +81,7 @@ const Register = (props: Props) => {
             if (user === null) {
                 if (mount) {
                     console.log(res)
-                    setServerMssage(res.data.header.headerMessage)
+                    setServerMssage(res.data.header.headerMessage ||res.data.header.httpStatus)
                     setLoading(false)
                 }
             } else {
@@ -93,6 +94,9 @@ const Register = (props: Props) => {
                 if (mount) setLoading(false)
             }
         }
+       } catch (error) {
+        console.log(error)
+       }
     }
 
     useEffect(()=>{
@@ -198,7 +202,7 @@ const Register = (props: Props) => {
                             label="I agree to the Terms of Services, Privacy Policy & Default notification settings of the Cat Prices App."
                         />
                         {!validation.checked && <Error message='Please agree to the terms of use' />}
-                        <Error message={typeof (serverMessage) === 'string' ? "User Already exists" : ""} />
+                        {serverMessage &&<Error message={typeof (serverMessage) === 'string' ? "User Already exists" : "Request Failed"} />}
 
                         <Button textStyle={[gStyles.text_White, gStyles.text_center]} style={[gStyles.bg_Primary, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Register"} />
                         <Text style={[gStyles.alignCenter, gStyles.pt_15]}>Have an acount? </Text>

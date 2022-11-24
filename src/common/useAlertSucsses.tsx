@@ -3,16 +3,17 @@ import { StyleSheet, View, Text } from 'react-native';
 import SweetAlert from 'react-native-sweet-alert';
 
 type Props = {
-    title:string;
+    title:string |any;
     subTitle:string;
-    collback:()=>void
+    collback:()=>void;
+    success:boolean;
 }
 
-const useAlertSucsses = ({collback , subTitle , title}:Props) => {
+const useAlert = ({collback , subTitle , title , success}:Props) => {
     SweetAlert.showAlertWithOptions({
-        title: title,
+        title:title?.data?.header?.headerMessage || title?.data?.header?.httpStatus   || title,
         subTitle: subTitle,
-        style: 'success',
+        style:success? 'success' :"error",
         cancellable: false,
 
     },
@@ -27,4 +28,4 @@ const styles = StyleSheet.create({
 screen:{}
 });
 
-export default useAlertSucsses;
+export default useAlert;

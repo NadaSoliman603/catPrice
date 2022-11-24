@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
     buttomBorder: {
-        borderBottomWidth: moderateScale(0.5),
-        borderColor: Colors.primary,
+        // borderBottomWidth: moderateScale(0.5),
+        // borderColor: Colors.primary,
 
     },
     textSpace: {

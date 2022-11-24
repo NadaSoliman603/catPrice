@@ -43,6 +43,7 @@ const SearchResults = () => {
         const geSearchData = async ({ search, limit }: { search: string; limit: string }) => {
             try {
                 if(cats.length >=10) setFlatLisloading(true)
+                //setLoading(true)
                 const res = await searchCatdApi({ search: search, limit: limit.toString() , token:token });
                 const catsData = res.data.body;
                 if (catsData.length === 0) { setNoSearchResult(true) } else { setNoSearchResult(false) }
@@ -56,15 +57,16 @@ const SearchResults = () => {
                 console.log(error);
                 setFlatLisloading(false)
             }
+            setLoading(false)
         };
 
         if (limit <= 30) geSearchData({ search: search, limit: limit.toString() });
-        setLoading(false)
+        //setLoading(false)
 
     }, [limit]);
 
     useEffect(() => {
-        // return () => { setMount(false); }
+        return () => { setLoading(true) }
     }, [])
 
 
@@ -84,7 +86,7 @@ const SearchResults = () => {
             {noSearchResult && <NoFoundData title={'No Srearch Result'} />}
             {cats.length > 0 && <FlatList
                 data={[...cats, { loader: true, catId: "loading123" }]}
-                renderItem={({ item }) => <CatCard showNoCriditModal={() => { setModalVisible(true) }} item={item} flatListLoading={flatListLoading} />}
+                renderItem={({ item }) => <CatCard key={item?.catId} showNoCriditModal={() => { setModalVisible(true) }} item={item} flatListLoading={flatListLoading} />}
                 keyExtractor={item => item?.catId}
                 onEndReached={() => {
                     setLimit(limit + 10)

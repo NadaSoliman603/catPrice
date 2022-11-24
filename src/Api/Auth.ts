@@ -181,7 +181,18 @@ export const newOrderApi = ({data , token , currency}:{data:OrderData[] , token:
 
 
 export const orderHistoryApi =  ({ token , currency}:{ token:string , currency:string})=>{
-  return axios.get(`${END_POINT}/api/v1/order/get-orders?status=NEW` , {
+  return axios.get(`${END_POINT}/api/v1/order/get-orders?status=all` , {
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${token}`,
+      "Currency": currency
+
+    },
+  })
+}
+
+export const criditsHistoryApi =  ({ token , currency}:{ token:string , currency:string})=>{
+  return axios.get(`${END_POINT}/api/v1/history/credits` , {
     headers: {
       'Content-Type': 'application/json',
       "Authorization": `Bearer ${token}`,
@@ -192,8 +203,14 @@ export const orderHistoryApi =  ({ token , currency}:{ token:string , currency:s
 }
 
 
-export const getSystemSettingApi =  ()=>{
-  return axios.get(`${END_POINT}/api/v1/settings/all`)
+export const getSystemSettingApi =  ({currency}:{currency:string})=>{
+  return axios.get(`${END_POINT}/api/v1/settings/all` ,{
+    headers: {
+      'Content-Type': 'application/json',
+      "Currency": currency
+
+    },
+  })
 }
 
 
