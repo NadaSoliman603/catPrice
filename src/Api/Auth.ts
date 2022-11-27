@@ -49,6 +49,15 @@ export const searchCatdApi = ({ search, limit , token}: { search: string; limit:
   })
 };
 
+export const searchCatdPagenationApi = ({ search, token , pageSize ,  offSet ,}: { search: string; pageSize: number , token:null|string , offSet:number }) => {
+  return axios.get(`${END_POINT}/api/v2/cat/search?search=${search}&offSet=${offSet}&pageSize=${pageSize}`,{
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+};
+
 
 
 export const getCatDetailsApi = ({ catID , token}: { catID: string , token:string|null}) => {

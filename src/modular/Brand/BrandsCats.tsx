@@ -82,7 +82,7 @@ const BrandsCats = (props: Props) => {
                         if(item.loader) {
                             return <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />
                         }
-                        return (<CatCard showNoCriditModal={()=>{true}} item={item} flatListLoading={flatListLoading} />)
+                        return (<CatCard last={false} showNoCriditModal={()=>{true}} item={item} flatListLoading={flatListLoading} />)
                     }}
                     keyExtractor={item => item?.catId}
                     onEndReached={() => {
