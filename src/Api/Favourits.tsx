@@ -61,3 +61,14 @@ export const deleteCatFromFavouritCollectionApi = ({data , token }:{data:{catId 
       },
     })
   }
+
+
+  export const deleteFavouritCollectionApi = ({data , token }:{data:{collectionId :number } , token:string})=>{
+    return axios
+    .post(`${END_POINT}/api/v1/favorites/delete-collection`, JSON.stringify(data), {
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${token}`,
+      },
+    })
+  }

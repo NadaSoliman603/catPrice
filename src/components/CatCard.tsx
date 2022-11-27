@@ -18,7 +18,7 @@ import { ShowModal } from '../Redux/reducers/AuthModalReducer';
 import { deleteCatFromFavouritCollectionApi } from '../Api/Favourits';
 import AddToFavourit from '../modular/Products/Screens/ProductDetails/AddToFavourit';
 import CustomButtomMeueModal from './AuthModal';
-
+import useAlert from '../common/useAlertSucsses'
 type Props = {
     item: any
     flatListLoading: boolean;
@@ -53,9 +53,21 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading }: Props) => {
             console.log(res.data)
             const price = res.data.body?.formattedPrice
             setOverLayLoading(false)
+
+            
+            if (res.data?.header?.httpStatusCode === 500){
+                useAlert({
+                    collback:()=>{},
+                    subTitle:"",
+                    success:false,
+                    title:res.data?.header.httpStatus ,
+                })
+            }
+
             if (!price) {
-                showNoCriditModal()
-                //navigation.navigate('Login')
+                if (res.data.header.headerMessage === "NO_ACTIVE_PLAN") {
+                    showNoCriditModal()
+                }
             } else {
                 console.log(res.data.body)
                 const priceText = user.defCurrency+ " " + price

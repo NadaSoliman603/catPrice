@@ -38,7 +38,7 @@ import Error from '../../../../common/Error';
 import { ImageSlider } from "react-native-image-slider-banner";
 import Slider from './Slider';
 import SliderImageCustom from './SliderImageCustom';
-import SweetAlert from 'react-native-sweet-alert';
+import useAlert from '../../../../common/useAlertSucsses';
 
 // import PieChart from 'react-native-pie-chart';
 
@@ -114,26 +114,24 @@ const ProductDetails = (props: Props) => {
         if (token) {
             setOverLayLoading(true)
             const res = await showPriceApi({ catId: productDetails.catId, token: token, currency: user?.defCurrency })
+            console.log(res)
             const price = res.data.body?.formattedPrice
             setOverLayLoading(false)
             setServerError({ error: false, msg: '' })
 
             if (res.data?.header?.httpStatusCode === 500){
-                SweetAlert.showAlertWithOptions({
-                    title: res.data?.header.httpStatus ,
-                    confirmButtonTitle: '',
-                    style: 'error',
-
-                },
-                    (callback: any) => {
-                    });
+                useAlert({
+                    collback:()=>{},
+                    subTitle:"",
+                    success:false,
+                    title:res.data?.header.httpStatus ,
+                })
             }
 
             if (!price) {
                 if (res.data.header.headerMessage === "NO_ACTIVE_PLAN") {
                     //navigation.navigate('CreditsSearchStack')
                     setNoCriditModalVisible(true)
-
                 }
 
             } else {
