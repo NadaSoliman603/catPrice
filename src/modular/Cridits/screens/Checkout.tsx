@@ -24,7 +24,7 @@ export function CheckoutScreen() {
       phone: '+201128859098',
       address: {
         city: 'Egypt',
-        country: 'EGP',
+        country: 'US',
         line1: '',
         line2: 'Texas',
         postalCode: '77063',
@@ -35,7 +35,7 @@ export function CheckoutScreen() {
     // The rest will be done automatically using webhooks
 
 
-   const clientSecret ="sk_test_51JPmWxJWQWOfli62fKperf8YkAPaZpAUDWQzSHG47c1fouFrjVrzpvS5TQaCBiNPOodhQCvjB3hitxrpUmxy9ZnI00m916LYmN"
+   const clientSecret ="pi_3M9VP3JPH93PAwz91bcBXcs2_secret_DQTgChg24PTKDswFyLVS7rDsL"
     const { error, paymentIntent } = await confirmPayment(
       clientSecret,
       {

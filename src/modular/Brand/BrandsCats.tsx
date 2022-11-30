@@ -35,11 +35,14 @@ const BrandsCats = (props: Props) => {
     //get Brand Data
     //=====================
     const getBrandData = async ({ brand, limit }: { brand: string; limit: string }) => {
+       console.log("kkk")
         try {
             if(+limit === 10 )setLoading(true)
             if(+limit > 10 && +limit < 40)setFlatLisloading(true)
             const res = await getCatsbyBrandApi({ brand: brand, limit: limit.toString() });
             const catsData = res.data.body;
+           //setFlatLisloading(false) 
+            if (catsData.length < 10) setFlatLisloading(false) 
             if (catsData.length === 0) { setNoSearchResult(true) } else { setNoSearchResult(false) }
             if (mount) {
                 setCats(catsData);
@@ -79,14 +82,12 @@ const BrandsCats = (props: Props) => {
                 {cats.length > 0 && <FlatList
                     data={[...cats, { loader: true, catId: "loading123" }]}
                     renderItem={({ item }) => {
-                        if(item.loader) {
-                            return <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />
-                        }
+                        
                         return (<CatCard last={false} showNoCriditModal={()=>{true}} item={item} flatListLoading={flatListLoading} />)
                     }}
                     keyExtractor={item => item?.catId}
                     onEndReached={() => {
-                        setLimit(limit + 10)
+                      setLimit(limit + 10)
                     }}
                 />}
             </View>

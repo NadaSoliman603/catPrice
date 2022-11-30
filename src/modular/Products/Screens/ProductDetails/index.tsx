@@ -1,7 +1,7 @@
 
 import { RouteProp, useNavigation, useRoute, } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Pressable , Alert} from 'react-native';
+import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { getCatDetailsApi, showPriceApi } from '../../../../Api/Auth';
 import AppImage from '../../../../common/AppImage';
 import MainView from '../../../../common/MainView';
@@ -39,6 +39,8 @@ import { ImageSlider } from "react-native-image-slider-banner";
 import Slider from './Slider';
 import SliderImageCustom from './SliderImageCustom';
 import useAlert from '../../../../common/useAlertSucsses';
+import { Alert } from '../../../../types/types';
+import CustomAwesomeAlert from '../../../../components/AwesomeAlert';
 
 // import PieChart from 'react-native-pie-chart';
 
@@ -62,6 +64,15 @@ const ProductDetails = (props: Props) => {
     const [noCriditmodalVisible, setNoCriditModalVisible] = useState(false);
 
 
+    const [showAlert , setShowAlert] = useState(false)
+    const [alert, setalert] = useState<Alert>({ 
+        message: "Please Login",
+        onCancel: () => { setShowAlert(false)  },
+        onConfairm: () => {  dispatch(ShowModal(true)) ;  setShowAlert(false)},
+        showCancelButton:true,
+        type:'login',
+        suTitle:undefined
+    })
     const togleNoCriditModal = (show: boolean,) => { setNoCriditModalVisible(show) }
     const togleModal = (show: boolean,) => { setModalVisible(show) }
 
@@ -89,18 +100,8 @@ const ProductDetails = (props: Props) => {
 
 
     const notLogin = ()=>{
-        Alert.alert("" , "Please login" ,  [
-            {
-                text: "Cancel",
-                onPress: () => {},
-                style: "cancel"
-              },
-            { text: "OK", onPress: () => {
-                //
-                dispatch(ShowModal(true))
-                //navigation.goBack()
-            } }
-          ])
+       setShowAlert(true)
+       //setServerError({error:false , msg:""})
     }
     // ===========================
     //Show Price
@@ -334,9 +335,6 @@ const ProductDetails = (props: Props) => {
 
                         <OutLineButton textStyle={{}} outline={false} style={{}} title={price ? price : 'Show Price '} onPress={price === null ? onShowprice : () => { }} icon={
                             price ? <></> : <Feather name="eye" size={fontSizes.font16} color={Colors.primary} />} />
-                        {serverError.error && serverError.msg !== "noPrice" && <Button textStyle={[gStyles.h6, { color: Colors.error }]} style={[gStyles.alignCenter, { padding: 0 }]} onPress={() => {
-                            dispatch(ShowModal(true))
-                        }} title={serverError.msg} />}
                         {serverError.error && serverError.msg === "noPrice" && <Error message={'to add product to the cart Please show the  Peice'} />}
 
                         <View style={[gStyles.row, gStyles.spaceBetwen]}>
@@ -381,6 +379,8 @@ const ProductDetails = (props: Props) => {
             </CustomButtomMeueModal>
             {/* end Favourits modal */}
             {overLayloading && <OverLayLoading />}
+            <CustomAwesomeAlert showAlert={showAlert} alert={alert}/>
+
         </>
     );
 }

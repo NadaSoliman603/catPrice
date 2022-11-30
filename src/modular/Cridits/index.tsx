@@ -9,6 +9,7 @@ import imgs from '../../assets/images';
 import Loading from '../../common/Loading';
 import NoFoundData from '../../common/NoDataFound';
 import OutLineButton from '../../common/OutLineButton';
+import CustomAwesomeAlert from '../../components/AwesomeAlert';
 import DashedTitle from '../../components/DashedTitle';
 import { ShowModal } from '../../Redux/reducers/AuthModalReducer';
 import { RootState } from '../../Redux/store/store';
@@ -17,6 +18,7 @@ import fontSizes from '../../styles/fontSizes';
 import gStyles from '../../styles/globalStyle';
 import { moderateScale } from '../../styles/ResponsiveDimentions';
 import { NavigationType } from '../../types/navigationTypes';
+import { Alert } from '../../types/types';
 import OfferCart from './Component/OfferCart';
 import PlanItem from './Component/PlanItem';
 // import planData from './dumyData';
@@ -34,6 +36,15 @@ const CreditsScreen = (props: Props) => {
     const onShowPlan = (plan: any) => {
         setShowPlan(plan)
     }
+    const [showAlert , setShowAlert] = useState(token ?false : true)
+    const [alert, setalert] = useState<Alert>({ 
+        message: "Please Login",
+        onCancel: () => { navigation.goBack() },
+        onConfairm: () => {  dispatch(ShowModal(true)) ; navigation.goBack()},
+        showCancelButton:true,
+        type:'login'
+    })
+   
 
 
     //=================================
@@ -103,7 +114,8 @@ const CreditsScreen = (props: Props) => {
                 }
             </ScrollView>
             {plans !== null && <OutLineButton textStyle={styles.button} style={{ marginBottom: moderateScale(20) }} title='Buy Now' outline={true} icon={<></>} onPress={checkout} />}
-        
+            <CustomAwesomeAlert showAlert={showAlert} alert={alert}/>
+
         </View>
     );
 }

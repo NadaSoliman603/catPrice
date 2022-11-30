@@ -19,6 +19,8 @@ import { deleteCatFromFavouritCollectionApi } from '../Api/Favourits';
 import AddToFavourit from '../modular/Products/Screens/ProductDetails/AddToFavourit';
 import CustomButtomMeueModal from './AuthModal';
 import useAlert from '../common/useAlertSucsses'
+import { Alert } from '../types/types';
+import CustomAwesomeAlert from './AwesomeAlert';
 type Props = {
     item: any
     flatListLoading: boolean;
@@ -37,8 +39,18 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
     const [brandsModalshow, setBrandModalShow] = useState<boolean>(false)
     //favourits
     const [isFavourit, setIsFavourit] = useState(item?.inFavorite)
-
     const dispatch = useDispatch()
+
+    const [showAlert , setShowAlert] = useState(false)
+    const [alert, setalert] = useState<Alert>({ 
+        message: "Please Login",
+        onCancel: () => { setShowAlert(false)  },
+        onConfairm: () => {  dispatch(ShowModal(true)) ;  setShowAlert(false)},
+        showCancelButton:true,
+        type:'login',
+        suTitle:undefined
+    })
+
     // ===========================
     //Show Price
     //============================
@@ -76,7 +88,8 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
             }
 
         } else {
-            setServerError({ error: true, msg: 'to show Price you have to login' })
+            setShowAlert(true)
+           // setServerError({ error: true, msg: 'to show Price you have to login' })
             // showModal()
             // navigation.navigate('Login')
         }
@@ -110,7 +123,8 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
                 }
             }
         } else {
-            dispatch(ShowModal(true))
+            setShowAlert(true)
+           // dispatch(ShowModal(true))
             //setServerError({ error: true, msg: 'to Add a Product to your favorites please login' })
         }
     }
@@ -197,6 +211,7 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
                     })}
                 </View>
             </CustomButtomMeueModal>
+            <CustomAwesomeAlert showAlert={showAlert} alert={alert}/>
 
         </>
     );

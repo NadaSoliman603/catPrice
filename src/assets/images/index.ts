@@ -24,6 +24,7 @@ const imgs = {
     frame1 : require('./imgs/Frame1.png'),
     frame2 : require('./imgs/Frame2.png'),
     balance_icon:require('./imgs/balance_icon.png'),
+    changePassword:require('./imgs/changePassword.png'),
 }
 
 export default imgs;

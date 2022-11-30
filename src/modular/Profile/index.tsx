@@ -1,6 +1,6 @@
 
-import  React , {useEffect} from 'react';
-import { StyleSheet, View, Text, Pressable , Alert} from 'react-native';
+import  React , {useEffect , useState} from 'react';
+import { StyleSheet, View, Text, Pressable } from 'react-native';
 import fontSizes from '../../styles/fontSizes';
 import gStyles from '../../styles/globalStyle';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -18,6 +18,8 @@ import { Drower } from '../../Redux/reducers/DrowerNavigation';
 import { RootState } from '../../Redux/store/store';
 import { ShowModal } from '../../Redux/reducers/AuthModalReducer';
 import useNotLogin from '../../common/useNotLogin';
+import { Alert } from '../../types/types';
+import CustomAwesomeAlert from '../../components/AwesomeAlert';
 type Props = {}
 
 const Profile = (props: Props) => {
@@ -26,25 +28,23 @@ const Profile = (props: Props) => {
     const dispatch = useDispatch()
     const user = useSelector((state: RootState) => state.Auth.token)
     const userData = useSelector((state: RootState) => state.Auth.user)
-
+    const [showAlert , setShowAlert] = useState(false)
+    const [alert, setalert] = useState<Alert>({ 
+        message: "Please Login",
+        onCancel: () => { setShowAlert(false) },
+        onConfairm: () => {  dispatch(ShowModal(true)) ; setShowAlert(false)},
+        showCancelButton:true,
+        type:'login',
+        suTitle:undefined
+    })
+   
 
     useEffect(()=>{
         // dispatch(Drower({title:"Profile" , headerShown:true}))  
     },)
 
     const notLogin = ()=>{
-        Alert.alert("" , "Please login" ,  [
-            {
-                text: "Cancel",
-                onPress: () => {},
-                style: "cancel"
-              },
-            { text: "OK", onPress: () => {
-                //
-                dispatch(ShowModal(true))
-                //navigation.goBack()
-            } }
-          ])
+        setShowAlert(true)
     }
    
 
@@ -61,9 +61,6 @@ const Profile = (props: Props) => {
                 <ProfileItem value={userData?.countryEn || ""} title='Country/region' onChange={() => { user? navigation.navigate('CountryScreen') :  notLogin()}} />
                 <ProfileItem value={userData?.defCurrency || ""} title='Currency' onChange={() => {user ? navigation.navigate('CurrencyScreen') :notLogin()}} />
                 <ProfileItem value='English' title='Language' onChange={() => {user?navigation.navigate('LanguageScreen') :notLogin()}} />
-
-
-                
 
                 <Pressable onPress={() => {user? navigation.navigate('Changepassword') : notLogin() }} style={planStyle}  >
                     <View style={[gStyles.row]}>
@@ -82,6 +79,8 @@ const Profile = (props: Props) => {
                 </Pressable>
 
             </View>
+            <CustomAwesomeAlert showAlert={showAlert} alert={alert}/>
+
         </View>
     );
 }

@@ -49,7 +49,7 @@ import SearchResults from '../modular/Search/SearchResult';
 import FavouriteCollectionDetails from '../modular/Favourites/FavouriteCollectionDetails';
 import CheckoutScreen from '../modular/Cridits/screens/Checkout';
 import CurrentPlan from '../modular/Profile/Screens/CurrentPlan';
-import Changepassword from '../modular/Products/Screens/Changepassword';
+import Changepassword from '../modular/Profile/Screens/Changepassword';
 
 
 const Tab = createBottomTabNavigator();

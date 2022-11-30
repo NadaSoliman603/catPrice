@@ -45,6 +45,7 @@ const SearchResults = () => {
         const geSearchData = async () => {
             try {
                 const res = await searchCatdPagenationApi({ search: search, token: token, offSet: pagination.offSet, pageSize: 5 });
+                console.log({res})
                 if (res.data.header.httpStatusCode === 200) {
                     const catsData = res.data.body;
                     console.log(catsData)
@@ -92,7 +93,7 @@ const SearchResults = () => {
                 <Feather color={Colors.darkGray} name={"search"} size={fontSizes.font22} />
             </Pressable>
             {loading && <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />}
-            {noSearchResult && <NoFoundData title={'No Srearch Result'} />}
+            {!loading && !flatListLoading && cats.length === 0 && <NoFoundData title={'No Srearch Result'} />}
             {cats.length > 0 && <FlatList
                 data={[...cats, { loader: true, catId: "loading123" } ]}
                 renderItem={({ item }) => <CatCard last={ pagination.last}  key={item?.catId} showNoCriditModal={() => { setModalVisible(true) }} item={item} flatListLoading={flatListLoading} />}
