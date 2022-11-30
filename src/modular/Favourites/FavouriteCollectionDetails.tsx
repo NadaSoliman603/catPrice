@@ -43,7 +43,7 @@ const FavouriteCollectionDetails = (props: Props) => {
     return (
         <MainView data={[]} loading={loading} overLayLoading={false} style={styles.screen}>
             <>
-                {favouritCollectionData !== null && favouritCollectionData.length  === 0 && <NoFoundData title='No Favorite Collection Found'/>}
+                {favouritCollectionData !== null && favouritCollectionData.length  === 0 && <NoFoundData title='No Data Found'/>}
                 <FlatList 
                     data={favouritCollectionData}
                     renderItem={({item})=>{

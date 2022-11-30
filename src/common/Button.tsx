@@ -8,21 +8,24 @@ import Colors from './../styles/colors';
 type Props = {
     title: string;
     onPress: any;
-    style:{}[];
+    style:{}[] | any[];
     textStyle :   {}[];
+    icon:JSX.Element | undefined
 }
-const Button = ({ title, onPress , style , textStyle }: Props) => {
+const Button = ({ title, onPress , style , textStyle , icon }: Props) => {
     return (
         <Pressable  style={({pressed})=>[
-            {
-                backgroundColor : pressed ? Colors.primaryPresedButton :  "#fff"
-            },
             styles.conatiner,
-            ...style
+            ...style,
+            {
+                backgroundColor : pressed ? Colors.primaryPresedButton : style[0]?.backgroundColor || "#fff"
+            },
+          
+            
            
         ]} onPress={onPress} >
             <Text style={[styles.text ,   gStyles.h3 ,...textStyle ]}>{title}</Text>
-
+            {icon}
         </Pressable>
     );
 }
