@@ -8,15 +8,12 @@ import { addFavouritCollectionApi, deleteFavouritCollectionApi, getFavouritColle
 import imgs from '../../assets/images';
 import MainView from '../../common/MainView';
 import NoFoundData from '../../common/NoDataFound';
-import { ShowModal } from '../../Redux/reducers/AuthModalReducer';
 import { RootState } from '../../Redux/store/store';
 import Colors from '../../styles/colors';
 import fontSizes from '../../styles/fontSizes';
 import gStyles, { wp } from '../../styles/globalStyle';
 import { moderateScale } from '../../styles/ResponsiveDimentions';
 import { NavigationType } from '../../types/navigationTypes';
-import FavItem from './components/FavItem';
-import favorites from './dumyData';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import OverLayLoading from '../../common/OverLayLoading';
 import useNotLogin from '../../common/useNotLogin';
@@ -24,11 +21,9 @@ import useAlert from '../../common/useAlertSucsses';
 import CustomAwesomeAlert from '../../components/AwesomeAlert';
 import { Alert } from '../../types/types';
 import Button from '../../common/Button';
-import CustomButtomMeueModal from "../../components/AuthModal"
 import AwesomeAlert from 'react-native-awesome-alerts';
-import CustomTextInput from '../../common/CustomTextInput';
-import { useForm } from 'react-hook-form';
 import Error from '../../common/Error';
+import Feather  from 'react-native-vector-icons/Feather';
 type Props = {}
 
 const Favourites = (props: Props) => {
@@ -37,7 +32,6 @@ const Favourites = (props: Props) => {
     const [loading, setLoading] = useState(true)
     const [overLayLoading, setOverLayLoading] = useState(false)
     const [favouritCollectionData, setFavouritCollectionData] = useState<any[] | null>(null)
-    const { control, register, handleSubmit, watch, formState: { errors }, reset } = useForm();
     const [collectionNameValidationError, setCollectionNameValidationError] = useState<null | string>(null)
     const [showcreateCollectionModal, setShowcreateCollectionModal] = useState<boolean>(false)
     const [collectionName, setCllectionName] = useState("")
@@ -188,7 +182,7 @@ const Favourites = (props: Props) => {
                         </Pressable>
 
                         <Pressable style={({ pressed }) => [{ padding: moderateScale(5), backgroundColor: pressed ? Colors.bg_Error : "transparent" }]} onPress={() => deleteCollection(item.collectionId, item.collectionName)}>
-                            <AntDesign name='delete' size={moderateScale(9)} color={"#EB001B"} />
+                            <Feather name='trash-2' size={moderateScale(9)} color={"#EB001B"} />
                         </Pressable>
                     </Pressable>
                 ))}
@@ -211,7 +205,7 @@ const Favourites = (props: Props) => {
                     confirmText="Create"
                     confirmButtonColor={Colors.primary}
                     cancelButtonColor="#E06666"
-                    onCancelPressed={() => { setShowcreateCollectionModal(false) }}
+                    onCancelPressed={() => { setShowcreateCollectionModal(false) ; setCollectionNameValidationError(null) }}
                     onConfirmPressed={addNewcollection}
                     useNativeDriver={true}
                     customView={<View style={{ minHeight: 60, width: 250 }}>

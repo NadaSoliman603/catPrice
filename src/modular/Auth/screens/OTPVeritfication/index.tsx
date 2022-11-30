@@ -13,18 +13,19 @@ import { NavigationType, RootStack } from '../../../../types/navigationTypes';
 import Feather from 'react-native-vector-icons/Feather';
 import BackHeader from '../../../../common/BackHeader';
 import CircleInput from '../../../../common/CircleInput';
-import { OTPRegiserActivationData } from '../../../../types/types';
+import { Alert, OTPRegiserActivationData } from '../../../../types/types';
 import { OTPRegiserActivationApi, OTPUserActivationApi } from '../../../../Api/Auth';
 import CountDown from 'react-native-countdown-component';
 import { moderateScale } from '../../../../styles/ResponsiveDimentions';
 import Timer from '../../components/Timer';
 import OverLayLoading from '../../../../common/OverLayLoading';
 import { AuthCustomNav, CreatePassdVeritfication, Phone } from '../..';
+import CustomAwesomeAlert from '../../../../components/AwesomeAlert';
 
 type Props = {
-    handelAuthScreens:(screen :AuthCustomNav)=>void;
-    phone:Phone | null;
-    handelForgetPassowd : (data:CreatePassdVeritfication)=>void;
+    handelAuthScreens: (screen: AuthCustomNav) => void;
+    phone: Phone | null;
+    handelForgetPassowd: (data: CreatePassdVeritfication) => void;
 }
 type ScreenRouteProp = RouteProp<RootStack, 'OTPVeritfication'>;
 
@@ -40,7 +41,16 @@ const OTPVeritfication = (props: Props) => {
 
     const [resendCode, setResendCode] = useState(false)
     const [resend, setResend] = React.useState(0)
+    const [showAlert, setShowAlert] = useState(false)
 
+    const [alert, setalert] = useState<Alert>({
+        message: "",
+        onCancel: () => { },
+        onConfairm: () => { setShowAlert(false) },
+        showCancelButton: false,
+        type: 'warning',
+        suTitle: undefined,
+    })
     // const route = useRoute<ScreenRouteProp>()
     const input1 = useRef()
     const input2 = useRef()
@@ -48,49 +58,91 @@ const OTPVeritfication = (props: Props) => {
     const input4 = useRef()
     //Submit OTPVeritfication Data
     const onSubmit = async (data: any) => {
-        if(props.phone?.screen === "Register"){
+        if (props.phone?.screen === "Register") {
             const code = data?.v1 + data.v2 + data.v3 + data.v4;
-            const token = veritivictatin?.activationToken;
+            const token = veritivictatin?.activationToken ||  veritivictatin?.otpToken;
             console.log("submit code", { code }, { veritivictatin }, { token },)
             if (token) {
                 try {
                     setLoading(true)
+                    console.log({ activationCode: code, activationToken: token })
                     const res = await OTPUserActivationApi({ activationCode: code, activationToken: token })
-                    console.log({ res })
+                    console.log("OTPUserActivationApi respons ===>" , {res})
+
                     setLoading(false)
-                    if (res?.data?.body) {
-                        console.log("Login")
-                        console.log(res)
-                        props.handelAuthScreens("Login")
-                        // navigation.navigate("Login")
+                    if (res?.data?.header?.httpStatusCode === 200) {
+                        if (props.phone?.screen === "Register") {
+                            props.handelAuthScreens("Login")
+                            // navigation.navigate("Login")
+                        }
+                        
+                    } else {
+                        setalert({
+                            ...alert,
+                            message: res?.data?.header?.headerMessage || res?.data?.header?.httpStatus,
+                            onConfairm:()=>{
+                                console.log(res?.data?.header?.httpStatus , res?.data?.header?.httpStatus === "BAD_REQUEST" )
+                                if(res?.data?.header?.httpStatus === "BAD_REQUEST"){
+                                    props.handelAuthScreens("ForgetPassword")
+                                }
+                                setShowAlert(false)
+                            }
+                        })
+                        setShowAlert(true)
+                        setLoading(false)
                     }
+
                 } catch (error) {
                     console.log(error)
+
                 }
             }
-            props.handelAuthScreens("Login")
-        }else{
+           // props.handelAuthScreens("Login")
+
+
+        } else {
             const code = data?.v1 + data.v2 + data.v3 + data.v4;
             const token = veritivictatin?.otpToken;
-            props.handelForgetPassowd({otp:code , otpToken:token})
+            props.handelForgetPassowd({ otp: code, otpToken: token })
             props.handelAuthScreens("CreateNewPassword")
+
         }
-       
+
     }
 
     //sent Phon OTP
-    const sendOTP = async ({ mobileCode, mobileNo ,path }: OTPRegiserActivationData) => {
+    const sendOTP = async ({ mobileCode, mobileNo, path }: OTPRegiserActivationData) => {
         try {
             setLoading(true)
-            const res = await OTPRegiserActivationApi({ mobileCode: mobileCode, mobileNo: mobileNo , path })
-            const veritivictatin = res?.data?.body
-            console.log("respons ===>", { res })
-            console.log("veritivictatin====>", { veritivictatin })
-            setExpiredTimer(3 * 60)
-            setExpiredCode(false)
-            setResendCode(false)
-            setVeritification(veritivictatin)
-            setLoading(false)
+            const res = await OTPRegiserActivationApi({ mobileCode: mobileCode, mobileNo: mobileNo, path })
+            console.log("sendOTP respons ===>" , {res})
+
+            if (res?.data?.header?.httpStatusCode === 200) {
+                const veritivictatin = res?.data?.body
+                console.log("respons ===>", { res })
+                console.log("veritivictatin====>", { veritivictatin })
+                setExpiredTimer(3 * 60)
+                setExpiredCode(false)
+                setResendCode(false)
+                setVeritification(veritivictatin)
+                setLoading(false)
+            } else {
+                console.log("sendOTP respons ===>" , {res})
+                setalert({
+                    ...alert,
+                    message: res?.data?.header?.headerMessage || res?.data?.header?.httpStatus,
+                    onConfairm:()=>{
+                        console.log(res?.data?.header?.httpStatus , res?.data?.header?.httpStatus === "BAD_REQUEST" )
+                        if(res?.data?.header?.httpStatus === "BAD_REQUEST"){
+                            props.handelAuthScreens("ForgetPassword")
+                        }
+                        setShowAlert(false)
+                    }
+                })
+                setShowAlert(true)
+                setLoading(false)
+            }
+
         } catch (error) {
             console.log(error)
         }
@@ -98,13 +150,13 @@ const OTPVeritfication = (props: Props) => {
     const params = props.phone
     useEffect(() => {
         console.log("LoginScreen")
-        if(props.phone !== null){
+        if (props.phone !== null) {
             const params = props.phone
             console.log({ params })
             const path = params.screen === "Register" ? "api/v1/sms/register-otp" : "apis/v1/user/forgot-password"
-            sendOTP({ mobileCode: params.mobileCode, mobileNo: params.phone , path })
+            sendOTP({ mobileCode: params.mobileCode, mobileNo: params.phone, path })
         }
-   
+
         return () => {
 
         }
@@ -114,7 +166,7 @@ const OTPVeritfication = (props: Props) => {
     return (
         <View style={styles.screen}>
             <>
-                <BackHeader onBack={()=>{props.handelAuthScreens("Login")}} title='OTP Verification' />
+                <BackHeader onBack={() => { props.handelAuthScreens("Login") }} title='OTP Verification' />
                 <View style={styles.screen}>
                     <Image source={imgs.OTP_Vetitification} style={styles.logoImg} />
 
@@ -133,10 +185,10 @@ const OTPVeritfication = (props: Props) => {
 
 
                     <View style={[gStyles.center, gStyles.pt_15]}>
-                        <Button textStyle={[gStyles.text_White, gStyles.text_center]} style={[!disablVerityinButton && gStyles.bg_Primary, disablVerityinButton && gStyles.disableButon, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Verify"} />
+                        <Button icon={undefined} textStyle={[gStyles.text_White, gStyles.text_center]} style={[!disablVerityinButton && gStyles.bg_Primary, disablVerityinButton && gStyles.disableButon, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Verify"} />
                         {!expiredCode && <Timer resend={expiredTimer} onFinsh={() => {
                             setExpiredCode(true)
-                            setResend(2 * 60)
+                            //setResend(2 * 60)
                         }} />}
 
                         {!expiredCode && params !== null && <Text style={[gStyles.alignCenter, gStyles.pt_20]}>
@@ -153,12 +205,12 @@ const OTPVeritfication = (props: Props) => {
 
                             {resendCode && expiredCode ? <>
                                 <Text style={[gStyles.alignCenter, gStyles.pt_20]}>Don't receive the OTP?</Text>
-                                <Button textStyle={[gStyles.text_Primary, gStyles.h4]}
-                                    style={[gStyles.alignCenter, styles.register]} onPress={()=>
-                                        params !== null && sendOTP({ mobileCode:params.mobileCode, mobileNo: params.mobileCode , path:params.screen === "Register" ? "api/v1/sms/register-otp" : "apis/v1/user/forgot-password" })} title={"Send Again"} />
-                            </> :  <>
-                            <Text style={[gStyles.alignCenter, gStyles.pt_20]}>Don't receive the OTP?</Text>
-                            <Text style={[gStyles.alignCenter, gStyles.pt_20]}>You can resend  OTP in a few minutes</Text>
+                                <Button icon={undefined} textStyle={[gStyles.text_Primary, gStyles.h4]}
+                                    style={[gStyles.alignCenter, styles.register]} onPress={() =>
+                                        params !== null && sendOTP({ mobileCode: params.mobileCode, mobileNo: params.phone, path: params.screen === "Register" ? "api/v1/sms/register-otp" : "apis/v1/user/forgot-password" })} title={"Send Again"} />
+                            </> : <>
+                                <Text style={[gStyles.alignCenter, gStyles.pt_20]}>Don't receive the OTP?</Text>
+                                <Text style={[gStyles.alignCenter, gStyles.pt_20]}>You can resend  OTP in a few minutes</Text>
                             </>}
                         </>
                         }
@@ -167,6 +219,8 @@ const OTPVeritfication = (props: Props) => {
                 </View>
             </>
             {loading && <OverLayLoading />}
+            <CustomAwesomeAlert showAlert={showAlert} alert={alert} />
+
         </View>
     );
 }

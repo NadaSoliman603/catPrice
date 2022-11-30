@@ -48,7 +48,7 @@ console.log({netInfo})
     >
       <Provider store={store}>
         <PaperProvider settings={{ icon: (props) => <Feather {...props} /> }} theme={theme}>
-          <StatusBar animated={true} backgroundColor={Colors.white} />
+          <StatusBar animated={false} backgroundColor={Colors.white} barStyle="dark-content" />
           <MainNavigation />
           <AuthStack />
           <InternetConection netInfo={netInfo} />

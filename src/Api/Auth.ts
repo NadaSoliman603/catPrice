@@ -164,7 +164,7 @@ export const ForgetPasswordApi = ({ data}: any) => {
     .post(`${END_POINT}/apis/v1/user/validation-forgot-password`, JSON.stringify(data), {
       headers: {
         'Content-Type': 'application/json',
-        "Authorization": `Bearer ${"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhYmRhYnVnaGF6YWxlaEBob3RtYWlsLmNvbSIsImV4cCI6MTY2OTM5NDM0NSwiaWF0IjoxNjY5MDM0MzQ1fQ.30zWBnMidKt2NYDGEZEfpkjTS64F_LBntjwNEQCxxtfwIQSOff9XHqO73jMo5Z2Kq4PP766NT2jIDsrXmlHspg"}`,
+        "Authorization": `Bearer ${"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMTI4ODU5MDk4IiwiZXhwIjoxNjcwMTc5NTIwLCJpYXQiOjE2Njk4MTk1MjB9.7DCwQhRNAaFfpCztv-Ugvks3eNtfY5RkBnRVB1igB8CwGinJqzjElQ4IbMKHMzUZMG0zcMxXfnpqZeT0Vjt-Hw"}`,
       },
     })
 };

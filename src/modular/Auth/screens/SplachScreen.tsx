@@ -107,7 +107,7 @@ const SplashScreen = () => {
 
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:"#fff" }}>
             <Animatable.View useNativeDriver animation='zoomIn' duration={1000} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Image source={imgs.logo2} style={{ alignSelf: 'center', height: wp(30), width: wp(70) }} resizeMode='stretch' />
                 {/* </Image> */}

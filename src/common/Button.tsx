@@ -15,13 +15,13 @@ type Props = {
 const Button = ({ title, onPress , style , textStyle , icon }: Props) => {
     return (
         <Pressable  style={({pressed})=>[
-            styles.conatiner,
-            ...style,
+           
             {
-                backgroundColor : pressed ? Colors.primaryPresedButton : style[0]?.backgroundColor || "#fff"
+                backgroundColor : pressed ? Colors.primaryPresedButton : "#fff"
             },
           
-            
+            styles.conatiner,
+            ...style,
            
         ]} onPress={onPress} >
             <Text style={[styles.text ,   gStyles.h3 ,...textStyle ]}>{title}</Text>

@@ -107,7 +107,7 @@ const ForgetPassword = (props: Props) => {
 
 
                     <View style={[gStyles.center, gStyles.pt_15]}>
-                        <Button textStyle={[gStyles.text_White, gStyles.text_center]} style={[gStyles.bg_Primary, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Get OTP"} />
+                        <Button icon={undefined} textStyle={[gStyles.text_White, gStyles.text_center]} style={[gStyles.bg_Primary, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Get OTP"} />
                     </View>
                 </View>
                 {/* </ScrollView> */}

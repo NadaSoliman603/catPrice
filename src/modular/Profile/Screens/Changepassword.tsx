@@ -144,7 +144,7 @@ const Changepassword = (props: Props) => {
                     />
                     {!validation.confairmPass && <Error message={validation.msg} />}
 
-                    <Button textStyle={[gStyles.text_White, gStyles.text_center]} style={[gStyles.bg_Primary, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Change Password"} />
+                    <Button  icon={undefined} textStyle={[gStyles.text_White, gStyles.text_center]} style={[gStyles.bg_Primary, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Change Password"} />
 
                 </View>
             </ScrollView>
