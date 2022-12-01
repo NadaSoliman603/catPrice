@@ -62,10 +62,7 @@ const Changepassword = (props: Props) => {
                     console.log("change Password", { res }, res.data?.header?.httpStatusCode)
                     if (res.data?.header?.httpStatusCode === 200) {
                         await AsyncStorage.removeItem("user")
-                        dispatch(Login({
-                            token: null,
-                            user: null
-                        }))
+                        dispatch(Login({    token: null, user: null}))
                         setalert({
                             message:"Password change successfully",
                             onCancel:()=>{},

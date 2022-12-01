@@ -45,8 +45,12 @@ const History = (props: Props) => {
     }
 
 
-    if (!token) useNotLogin()
-
+    useEffect(()=>{
+        if (!token) { 
+            dispatch(ShowModal(true))
+            navigation.goBack()
+        }
+    },[])
     const getOrderData = async () => {
 
         try {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useState} from 'react';
 import { StyleSheet, View, Text  } from 'react-native';
 import { TextInput , } from 'react-native-paper';
 import { useForm, Controller, FieldValues } from "react-hook-form";
@@ -22,6 +22,12 @@ type Props = {
     rules:any
 }
 const CustomTextInput = ({ label, control, name, error , icon ,rightIcon=false ,secureTextEntry=false , keyboard = "default" , rules={required: true,}}: Props) => {
+    const [issecureText , setIsSecureText] =useState<boolean>(secureTextEntry) 
+    const handelIsSecure = ()=>{
+        if(secureTextEntry){
+            setIsSecureText(!issecureText)
+        }
+    }
     return (
         <View style={styles.input}>
             <Controller
@@ -38,12 +44,14 @@ const CustomTextInput = ({ label, control, name, error , icon ,rightIcon=false ,
                         onChangeText={onChange}
                         mode="outlined"
                         // right={()=>(<Feather name='phone' {...props}  size={fontSizes.font18}/>)}
-                        right={<TextInput.Icon icon={icon} />}
+                        right={<TextInput.Icon onPress={handelIsSecure} icon={
+                            !secureTextEntry ? icon : ()=><Feather name={issecureText ? 'lock' :'unlock'} size={fontSizes.font20} />
+                        } />}
                         left={rightIcon?<TextInput.Icon icon={rightIcon}  /> :false}
                         // error={error}
                         selectionColor={Colors.bg}
                         keyboardType = {keyboard ? keyboard : "default"}
-                        secureTextEntry ={secureTextEntry}
+                        secureTextEntry ={issecureText}
                         dense={false}
                         outlineColor={"#eee"}
                         // placeholder= {'Some Text'}

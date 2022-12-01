@@ -143,7 +143,8 @@ const ProductDetails = (props: Props) => {
         } else {
             //navigation.navigate('Login')
             // setServerError({ error: true, msg: 'to show Price you have to login' })
-            notLogin()
+            // notLogin()
+            dispatch(ShowModal(true))
         }
     }
 

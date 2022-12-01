@@ -2,7 +2,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable, StatusBar } from 'react-native';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import { Avatar, TextInput, } from 'react-native-paper';
+import { ActivityIndicator, Avatar, TextInput, } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFavouritCollectionApi, deleteFavouritCollectionApi, getFavouritCollectionsApi } from '../../Api/Favourits';
 import imgs from '../../assets/images';
@@ -23,7 +23,9 @@ import { Alert } from '../../types/types';
 import Button from '../../common/Button';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import Error from '../../common/Error';
-import Feather  from 'react-native-vector-icons/Feather';
+import Feather from 'react-native-vector-icons/Feather';
+import Loading from '../../common/Loading';
+import { ShowModal } from '../../Redux/reducers/AuthModalReducer';
 type Props = {}
 
 const Favourites = (props: Props) => {
@@ -48,8 +50,12 @@ const Favourites = (props: Props) => {
     const onPress = (id: number) => {
         navigation.navigate("FavouriteCollectionDetails", { id: id.toString() })
     }
-
-    if (!token) { useNotLogin() }
+    useEffect(() => {
+        if (!token) {
+            dispatch(ShowModal(true))
+            navigation.goBack()
+        }
+    }, [])
 
     const getFavouritCollectionData = async () => {
         if (token) {
@@ -118,7 +124,6 @@ const Favourites = (props: Props) => {
     const addNewcollection = async () => {
         if (collectionName.length === 0) {
             setCollectionNameValidationError("This filed is required *")
-
         } else {
             const data = { collectionName: collectionName }
 
@@ -141,7 +146,7 @@ const Favourites = (props: Props) => {
                                 const newcollection = res?.data?.body
                                 setFavouritCollectionData([...favouritCollectionData, newcollection])
                                 setCollectionNameValidationError(null)
-                               
+
                                 setShowAlert(true)
                                 setalert({ suTitle: collectionName, showCancelButton: false, message: "Collection Created  successfully", onCancel: () => null, onConfairm: () => { setShowAlert(false) }, type: "success" })
                                 setCllectionName("")
@@ -163,69 +168,71 @@ const Favourites = (props: Props) => {
                 setOverLayLoading(false)
             }
         }
-
-
-
-
     }
     return (
-        <MainView data={[]} loading={loading} overLayLoading={false} style={{ padding:0 }}>
-            <ScrollView style={{ flex:1 ,  padding:moderateScale(6), }}>
-                {favouritCollectionData !== null && favouritCollectionData.length === 0 && <NoFoundData title='No Favorite Collection Found' />}
-                <Text style={{ textAlign: "center", color: Colors.textBlack, fontWeight: "600", fontSize: fontSizes.font18, paddingBottom: moderateScale(3) }}>Collections</Text>
-                {favouritCollectionData?.map((item: any) => (
-                    <Pressable key={item.collectionId} style={({ pressed }) => [styles.cardContainer]}>
+        <>
+            <MainView data={[]} loading={false} overLayLoading={false} style={{ padding: 0 }}>
+                <ScrollView style={{ flex: 1, padding: moderateScale(6), }}>
+
+                    <Text style={{ textAlign: "center", color: Colors.textBlack, fontWeight: "600", fontSize: fontSizes.font18, paddingBottom: moderateScale(3) }}>Collections</Text>
+                    {favouritCollectionData?.map((item: any) => (
+                        <Pressable key={item.collectionId} style={({ pressed }) => [styles.cardContainer]}>
 
 
-                        <Pressable onPress={() => onPress(item.collectionId)} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.primaryPresedButton : "transparent" }, styles.titelContainer]}>
-                            <Text style={styles.titel}> {item.collectionName}</Text>
+                            <Pressable onPress={() => onPress(item.collectionId)} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.primaryPresedButton : "transparent" }, styles.titelContainer]}>
+                                <Text style={styles.titel}> {item.collectionName}</Text>
+                            </Pressable>
+
+                            <Pressable style={({ pressed }) => [{ padding: moderateScale(5), backgroundColor: pressed ? Colors.bg_Error : "transparent" }]} onPress={() => deleteCollection(item.collectionId, item.collectionName)}>
+                                <Feather name='trash-2' size={moderateScale(9)} color={"#EB001B"} />
+                            </Pressable>
                         </Pressable>
+                    ))}
 
-                        <Pressable style={({ pressed }) => [{ padding: moderateScale(5), backgroundColor: pressed ? Colors.bg_Error : "transparent" }]} onPress={() => deleteCollection(item.collectionId, item.collectionName)}>
-                            <Feather name='trash-2' size={moderateScale(9)} color={"#EB001B"} />
-                        </Pressable>
-                    </Pressable>
-                ))}
-                <Button textStyle={[gStyles.text_White, gStyles.text_center]} style={[styles.button]} onPress={() => setShowcreateCollectionModal(true)} title={"Create Collection"}
-                    icon={<AntDesign name='pluscircle' color={Colors.white} size={moderateScale(6.5)} style={{ paddingLeft: moderateScale(3) }} />}
-                />
+                    <Button textStyle={[gStyles.text_White, gStyles.text_center]} style={[styles.button]} onPress={() => setShowcreateCollectionModal(true)} title={"Create Collection"}
+                        icon={<AntDesign name='pluscircle' color={Colors.white} size={moderateScale(6.5)} style={{ paddingLeft: moderateScale(3) }} />}
+                    />
+                    {/* {favouritCollectionData !== null && favouritCollectionData.length === 0 && <NoFoundData title='No Favorite Collection Found' />} */}
+                    {loading && <ActivityIndicator color={Colors.primaryPresedButton} size="small" />}
 
-                {overLayLoading && <OverLayLoading />}
-                <CustomAwesomeAlert showAlert={showAlert} alert={alert} />
-                <AwesomeAlert
-                    cancelButtonStyle={styles.cancelButtonStyle}
-                    actionContainerStyle={styles.actionContainerStyle}
-                    show={showcreateCollectionModal}
-                    showProgress={false}
-                    closeOnTouchOutside={false}
-                    closeOnHardwareBackPress={false}
-                    showCancelButton={true}
-                    showConfirmButton={true}
-                    cancelText="cancel"
-                    confirmText="Create"
-                    confirmButtonColor={Colors.primary}
-                    cancelButtonColor="#E06666"
-                    onCancelPressed={() => { setShowcreateCollectionModal(false) ; setCollectionNameValidationError(null) }}
-                    onConfirmPressed={addNewcollection}
-                    useNativeDriver={true}
-                    customView={<View style={{ minHeight: 60, width: 250 }}>
-                        <StatusBar animated={false} backgroundColor='rgba(0, 0, 0, 0.6)' />
-                        <TextInput
-                            style={[styles.input, styles.textInput]}
-                            label='Colection Name'
-                            value={collectionName}
-                            onChangeText={(value) => { setCllectionName(value) }}
-                            mode="outlined"
-                            selectionColor={Colors.bg}
-                            dense={true}
-                            outlineColor={"#eee"}
+                    <CustomAwesomeAlert showAlert={showAlert} alert={alert} />
+                    <AwesomeAlert
+                        cancelButtonStyle={styles.cancelButtonStyle}
+                        actionContainerStyle={styles.actionContainerStyle}
+                        show={showcreateCollectionModal}
+                        showProgress={false}
+                        closeOnTouchOutside={false}
+                        closeOnHardwareBackPress={false}
+                        showCancelButton={true}
+                        showConfirmButton={true}
+                        cancelText="cancel"
+                        confirmText="Create"
+                        confirmButtonColor={Colors.primary}
+                        cancelButtonColor="#E06666"
+                        onCancelPressed={() => { setShowcreateCollectionModal(false); setCollectionNameValidationError(null) }}
+                        onConfirmPressed={addNewcollection}
+                        useNativeDriver={true}
+                        customView={<View style={{ minHeight: 60, width: 250 }}>
+                            <StatusBar animated={false} backgroundColor='rgba(0, 0, 0, 0.6)' />
+                            <TextInput
+                                style={[styles.input, styles.textInput]}
+                                label='Colection Name'
+                                value={collectionName}
+                                onChangeText={(value) => { setCllectionName(value) }}
+                                mode="outlined"
+                                selectionColor={Colors.bg}
+                                dense={true}
+                                outlineColor={"#eee"}
 
-                        />
-                        {collectionNameValidationError !== null && <Error message={collectionNameValidationError} />}
-                    </View>}
-                />
-            </ScrollView>
-        </MainView>
+                            />
+                            {collectionNameValidationError !== null && <Error message={collectionNameValidationError} />}
+                        </View>}
+                    />
+                </ScrollView>
+
+            </MainView>
+            {overLayLoading && <OverLayLoading />}
+        </>
     );
 }
 
@@ -261,7 +268,7 @@ const styles = StyleSheet.create({
         width: "70%",
         alignSelf: "center",
         alignItems: "center",
-        marginBottom:moderateScale(30)
+        marginBottom: moderateScale(30)
     },
     input: {
         marginVertical: moderateScale(1),

@@ -44,7 +44,8 @@ const Profile = (props: Props) => {
     },)
 
     const notLogin = ()=>{
-        setShowAlert(true)
+        dispatch(ShowModal(true))
+        //setShowAlert(true)
     }
    
 

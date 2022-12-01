@@ -14,7 +14,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import BackHeader from '../../../../common/BackHeader';
 import CircleInput from '../../../../common/CircleInput';
 import { Alert, OTPRegiserActivationData } from '../../../../types/types';
-import { OTPRegiserActivationApi, OTPUserActivationApi } from '../../../../Api/Auth';
+import { OTPRegiserActivationApi, OTPUserActivationApi, OTPVreificationForgetPasswordApi } from '../../../../Api/Auth';
 import CountDown from 'react-native-countdown-component';
 import { moderateScale } from '../../../../styles/ResponsiveDimentions';
 import Timer from '../../components/Timer';
@@ -73,7 +73,6 @@ const OTPVeritfication = (props: Props) => {
                     if (res?.data?.header?.httpStatusCode === 200) {
                         if (props.phone?.screen === "Register") {
                             props.handelAuthScreens("Login")
-                            // navigation.navigate("Login")
                         }
                         
                     } else {
@@ -81,9 +80,8 @@ const OTPVeritfication = (props: Props) => {
                             ...alert,
                             message: res?.data?.header?.headerMessage || res?.data?.header?.httpStatus,
                             onConfairm:()=>{
-                                console.log(res?.data?.header?.httpStatus , res?.data?.header?.httpStatus === "BAD_REQUEST" )
                                 if(res?.data?.header?.httpStatus === "BAD_REQUEST"){
-                                    props.handelAuthScreens("ForgetPassword")
+                                    props.handelAuthScreens("OTPVeritfication")
                                 }
                                 setShowAlert(false)
                             }
@@ -103,8 +101,30 @@ const OTPVeritfication = (props: Props) => {
         } else {
             const code = data?.v1 + data.v2 + data.v3 + data.v4;
             const token = veritivictatin?.otpToken;
-            props.handelForgetPassowd({ otp: code, otpToken: token })
-            props.handelAuthScreens("CreateNewPassword")
+            setLoading(true)
+            console.log({ activationCode: code, activationToken: token })
+            const res = await OTPVreificationForgetPasswordApi({ activationCode: code, activationToken: token })
+            if (res?.data?.header?.httpStatusCode === 200) {
+                props.handelForgetPassowd({ otp: code, otpToken: token })
+                props.handelAuthScreens("CreateNewPassword")
+                
+            } else {
+                setalert({
+                    ...alert,
+                    message: res?.data?.header?.headerMessage || res?.data?.header?.httpStatus,
+                    onConfairm:()=>{
+                        console.log(res?.data?.header?.httpStatus , res?.data?.header?.httpStatus === "BAD_REQUEST" )
+                        if(res?.data?.header?.httpStatus === "BAD_REQUEST"){
+                          //  props.handelAuthScreens("ForgetPassword")
+                        }
+                        setShowAlert(false)
+                    }
+                })
+                setShowAlert(true)
+                setLoading(false)
+            }
+
+          
 
         }
 
@@ -134,7 +154,7 @@ const OTPVeritfication = (props: Props) => {
                     onConfairm:()=>{
                         console.log(res?.data?.header?.httpStatus , res?.data?.header?.httpStatus === "BAD_REQUEST" )
                         if(res?.data?.header?.httpStatus === "BAD_REQUEST"){
-                            props.handelAuthScreens("ForgetPassword")
+                         //   props.handelAuthScreens("ForgetPassword")
                         }
                         setShowAlert(false)
                     }

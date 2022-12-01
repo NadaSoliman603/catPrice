@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
     container: {
         borderWidth: 1,
         borderColor: Colors.gray,
-        width: wp(10),
-        height: wp(10),
+        width: wp(12),
+        height: wp(12),
         borderRadius: 50,
         justifyContent: "center",
         alignItems: "center"

@@ -130,6 +130,21 @@ export const OTPUserActivationApi = ({ activationCode, activationToken }: OTPUse
     })
 };
 
+export const OTPVreificationForgetPasswordApi = ({ activationCode, activationToken }: OTPUserActivationData) => {
+  const data = {
+    otp: activationCode,
+    otpToken: activationToken
+  }
+  console.log(data)
+  return axios
+    .post(`${END_POINT}/apis/v1/user/validation-forgot-otp`, JSON.stringify(data), {
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMTI4ODU5MDk4IiwiZXhwIjoxNjcwMTc5NTIwLCJpYXQiOjE2Njk4MTk1MjB9.7DCwQhRNAaFfpCztv-Ugvks3eNtfY5RkBnRVB1igB8CwGinJqzjElQ4IbMKHMzUZMG0zcMxXfnpqZeT0Vjt-Hw"}`,
+      },
+    })
+};
+
 
 export const changePasswordApi = ({ data, token  }: { data: any; token: string }) => {
   console.log(token)

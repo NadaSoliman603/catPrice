@@ -88,7 +88,8 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
             }
 
         } else {
-            setShowAlert(true)
+            dispatch(ShowModal(true))
+           // setShowAlert(true)
            // setServerError({ error: true, msg: 'to show Price you have to login' })
             // showModal()
             // navigation.navigate('Login')
@@ -123,8 +124,8 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
                 }
             }
         } else {
-            setShowAlert(true)
-           // dispatch(ShowModal(true))
+            //setShowAlert(true)
+           dispatch(ShowModal(true))
             //setServerError({ error: true, msg: 'to Add a Product to your favorites please login' })
         }
     }
@@ -182,7 +183,7 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
                         </Pressable>}
                         {favLoading && <ActivityIndicator color={Colors.primaryPresedButton} size={fontSizes.font20} />}
                     </View>
-                    {serverError.error && <Button textStyle={[gStyles.h6, { color: Colors.error }]} style={[gStyles.alignCenter, { padding: 0 }]} onPress={() => {
+                    {serverError.error && <Button icon={undefined} textStyle={[gStyles.h6, { color: Colors.error }]} style={[gStyles.alignCenter, { padding: 0 }]} onPress={() => {
                         dispatch(ShowModal(true))
                     }} title={serverError.msg} />}
                     {overLayloading && <OverLayLoading />}

@@ -51,13 +51,15 @@ const CreateNewPassword = (props: Props) => {
                 const res = await ForgetPasswordApi({data:userdata})
                 console.log({data})
                 console.log({res})
+                console.log(res.data?.header?.httpStatusCode === 200 , res.data?.header?.httpStatusCode )
                 if(res.data?.header?.httpStatusCode === 200){
                     setalert({
                         ...alert,
                         message: "password change successfully",
-                        onConfairm:()=>props.handelAuthScreens("Login"),
+                        onConfairm:()=>{props.handelAuthScreens("Login") ;  setShowAlert(false)},
                         type:"success",
                     })
+                    setShowAlert(true)
                     
                 }else{
                     setalert({

@@ -36,15 +36,22 @@ const CreditsScreen = (props: Props) => {
     const onShowPlan = (plan: any) => {
         setShowPlan(plan)
     }
-    const [showAlert , setShowAlert] = useState(token ?false : true)
+    const [showAlert , setShowAlert] = useState(false )
     const [alert, setalert] = useState<Alert>({ 
         message: "Please Login",
         onCancel: () => { navigation.goBack() },
         onConfairm: () => {  dispatch(ShowModal(true)) ; navigation.goBack()},
         showCancelButton:true,
-        type:'login'
+        type:'login',
+        suTitle:undefined
     })
    
+   useEffect(()=>{
+    if(!token){
+        dispatch(ShowModal(true));
+        navigation.goBack();
+    }
+   },[])
 
 
     //=================================

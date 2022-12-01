@@ -88,7 +88,7 @@ const DrowerContent = ({ props }: Props) => {
                  }} title="Home" />
                 <IconButton icon={<Feather color={Colors.primary} name='users' size={fontSizes.font20} />} onPress={() => {  navigation.navigate("BayerList") }} title="Buyers List" />
                 <IconButton icon={<Octicons color={Colors.primary} name='history' size={fontSizes.font20} />} onPress={() => {  navigation.navigate("History") }} title="History" />
-                {login && <IconButton icon={<AntDesign color={Colors.primary} name='hearto' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Favourites") }} title="Favourites" />}
+                {<IconButton icon={<AntDesign color={Colors.primary} name='hearto' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Favourites") }} title="Favourites" />}
                 <IconButton icon={<AntDesign color={Colors.primary} name='message1' size={fontSizes.font20} />} onPress={() => { navigation.navigate("Contact") }} title="Contact Us" />
                 <IconButton icon={<Feather color={Colors.primary} name='alert-circle' size={fontSizes.font20} />} onPress={() => { navigation.navigate("About") }} title="About" />
                 <IconButton icon={<Feather  color={Colors.primary} name='file-text' size={fontSizes.font20} />} onPress={() => { navigation.navigate("TermsAndConditions") }} title="Terms and Conditions" />
