@@ -100,7 +100,7 @@ const ProductDetails = (props: Props) => {
 
 
     const notLogin = ()=>{
-       setShowAlert(true)
+       //setShowAlert(true)
        //setServerError({error:false , msg:""})
     }
     // ===========================

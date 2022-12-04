@@ -83,13 +83,14 @@ const Favourites = (props: Props) => {
     // delete Collection
     //=======================
     const deleteCollection = async (collectionId: number, collectionName: string) => {
+        console.log({collectionId})
         const onConfairm = async () => {
             if (token) {
                 setShowAlert(false)
                 setOverLayLoading(true)
                 const res = await deleteFavouritCollectionApi({ token: token, data: { collectionId: collectionId } })
+                console.log({res})
                 if (res.data.header.httpStatusCode === 200) {
-                    console.log(res)
                     const newData = favouritCollectionData?.filter((item) => item.collectionId !== collectionId)
                     console.log({ newData })
                     if (newData) {
@@ -113,7 +114,6 @@ const Favourites = (props: Props) => {
 
         setShowAlert(true)
         setalert({ suTitle: `(${collectionName})`, showCancelButton: true, message: `Do You want to delete this Collection`, onCancel: () => { setShowAlert(false) }, onConfairm: onConfairm, type: "delete" })
-
 
 
     }
@@ -208,12 +208,20 @@ const Favourites = (props: Props) => {
                         cancelText="cancel"
                         confirmText="Create"
                         confirmButtonColor={Colors.primary}
-                        cancelButtonColor="#E06666"
+                        cancelButtonColor={Colors.error}
                         onCancelPressed={() => { setShowcreateCollectionModal(false); setCollectionNameValidationError(null) }}
                         onConfirmPressed={addNewcollection}
                         useNativeDriver={true}
-                        customView={<View style={{ minHeight: 60, width: 250 }}>
+                        customView={<View style={{ minHeight: moderateScale(20), width: moderateScale(110) }}>
+
                             <StatusBar animated={false} backgroundColor='rgba(0, 0, 0, 0.6)' />
+                            <Text style={{ 
+                                fontWeight:"600",
+                                color:Colors.textBlack,
+                                fontSize:fontSizes.font16,
+                                textAlign:"center",
+                                marginVertical:moderateScale(3)
+                             }}>Create New Collection</Text>
                             <TextInput
                                 style={[styles.input, styles.textInput]}
                                 label='Colection Name'

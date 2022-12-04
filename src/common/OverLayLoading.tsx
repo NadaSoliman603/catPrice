@@ -6,7 +6,7 @@ import dimensions from '../styles/dimensions';
 
 const OverLayLoading = () => {
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen ]}>
       <View
         style={styles.loaderContainer}>
         <ActivityIndicator color={Colors.white} size="large" />
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.3)',
     alignItems: 'center',
     justifyContent: 'center',
+   
   },
   loaderContainer:{
     backgroundColor: Colors.primary,

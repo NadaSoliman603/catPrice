@@ -27,7 +27,7 @@ import { AuthCustomNav, Phone } from '../..';
 type Props = {
     handelAuthScreens:(screen :AuthCustomNav )=>void ;
     handelPhonNumber:(phone:Phone)=>void
-
+    togelloading:(value:boolean)=>void
 }
 
 const Login = (props: Props) => {
@@ -42,13 +42,9 @@ const Login = (props: Props) => {
     const [countryCode, setCountryCode] = useState<any>(loction);
     const [serverError, setServerError] = useState<boolean>(false)
     useEffect(() => {
-        // const checkLogin = async () => {
-        //     const userinfo = await AsyncStorage.getItem("user")
-        //     if (userinfo) { }
-        // }
-        // checkLogin()
+        props.togelloading(loading)
         return () => { };
-    }, []);
+    }, [loading]);
 
 
     //==========================
@@ -95,6 +91,7 @@ const Login = (props: Props) => {
 
 
     return (
+      <>
         <View style={styles.screen}>
             <View style={styles.screen}>
                 <Image resizeMode='contain' source={imgs.logo} style={styles.logoImg} />
@@ -119,6 +116,7 @@ const Login = (props: Props) => {
                             withCallingCode={true}
                             withEmoji={true}
                             onSelect={(country: any) => {
+                                console.log(country)
                                 setCountryCode(country)
                             }}
                             // withCurrency={true}
@@ -148,21 +146,23 @@ const Login = (props: Props) => {
 
 
                 <View style={[gStyles.center]}>
-                    <Button textStyle={[gStyles.text_sm, gStyles.text_Primary]} style={[gStyles.alignCenter]} onPress={() => {
+                    <Button icon={undefined} textStyle={[gStyles.text_sm, gStyles.text_Primary]} style={[gStyles.alignCenter]} onPress={() => {
                         props.handelAuthScreens("ForgetPassword")
                         // navigation.navigate('ForgetPassword') 
                     }} title={"I forget my Password"}      />
                     {serverError && <Error message="That's not the right password or phone number tray again" />}
-                    <Button textStyle={[gStyles.text_White, gStyles.text_center]} style={[gStyles.bg_Primary, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Login"} />
+                    <Button icon={undefined} textStyle={[gStyles.text_White, gStyles.text_center]} style={[gStyles.bg_Primary, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Login"} />
                     <Text style={[gStyles.alignCenter, gStyles.pt_20]}>Don't have an acount? </Text>
-                    <Button textStyle={[gStyles.text_Primary, gStyles.h4]} style={[gStyles.alignCenter, styles.register]} onPress={() => { 
+                    <Button icon={undefined} textStyle={[gStyles.text_Primary, gStyles.h4]} style={[gStyles.alignCenter, styles.register]} onPress={() => { 
                         //navigation.navigate("Register") 
                         props.handelAuthScreens("Register")
                         }} title={"Register here"} />
                 </View>
             </View>
-            {loading && <OverLayLoading />}
+            {/* {loading && <OverLayLoading />} */}
         </View>
+        {/* <OverLayLoading /> */}
+        </>
     );
 }
 
@@ -174,7 +174,8 @@ const styles = StyleSheet.create({
         // alignContent: "center",
         // flex: 1,
         backgroundColor: Colors.white,
-        padding: moderateScale(6)
+        padding: moderateScale(6),
+        //minHeight:hp(90)
     },
     logoImg: {
         width: moderateScale(100),

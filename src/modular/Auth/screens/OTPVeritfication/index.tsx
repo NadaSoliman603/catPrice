@@ -26,11 +26,13 @@ type Props = {
     handelAuthScreens: (screen: AuthCustomNav) => void;
     phone: Phone | null;
     handelForgetPassowd: (data: CreatePassdVeritfication) => void;
+    togelloading:(value:boolean)=>void;
+
 }
 type ScreenRouteProp = RouteProp<RootStack, 'OTPVeritfication'>;
 
 const OTPVeritfication = (props: Props) => {
-    const { control, register, handleSubmit, watch, formState: { errors }, getValues } = useForm();
+    const { control, register, handleSubmit, watch, formState: { errors }, getValues  , reset} = useForm();
     // const navigation = useNavigation<NavigationType>()
     const [disablVerityinButton, setDisablVerityinButton] = useState(true)
     const [veritivictatin, setVeritification] = useState<null | any>(null)
@@ -42,10 +44,9 @@ const OTPVeritfication = (props: Props) => {
     const [resendCode, setResendCode] = useState(false)
     const [resend, setResend] = React.useState(0)
     const [showAlert, setShowAlert] = useState(false)
-
-    const [alert, setalert] = useState<Alert>({
-        message: "",
-        onCancel: () => { },
+    const [autoFocus , setAutoFocus] = useState<boolean>(true)
+    const [alert, setalert] = useState<Alert>({  
+        message: "",onCancel: () => { },
         onConfairm: () => { setShowAlert(false) },
         showCancelButton: false,
         type: 'warning',
@@ -58,6 +59,7 @@ const OTPVeritfication = (props: Props) => {
     const input4 = useRef()
     //Submit OTPVeritfication Data
     const onSubmit = async (data: any) => {
+        setAutoFocus(false)
         if (props.phone?.screen === "Register") {
             const code = data?.v1 + data.v2 + data.v3 + data.v4;
             const token = veritivictatin?.activationToken ||  veritivictatin?.otpToken;
@@ -76,10 +78,16 @@ const OTPVeritfication = (props: Props) => {
                         }
                         
                     } else {
+                      
                         setalert({
                             ...alert,
                             message: res?.data?.header?.headerMessage || res?.data?.header?.httpStatus,
                             onConfairm:()=>{
+                                reset({ v1:"",v2:"", v3:"", v4:""})
+                                const foucusinput1:any =input1?.current
+                                if(foucusinput1 !== undefined){
+                                    foucusinput1.focus()
+                                }
                                 if(res?.data?.header?.httpStatus === "BAD_REQUEST"){
                                     props.handelAuthScreens("OTPVeritfication")
                                 }
@@ -109,10 +117,17 @@ const OTPVeritfication = (props: Props) => {
                 props.handelAuthScreens("CreateNewPassword")
                 
             } else {
+              
                 setalert({
                     ...alert,
                     message: res?.data?.header?.headerMessage || res?.data?.header?.httpStatus,
                     onConfairm:()=>{
+                        reset({ v1:"",v2:"", v3:"", v4:""})
+                        const foucusinput1:any =input1?.current
+                        if(foucusinput1 !== undefined){
+                            foucusinput1.focus()
+                        }
+                        // setAutoFocus(true)
                         console.log(res?.data?.header?.httpStatus , res?.data?.header?.httpStatus === "BAD_REQUEST" )
                         if(res?.data?.header?.httpStatus === "BAD_REQUEST"){
                           //  props.handelAuthScreens("ForgetPassword")
@@ -147,11 +162,13 @@ const OTPVeritfication = (props: Props) => {
                 setVeritification(veritivictatin)
                 setLoading(false)
             } else {
+
                 console.log("sendOTP respons ===>" , {res})
                 setalert({
                     ...alert,
                     message: res?.data?.header?.headerMessage || res?.data?.header?.httpStatus,
                     onConfairm:()=>{
+                        
                         console.log(res?.data?.header?.httpStatus , res?.data?.header?.httpStatus === "BAD_REQUEST" )
                         if(res?.data?.header?.httpStatus === "BAD_REQUEST"){
                          //   props.handelAuthScreens("ForgetPassword")
@@ -182,7 +199,10 @@ const OTPVeritfication = (props: Props) => {
         }
     }, [])
 
-
+    useEffect(() => {
+        props.togelloading(loading)
+        return () => { };
+    }, [loading]);
     return (
         <View style={styles.screen}>
             <>
@@ -197,10 +217,10 @@ const OTPVeritfication = (props: Props) => {
                     <Text style={[gStyles.alignCenter, gStyles.text_center, gStyles.text_Primary, gStyles.pt_15, gStyles.h1]}>Phone Verification</Text>
 
                     <View style={[gStyles.pt_15, gStyles.row, gStyles.spaceBetwen, gStyles.width_230, gStyles.selfCenter]}>
-                        <CircleInput setDisablVerityinButton={setDisablVerityinButton} getValues={getValues} inputRef={input1} foucsNextInput={input2} name={"v1"} control={control} />
-                        <CircleInput setDisablVerityinButton={setDisablVerityinButton} getValues={getValues} inputRef={input2} foucsNextInput={input3} name={"v2"} control={control} />
-                        <CircleInput setDisablVerityinButton={setDisablVerityinButton} getValues={getValues} inputRef={input3} foucsNextInput={input4} name={"v3"} control={control} />
-                        <CircleInput setDisablVerityinButton={setDisablVerityinButton} getValues={getValues} inputRef={input4} foucsNextInput={input1} name={"v4"} control={control} />
+                        <CircleInput  autoFocus={true} setDisablVerityinButton={setDisablVerityinButton} getValues={getValues} inputRef={input1} foucsNextInput={input2} name={"v1"} control={control} />
+                        <CircleInput  autoFocus={false}  setDisablVerityinButton={setDisablVerityinButton} getValues={getValues} inputRef={input2} foucsNextInput={input3} name={"v2"} control={control} />
+                        <CircleInput  autoFocus={false}  setDisablVerityinButton={setDisablVerityinButton} getValues={getValues} inputRef={input3} foucsNextInput={input4} name={"v3"} control={control} />
+                        <CircleInput  autoFocus={false}  setDisablVerityinButton={setDisablVerityinButton} getValues={getValues} inputRef={input4} foucsNextInput={input1} name={"v4"} control={control} />
                     </View>
 
 
@@ -238,7 +258,7 @@ const OTPVeritfication = (props: Props) => {
 
                 </View>
             </>
-            {loading && <OverLayLoading />}
+            {/* {loading && <OverLayLoading />} */}
             <CustomAwesomeAlert showAlert={showAlert} alert={alert} />
 
         </View>

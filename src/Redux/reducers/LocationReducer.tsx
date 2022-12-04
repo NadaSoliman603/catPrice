@@ -12,10 +12,10 @@ export interface LocationState {
 
 
 const initialState = {
-    cca2: 'SA',
-    currency: ['SAR'],
-    callingCode: ["966"],
-    name: "Saudi Arabia"
+    cca2: "ZA",
+    currency: ["ZAR"],
+    callingCode: ["27"],
+    name: "South Africa"
 }
 
 export const LocationSlice = createSlice({

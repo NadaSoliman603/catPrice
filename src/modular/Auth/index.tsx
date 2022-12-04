@@ -22,6 +22,8 @@ const AuthStack = (props: Props) => {
     const [modalHeight, setModalHeight] = React.useState<number>(95)
     const [phone , setPhone] = React.useState<Phone | null>(null)
     const [createPassdVeritfication , setCreatePassdVeritfication] = React.useState <null | CreatePassdVeritfication>(null)
+    const [loading , setloading] = React.useState<boolean>(false)
+    const togelloading = (value:boolean)=>{setloading(value)}
     const dispatch = useDispatch()
     const togleModal = (show: boolean,) => {
         // setModalVisible(show)
@@ -50,15 +52,15 @@ const AuthStack = (props: Props) => {
     return (
         // <ButtomMeueModal height={100} title="" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={togleModal}>
 
-        <ButtomMeueModal bgColor='default' height={modalHeight} title="" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={togleModal}>
+        <ButtomMeueModal loading={loading} bgColor='default' height={modalHeight} title="" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={togleModal}>
             <>
-                {authScreen === "Login" && <Login handelPhonNumber={handelPhonNumber}  handelAuthScreens={handelAuthScreens} />}
-                {authScreen === "Register" && <Register handelPhonNumber={handelPhonNumber} handelAuthScreens={handelAuthScreens} />}
+                {authScreen === "Login" && <Login  togelloading ={togelloading} handelPhonNumber={handelPhonNumber}  handelAuthScreens={handelAuthScreens} />}
+                {authScreen === "Register" && <Register togelloading ={togelloading} handelPhonNumber={handelPhonNumber} handelAuthScreens={handelAuthScreens} />}
                 {authScreen === "ForgetPassword" && <ForgetPassword handelPhonNumber={handelPhonNumber}  handelAuthScreens={handelAuthScreens} />}
-                {authScreen === "OTPVeritfication" && <OTPVeritfication handelForgetPassowd={(data:CreatePassdVeritfication)=>handelForgetPassowd(data)}  phone={phone} handelAuthScreens={handelAuthScreens} />}
-                {authScreen === "CreateNewPassword" && <CreateNewPassword createPassdVeritfication={createPassdVeritfication}  handelAuthScreens={handelAuthScreens}/>}
+                {authScreen === "OTPVeritfication" && <OTPVeritfication togelloading ={togelloading} handelForgetPassowd={(data:CreatePassdVeritfication)=>handelForgetPassowd(data)}  phone={phone} handelAuthScreens={handelAuthScreens} />}
+                {authScreen === "CreateNewPassword" && <CreateNewPassword togelloading ={togelloading} createPassdVeritfication={createPassdVeritfication}  handelAuthScreens={handelAuthScreens}/>}
 
-                <View  style={{ height:moderateScale(25) }}></View>
+                {/* <View  style={{ height:moderateScale(25) }}></View> */}
             </>
         </ButtomMeueModal>
         // </ButtomMeueModal> 

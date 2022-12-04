@@ -25,6 +25,15 @@ const imgs = {
     frame2 : require('./imgs/Frame2.png'),
     balance_icon:require('./imgs/balance_icon.png'),
     changePassword:require('./imgs/changePassword.png'),
+    brandprimary:require('./imgs/brandprimary.png'),
+    userPrimary:require('./imgs/userPrimary.png'),
+    homePrimary:require('./imgs/subtractPrimary.png'),
+    walletPrimary:require('./imgs/walletPrimamry.png'),
+
+    brand:require('./imgs/brand.png'),
+    user:require('./imgs/user.png'),
+    home:require('./imgs/home.png'),
+    wallet:require('./imgs/wallet.png'),
 }
 
 export default imgs;

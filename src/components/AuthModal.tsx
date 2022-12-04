@@ -8,6 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { Divider } from "react-native-paper";
 import fontSizes from "../styles/fontSizes";
 import { ScrollView } from "react-native-gesture-handler";
+import OverLayLoading from "../common/OverLayLoading";
 
 type Props = {
     modalVisible: boolean;
@@ -16,9 +17,10 @@ type Props = {
     children: JSX.Element;
     title: string;
     height: number;
-    bgColor: string | "default"
+    bgColor: string | "default" , 
+    loading:boolean | undefined
 }
-const ButtomMeueModal = ({ bgColor, height, modalVisible, togleModal, setModalVisible, children, title }: Props) => {
+const ButtomMeueModal = ({ bgColor, height, modalVisible, togleModal, setModalVisible, children, title , loading }: Props) => {
     // const [modalVisible, setModalVisible] = useState(false);
     const fulllHeight = height === 100
     return (
@@ -32,6 +34,8 @@ const ButtomMeueModal = ({ bgColor, height, modalVisible, togleModal, setModalVi
                     setModalVisible(!modalVisible)
                 }}
                 style={styles.modal}
+                // statusBarTranslucent ={true}
+
             // onDismiss={}
             >
 
@@ -43,7 +47,9 @@ const ButtomMeueModal = ({ bgColor, height, modalVisible, togleModal, setModalVi
                             height: hp(height),
                             flex: 1,
                             maxHeight:hp(height),
+                            overflow:"hidden"
                         }]}>
+                          
                             {/* <View style={styles.menuIcon}></View> */}
 
                             <View style={[gStyles.row, gStyles.spaceBetwen, { paddingHorizontal: moderateScale(5), paddingVertical: 10, }]}>
@@ -56,7 +62,8 @@ const ButtomMeueModal = ({ bgColor, height, modalVisible, togleModal, setModalVi
                                 </Pressable>}
 
                             </View>
-                            <ScrollView style={{ flex: 1, }}>
+                            {loading && <OverLayLoading />}
+                            <ScrollView style={{ flex: 1}}>
                                 {children}
                             </ScrollView>
                         </View>

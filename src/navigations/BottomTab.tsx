@@ -51,7 +51,6 @@ import CheckoutScreen from '../modular/Cridits/screens/Checkout';
 import CurrentPlan from '../modular/Profile/Screens/CurrentPlan';
 import Changepassword from '../modular/Profile/Screens/Changepassword';
 
-
 const Tab = createBottomTabNavigator();
 
 
@@ -83,17 +82,19 @@ function BottomTab() {
                     let icon
 
                     if (route.name === 'Home') {
-                        icon = <Feather color={focused ? Colors.primary : Colors.darkGray} name='home' size={fontSizes.font20} />
-                    } else if (route.name === 'Explore') {
-                        icon = <Feather color={focused ? Colors.primary : Colors.darkGray} name='search' size={fontSizes.font20} />
+                        icon = <FastImage resizeMode='contain'  source={focused ?imgs.homePrimary :imgs.home} style={{ width:moderateScale(8) , height:moderateScale(8) }} />
+
+                        // icon = <Feather color={focused ? Colors.primary : Colors.darkGray} name='home' size={fontSizes.font20} />
+                    } else if (route.name === 'Profile') {
+                        icon = <FastImage resizeMode='contain'  source={focused ? imgs.userPrimary :imgs.user} style={{ width:moderateScale(8) , height:moderateScale(8) }} />
                     }
-                    else if (route.name === 'Brand') {
-                        icon = <MaterialIcons color={focused ? Colors.primary : Colors.darkGray} name='directions-car' size={fontSizes.font20} />
+                    else if (route.name === 'Brands') {
+                        icon = <FastImage resizeMode='contain'  source={focused ? imgs.brandprimary :imgs.brand} style={{ width:moderateScale(8) , height:moderateScale(8) }} />
                     }
                     else if (route.name === 'Credits') {
-                        icon = <AntDesign color={focused ? Colors.primary : Colors.darkGray} name='creditcard' size={fontSizes.font20} />
+                        icon = <FastImage resizeMode='contain'  source={focused ? imgs.walletPrimary : imgs.wallet} style={{ width:moderateScale(8) , height:moderateScale(8) }} />
                     }
-                    else if (route.name === 'Profile') { icon = <AntDesign color={focused ? Colors.primary : Colors.darkGray} name='user' size={fontSizes.font20} /> }
+                    else if (route.name === 'Favorites') { icon = <MaterialIcons color={focused ? Colors.primary : Colors.darkGray} name='favorite' size={fontSizes.font22} /> }
                     return icon;
                 },
 
@@ -116,8 +117,8 @@ function BottomTab() {
             })}
         >
             <Tab.Screen name="Home" component={AppStack} />
-            <Tab.Screen name="Explore" component={SearchStack} />
-            <Tab.Screen name="Brand" component={BrandStack} />
+            <Tab.Screen name="Favorites" component={FavouritsStack} />
+            <Tab.Screen name="Brands" component={BrandStack} />
             <Tab.Screen name="Credits" component={Credits} />
             <Tab.Screen name="Profile" component={BrofileStack} />
         </Tab.Navigator>
@@ -133,7 +134,6 @@ const AppStack = () => {
             <Stack.Screen options={{ title: "Search", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="Search" component={Search} />
             <Stack.Screen options={{ title: "Search Results", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="SearchResults" component={SearchResults} />
             <Stack.Screen options={{ title: "Home", headerRight: () => <CartIcon navigationScreen='default' /> }} name="HomeScreen" component={Home} />
-
             <Stack.Screen options={{ title: "Product Details", headerRight: () => <CartIcon navigationScreen='default' />, headerLeft: () => <BackBotton /> }} name="ProductDetails" component={ProductDetails} />
             <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Contact Us" }} name="Contact" component={Contact} />
             <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "About Us" }} name="About" component={About} />
@@ -147,6 +147,31 @@ const AppStack = () => {
             <Stack.Screen options={{ title: "Credits", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="CreditsScreen" component={CreditsScreen} />
 
             <Stack.Screen options={{ title: "Favourites", headerShown: true, headerLeft: () => <BackBotton /> }} name="FavouriteCollectionDetails" component={FavouriteCollectionDetails} />
+
+        </Stack.Navigator>
+    )
+}
+
+const FavouritsStack = () => {
+    const navigation = useNavigation<NavigationType>()
+
+    return (
+        <Stack.Navigator screenOptions={{ ...stackOption }} initialRouteName='Favourites'>
+            <Stack.Screen options={{ title: "Favourites", headerShown: true, headerLeft: () => <BackBotton /> }} name="FavouriteCollectionDetails" component={FavouriteCollectionDetails} />
+            <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
+            <Stack.Screen options={{ title: "Home", headerRight: () => <CartIcon navigationScreen='default' /> }} name="HomeScreen" component={Home} />
+            <Stack.Screen options={{ title: "Product Details", headerRight: () => <CartIcon navigationScreen='default' />, headerLeft: () => <BackBotton /> }} name="ProductDetails" component={ProductDetails} />
+            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Contact Us" }} name="Contact" component={Contact} />
+            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "About Us" }} name="About" component={About} />
+            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Terms and Conditions" }} name="TermsAndConditions" component={TermsAndConditions} />
+            <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Privacy Policy" }} name="Privacy" component={Privacy} />
+            <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' /> }} name="History" component={History} />
+            <Stack.Screen options={{ headerShown: false, }} name="OrderStack" component={OrderStack} />
+            <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
+            <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' />, title: "Cridits" }} name="CreditsSearchStack" component={CreditsScreen} />
+            <Stack.Screen options={{ title: "Credits", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="CreditsScreen" component={CreditsScreen} />
+            {/* <Stack.Screen options={{ title: "Search", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="Search" component={Search} /> */}
+            {/* <Stack.Screen options={{ title: "Search Results", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="SearchResults" component={SearchResults} /> */}
 
         </Stack.Navigator>
     )

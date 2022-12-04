@@ -35,13 +35,13 @@ export const registerApi = ({ password, defCurrency, mobileNo, mobileCode, count
 
 
 export const getBrandApi = () => {
-  return axios.get('http://floridatrading.online:8010/api/v1/brands/get-all-brands')
+  return axios.get(`${END_POINT}/api/v1/brands/get-all-brands`)
 };
 
 
 
 export const searchCatdApi = ({ search, limit , token}: { search: string; limit: string , token:null|string }) => {
-  return axios.get(`http://floridatrading.online:8010/api/v1/cat/search?search=${search}&limit=${limit}`,{
+  return axios.get(`${END_POINT}/api/v1/cat/search?search=${search}&limit=${limit}`,{
     headers: {
       'Content-Type': 'application/json',
       "Authorization": `Bearer ${token}`,
@@ -61,7 +61,7 @@ export const searchCatdPagenationApi = ({ search, token , pageSize ,  offSet ,}:
 
 
 export const getCatDetailsApi = ({ catID , token}: { catID: string , token:string|null}) => {
-  return axios.get(`http://floridatrading.online:8010/api/v1/cat/get-cat-details?catId=${catID}`,{
+  return axios.get(`${END_POINT}/api/v1/cat/get-cat-details?catId=${catID}`,{
     headers: {
       'Content-Type': 'application/json',
       "Authorization": `Bearer ${token}`,
@@ -71,14 +71,14 @@ export const getCatDetailsApi = ({ catID , token}: { catID: string , token:strin
 
 
 export const getCatsbyBrandApi = ({ brand, limit }: { brand: string, limit: string }) => {
-  return axios.get(`http://floridatrading.online:8010/api/v1/cat/get-all-cats-by-brand?brand=${brand}&limit=${limit}`)
+  return axios.get(`${END_POINT}/api/v1/cat/get-all-cats-by-brand?brand=${brand}&limit=${limit}`)
 };
 
 
 
 export const getPlanApi = ({ path, token }: { path: string; token: string }) => {
   return axios
-    .get(`${'http://floridatrading.online:8010/api/v1/plans/get-plans'}`, {
+    .get(`${END_POINT}/api/v1/plans/get-plans`, {
       headers: {
         'Content-Type': 'application/json',
         "Authorization": `Bearer ${token}`,
@@ -90,7 +90,7 @@ export const getPlanApi = ({ path, token }: { path: string; token: string }) => 
 
 export const showPriceApi = ({ catId, token , currency }: { catId: string; token: string , currency:string}) => {
   return axios
-    .get(`http://floridatrading.online:8010/api/v1/cat/show-price?id=${catId}`, {
+    .get(`${END_POINT}/api/v1/cat/show-price?id=${catId}`, {
       headers: {
         'Content-Type': 'application/json',
         "Authorization": `Bearer ${token}`,

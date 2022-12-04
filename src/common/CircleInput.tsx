@@ -11,10 +11,11 @@ type Props = {
     inputRef: any,
     foucsNextInput: any;
     getValues: any;
-    setDisablVerityinButton:any
+    setDisablVerityinButton: any,
+    autoFocus: boolean
 }
 
-const CircleInput = ({ control, name, inputRef, foucsNextInput, getValues , setDisablVerityinButton }: Props) => {
+const CircleInput = ({ control, name, inputRef, foucsNextInput, getValues, setDisablVerityinButton, autoFocus }: Props) => {
     return (
 
         <Controller
@@ -26,43 +27,44 @@ const CircleInput = ({ control, name, inputRef, foucsNextInput, getValues , setD
             render={({ field: { onChange, onBlur, value } }) => (
                 <View style={[styles.container,]}>
                     <TextInput
+                        autoFocus={autoFocus}
                         style={styles.input}
                         value={value}
-                        onChangeText={(text)=>{                   
-                             onChange(text)
-                             const values = getValues()
-                            console.log("=============>",values)
-                            if(values.v1 !== undefined && values.v2  !== undefined &&values.v3  !== undefined &&values.v4  !== undefined){
-                                    if (values.v1?.length > 0
-                                        &&values.v2?.length > 0
-                                        &&values.v3?.length > 0
-                                        &&values.v4?.length > 0
-                                        ) {
-                                            console.log("disActive1")
-                                            setDisablVerityinButton(false)
-                                    } else {
-                                        console.log("Active1")
-                                        setDisablVerityinButton(true)
-                                    }
+                        onChangeText={(text) => {
+                            onChange(text)
+                            const values = getValues()
+                            console.log("=============>", values)
+                            if (values.v1 !== undefined && values.v2 !== undefined && values.v3 !== undefined && values.v4 !== undefined) {
+                                if (values.v1?.length > 0
+                                    && values.v2?.length > 0
+                                    && values.v3?.length > 0
+                                    && values.v4?.length > 0
+                                ) {
+                                    console.log("disActive1")
+                                    setDisablVerityinButton(false)
+                                } else {
+                                    console.log("Active1")
+                                    setDisablVerityinButton(true)
                                 }
-                            
+                            }
+
                         }}
                         maxLength={1}
                         keyboardType={'numeric'}
                         ref={inputRef}
                         onChange={() => {
-                            
+
 
                             if (!value && foucsNextInput) {
                                 if (foucsNextInput) {
-                                    
+
                                     foucsNextInput.current.focus();
                                 }
                             } else {
                                 console.log("pleas enter value");
                             }
                         }}
-                        
+
                     />
                 </View>
             )}

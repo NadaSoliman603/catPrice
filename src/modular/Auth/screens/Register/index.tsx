@@ -28,8 +28,10 @@ import { RootState } from '../../../../Redux/store/store';
 import { AuthCustomNav, Phone } from '../..';
 
 type Props = {
-    handelAuthScreens:(screen :AuthCustomNav)=>void,
-    handelPhonNumber:(phone:Phone)=>void
+    handelAuthScreens:(screen :AuthCustomNav)=>void;
+    handelPhonNumber:(phone:Phone)=>void;
+    togelloading:(value:boolean)=>void;
+
 }
 
 const Register = (props: Props) => {
@@ -46,7 +48,10 @@ const Register = (props: Props) => {
     const [loading, setLoading] = useState(false)
     const [serverMessage, setServerMssage] = useState<boolean | string>(false)
     const [mount, setMount] = useState<boolean>(true)
-
+    useEffect(() => {
+        props.togelloading(loading)
+        return () => { };
+    }, [loading]);
 
     //===========================
     // submit Register Data 
@@ -204,9 +209,9 @@ const Register = (props: Props) => {
                         {!validation.checked && <Error message='Please agree to the terms of use' />}
                         {serverMessage &&<Error message={typeof (serverMessage) === 'string' ? "User Already exists" : "Request Failed"} />}
 
-                        <Button textStyle={[gStyles.text_White, gStyles.text_center]} style={[gStyles.bg_Primary, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Register"} />
+                        <Button icon={undefined} textStyle={[gStyles.text_White, gStyles.text_center]} style={[gStyles.bg_Primary, gStyles.center]} onPress={handleSubmit(onSubmit)} title={"Register"} />
                         <Text style={[gStyles.alignCenter, gStyles.pt_15]}>Have an acount? </Text>
-                        <Button textStyle={[gStyles.text_Primary, gStyles.h4]} style={[gStyles.alignCenter, styles.register]} onPress={() => { 
+                        <Button  icon={undefined} textStyle={[gStyles.text_Primary, gStyles.h4]} style={[gStyles.alignCenter, styles.register]} onPress={() => { 
                            // navigation.navigate("Login") 
                            props.handelAuthScreens("Login")
                             }} title={"Login here"} />
@@ -216,7 +221,7 @@ const Register = (props: Props) => {
                     
                 </View>
             </View>
-            {loading && <OverLayLoading />}
+            {/* {loading && <OverLayLoading />} */}
 
         </>
     );

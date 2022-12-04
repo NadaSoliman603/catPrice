@@ -111,6 +111,7 @@ const History = (props: Props) => {
     useEffect(() => {
         if (value === "order") getOrderData()
         if (value === "credits") getCriditsData()
+        if (value === "search") setLoading(false)
     }, [value])
     return (
         <MainView data={[]} loading={false} overLayLoading={false} style={styles.screen}>

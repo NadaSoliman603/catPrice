@@ -26,7 +26,7 @@ const CustomAwesomeAlert = ({ alert, showAlert }: Props) => {
             cancelText="cancel"
             confirmText="    ok    "
             confirmButtonColor={Colors.primary}
-            cancelButtonColor="#E06666"
+            cancelButtonColor={Colors.error}
             onCancelPressed={alert.onCancel}
             onConfirmPressed={alert.onConfairm}
             useNativeDriver={true}

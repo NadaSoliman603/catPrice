@@ -37,15 +37,14 @@ const Home = (props: Props) => {
         try {
             setLoading(true)
             const res = await getSystemSettingApi({currency:currency})
+            console.log({res})
             const metalPrice = res?.data?.body
-            console.log({metalPrice})
-            console.log(metalPrice)
-            console.log(metalPrice.fdPdPrice)
+      
             if(mount)  setmetalPrice({
                 currancy:currency,
-                fdPdPrice:metalPrice.fdPdPrice,
-                fdPtPrice:metalPrice.fdPtPrice,
-                fdRhPrice:metalPrice.fdRhPrice
+                fdPdPrice:metalPrice?.fdPdPrice,
+                fdPtPrice:metalPrice?.fdPtPrice,
+                fdRhPrice:metalPrice?.fdRhPrice
             }) 
             setLoading(false)
         } catch (error) {

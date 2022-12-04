@@ -35,7 +35,7 @@ export function CheckoutScreen() {
     // The rest will be done automatically using webhooks
 
 
-   const clientSecret ="pi_3M9VP3JPH93PAwz91bcBXcs2_secret_DQTgChg24PTKDswFyLVS7rDsL"
+   const clientSecret ="pi_3MAxxIJWQWOfli620hyrnnV5_secret_MGBbRpyedWopg6uJEw7uc4xes"
     const { error, paymentIntent } = await confirmPayment(
       clientSecret,
       {

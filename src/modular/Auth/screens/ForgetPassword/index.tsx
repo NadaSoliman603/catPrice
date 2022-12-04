@@ -24,6 +24,7 @@ import { AuthCustomNav, Phone } from '../..';
 type Props = {
     handelAuthScreens:(screen :AuthCustomNav)=>void,
     handelPhonNumber:(phone:Phone)=>void;
+
 }
 
 const ForgetPassword = (props: Props) => {
@@ -41,6 +42,7 @@ const ForgetPassword = (props: Props) => {
         props.handelAuthScreens("OTPVeritfication")
         // navigation.navigate('OTPVeritfication' ,{mobileCode:"20", phone:"1128859098"})
     }
+    
     return (
         <ScrollView>
             <View style={styles.screen}>
@@ -95,6 +97,7 @@ const ForgetPassword = (props: Props) => {
                                 withCallingCode={true}
                                 withEmoji={true}
                                 onSelect={(country: any) => {
+                                 
                                     setCountryCode(country)
                                 }}
                                 // withCurrency={true}

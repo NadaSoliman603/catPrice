@@ -19,6 +19,8 @@ import FastImage from 'react-native-fast-image';
 type Props = {
     handelAuthScreens: (screen: AuthCustomNav) => void;
     createPassdVeritfication: CreatePassdVeritfication | null; 
+    togelloading:(value:boolean)=>void;
+
 }
 
 const CreateNewPassword = (props: Props) => {
@@ -82,12 +84,16 @@ const CreateNewPassword = (props: Props) => {
         }
         setLoading(false)
     }
+    React.useEffect(() => {
+        props.togelloading(loading)
+        return () => { };
+    }, [loading]);
     return (
         <>
             <View >
             <StatusBar backgroundColor={Colors.white}/>
             <BackHeader onBack={() => { props.handelAuthScreens("Login") }} title='Forget Password' />
-               {loading &&  <OverLayLoading/>}
+               {/* {loading &&  <OverLayLoading/>} */}
                 <View style={styles.screen} >
                 <FastImage resizeMode='contain' source={imgs.changePassword} style={{ width: "100%", height: "100%" }} />
 
