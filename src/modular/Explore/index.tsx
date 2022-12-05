@@ -5,9 +5,9 @@ type Props = {}
 
 const Explore = (props: Props) => {
     return (
-        <MainView>
+        <>
             <Text></Text>
-        </MainView>
+        </>
     );
 }
 

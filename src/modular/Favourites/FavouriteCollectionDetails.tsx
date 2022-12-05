@@ -29,7 +29,7 @@ const FavouriteCollectionDetails = (props: Props) => {
             const res = await getFavouritCollectionsDetailsApi({token:token , id:route.params.id})
             if(res.data.header.httpStatusCode === 200){
                 console.log(res)
-                setFavouritCollectionData(res.data.body.favorites)
+                setFavouritCollectionData(res?.data?.body?.cats)
             }
         }else{
             //dispatch(ShowModal(true))
@@ -47,11 +47,10 @@ const FavouriteCollectionDetails = (props: Props) => {
                 <FlatList 
                     data={favouritCollectionData}
                     renderItem={({item})=>{
-                        return <FavItem  onPressIcon={()=>{}} onPress={()=>{onPress(item.catId)}} item={favorites[0]} />
+                        return <FavItem  onPressIcon={()=>{}} onPress={()=>{onPress(item.catId)}} item={item} />
                     }}
                     keyExtractor={(item , index)=>{
-                        console.log(item.collectionId)
-                        return index.toString()
+                        return item.catId
                     }}
                 />
             </>

@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Redux/store/store';
 import { Login } from '../Redux/reducers/AuthReducer';
 import { ShowModal } from '../Redux/reducers/AuthModalReducer';
+import { moderateScale } from '../styles/ResponsiveDimentions';
 type Props = {
     props: any;
 };
@@ -31,6 +32,7 @@ const DrowerContent = ({ props }: Props) => {
     // const [login , setLogin] = useState<any>(false)
     const navigation = useNavigation<NavigationType>()
     const login = useSelector((state: RootState) => state.Auth.token)
+    const user = useSelector((state: RootState) => state.Auth.user)
     const dispatch = useDispatch()
     const onLogout = async()=>{
         await AsyncStorage.removeItem("user")
@@ -77,6 +79,7 @@ const DrowerContent = ({ props }: Props) => {
                        <View style={styles.userImag}>
                        <Feather  name='user' size={50}/>
                        </View>
+                       {login && <Text style={{ color:Colors.white , fontWeight:"bold" , textTransform: 'capitalize' , margin:moderateScale(3) , fontSize:fontSizes.font18}}>{user?.fullNameEn}</Text>}
                     </View>
                 </Pressable>
 

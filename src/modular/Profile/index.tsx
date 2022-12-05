@@ -55,7 +55,7 @@ const Profile = (props: Props) => {
                 <Pressable onPress={() => {
                    user?  navigation.navigate('CurrentPlan') :notLogin()
                     }} style={planStyle}  >
-                    <Text style={[gStyles.h4]}>Current Plan</Text>
+                    <Text style={[gStyles.h4]}>Current Plan and Balance</Text>
                     <Avatar.Image size={moderateScale(10)} style={{ backgroundColor: Colors.white }} source={imgs.golodOffer} />
                 </Pressable>
 

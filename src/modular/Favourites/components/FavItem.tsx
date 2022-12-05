@@ -21,11 +21,11 @@ const FavItem = ({ item , onPressIcon, onPress }: Props) => {
     return (
         <Pressable onPress={onPress}  style={({pressed})=>[{backgroundColor:pressed?Colors.primaryPresedButton :Colors.white}, styles.screen]}>
             <View style={[gStyles.row]}>
-                <FastImage source={{ uri: item.images[0].fullImageURL }} style={[styles.image]} />
+                <FastImage source={{ uri: item?.image }} style={[styles.image]} />
                 <View style={[gStyles.pl_3]}>
-                    <Text style={[gStyles.text_Bold, gStyles.text_black]}>{item.catNo}</Text>
-                    <Text><Text style={[gStyles.text_Primary]}></Text> {item.catSn}</Text>
-                    <Text style={[gStyles.text_Primary, gStyles.text_Bold, gStyles.h5]}>SAR 112.88</Text>
+                    <Text style={[gStyles.text_Bold, gStyles.text_black]}>{item.catSn  || item.catNo }</Text>
+                    {<Text>{item.ref1 &&<Text style={[{fontWeight:"bold"}]}>ref1:</Text>}{item.ref1}</Text>}
+                    <Text>{item.ref1 && <Text style={[{fontWeight:"bold"}]}>ref1:</Text>}{item.ref2}</Text>
                 </View>
             </View>
             <Pressable onPress={onPressIcon} style={[]}>

@@ -13,11 +13,13 @@ import OverLayLoading from "../../../common/OverLayLoading";
 import { userUpdatInfApi } from "../../../Api/Auth";
 import { Login } from '../../../Redux/reducers/AuthReducer';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 
 
 export default function CountryScreen() {
     useDrower("Country")
+    const navigation = useNavigation()
 
     // const flatlist = useRef()
     const [ref, setRef] = useState(null);
@@ -51,6 +53,7 @@ export default function CountryScreen() {
                 AsyncStorage.setItem('user', JSON.stringify(newUser))
                 dispatch(Login({ user: newUser, token: token }))
                 setValue(value)
+                navigation.goBack()
             }
             setOverlayLoading(false)
             console.log()

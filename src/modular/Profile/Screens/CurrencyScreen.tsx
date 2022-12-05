@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FlatList, StyleSheet, Text, View, Pressable } from "react-native";
-import { getSupportedCurrencies , formatCurrency } from "react-native-format-currency";
+import { getSupportedCurrencies, formatCurrency } from "react-native-format-currency";
 import Colors from "../../../styles/colors";
 import gStyles from "../../../styles/globalStyle";
 import { moderateScale } from "../../../styles/ResponsiveDimentions";
@@ -14,6 +14,8 @@ import { userUpdatInfApi } from "../../../Api/Auth";
 import { Login } from '../../../Redux/reducers/AuthReducer';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootState } from "../../../Redux/store/store";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationType } from "../../../types/navigationTypes";
 
 
 
@@ -27,35 +29,36 @@ export default function CurrencyScreen() {
     const user = useSelector((state: RootState) => state.Auth.user)
     const token = useSelector((state: RootState) => state.Auth.token)
     const [overlayLoading, setOverlayLoading] = useState(false)
-
+    const navigation = useNavigation<NavigationType>()
     const [value, setValue] = useState(user?.defCurrency);
 
     // get all of the supported currency codes
     const currencyCodes = getSupportedCurrencies();
-    
+
     const dispatch = useDispatch()
     const changeCurrancy = async (value: any, index: number) => {
         try {
             const data = {
                 countryCode: user?.countryCode,
-                country:  user.countryEn, 
+                country: user.countryEn,
                 fullName: user?.fullNameEn,
-                defCurrency:  value,
+                defCurrency: value,
                 image: user?.profilePicture
             }
-           
-            if(token){
+
+            if (token) {
                 setOverlayLoading(true)
                 const res = await userUpdatInfApi({ data: data, token: token })
-                console.log("=================>",  {res})
-            if (res.status === 200) {
-                let newUser = { ...user }
-                newUser.defCurrency = value
-                console.log(newUser)
-                AsyncStorage.setItem('user', JSON.stringify(newUser))
-                dispatch(Login({ user: newUser, token: token }))
-                setValue(value)
-            }
+                console.log("=================>", { res })
+                if (res.status === 200) {
+                    let newUser = { ...user }
+                    newUser.defCurrency = value
+                    console.log(newUser)
+                    AsyncStorage.setItem('user', JSON.stringify(newUser))
+                    dispatch(Login({ user: newUser, token: token }))
+                    setValue(value)
+                    navigation.goBack()
+                }
             }
             setOverlayLoading(false)
             console.log()
@@ -95,10 +98,10 @@ export default function CurrencyScreen() {
                     data={currencyCodes}
                     renderItem={renderItem}
                     keyExtractor={(code) => code.name}
-                    // ref={(ref) => { setRef(ref) }}
+                // ref={(ref) => { setRef(ref) }}
                 />
             </View>
-            </>
+        </>
     );
 }
 

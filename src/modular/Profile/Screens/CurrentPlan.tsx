@@ -5,7 +5,7 @@ import FastImage from 'react-native-fast-image';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { userBalanceApi } from '../../../Api/Auth';
+import { userBalanceApi, userCurrentPlanApi } from '../../../Api/Auth';
 import imgs from '../../../assets/images';
 import { ShowModal } from '../../../Redux/reducers/AuthModalReducer';
 import { RootState } from '../../../Redux/store/store';
@@ -16,54 +16,60 @@ import { moderateScale } from '../../../styles/ResponsiveDimentions';
 import { NavigationType } from '../../../types/navigationTypes';
 type Props = {}
 
-type Plan = {
+type Balance = {
     balance:number;
     balanceId:number;
+} 
+type Plan = {
+
 }
 const CurrentPlan = (props: Props) => {
     const [loading , setLoading] = React.useState(true)
-    const [plan , setPlan] = React.useState<null | Plan | 0>(null)
+    const [balance , setBalance] = React.useState<null | Balance | 0>(null)
     const token = useSelector((state:RootState)=>state.Auth.token)
-    const dispatch = useDispatch()
-    const navigation = useNavigation<NavigationType>()
+    const [currentPlan , setCurrentPlan] = React.useState<null |Plan >()
 
-    const getActivePlanePlan = async()=>{
+    const getUserBalance = async()=>{
         if(token){
             setLoading(true)
             const res = await userBalanceApi({token:token})
-            console.log(res)
-            if(res.data.header.httpStatusCode){
-                const currentPlane = res.data.body
-                console.log(currentPlane)
-                setPlan(currentPlane)
+            if(res.data.header.httpStatusCode === 200){
+                const balance = res?.data?.body
+                setBalance(balance)
+            }else{
+                //Alert to show header message 
             }
-            
-        }else{
-            Alert.alert("" , "To Show the current plan please login" ,  [
-                {
-                    text: "Cancel",
-                    onPress: () => navigation.goBack(),
-                    style: "cancel"
-                  },
-                { text: "OK", onPress: () => {
-                    //
-                    dispatch(ShowModal(true)),
-                    navigation.goBack()
-                } }
-              ])
+        }
+        setLoading(false)
+    }
+
+    const getUserActivePlan = async()=>{
+        if(token){
+            setLoading(true)
+            const res = await userCurrentPlanApi({token:token})
+            if(res.data.header.httpStatusCode === 200){
+                const balance = res?.data?.body
+                setBalance(balance)
+            }else{
+                //Alert to show header message 
+            }
         }
         setLoading(false)
     }
     React.useEffect(()=>{
-        getActivePlanePlan()
+        getUserBalance()
     },[])
     return (
         <ScrollView style={{ flex:1 }}>
             <View style={styles.screen}>
                 {/* start of active plan */}
                 <View style={styles.card}>
-                    <FastImage resizeMode='contain' source={imgs.golodOffer} style={styles.cardImg} />
-                    <Text style={[styles.title, { marginHorizontal: moderateScale(30) }]}>You’re currently subscribed to the  <Text style={{ color: "#000" }}>Gold Plan.</Text> </Text>
+                    {/* <FastImage resizeMode='contain' source={imgs.golodOffer} style={styles.cardImg} /> */}
+                    <ActivityIndicator color={Colors.primary}  size={fontSizes.font20}/> 
+
+                    <Text style={[styles.title, { marginHorizontal: moderateScale(30) }]}>You’re currently subscribed to the  
+                    {/* <Text style={{ color: "#000" }}> Gold Plan.</Text> */}
+                    </Text>
 
                 </View>
                 {/* end of active plan */}
@@ -73,7 +79,7 @@ const CurrentPlan = (props: Props) => {
                     <FastImage resizeMode='contain' source={imgs.balance_icon} style={styles.cardImg} />
                     <Text style={[styles.title, { color: "#000" }]}>Your Account Balance is</Text>
                     <Text style={[styles.title, styles.balance]} >
-                        {plan !== null && `Cridits ${plan === 0 ? plan:  plan.balance}`}
+                        {balance !== null && `Cridits ${balance === 0 ? balance:  balance.balance}`}
                         {loading && <ActivityIndicator color={Colors.primary}  size={fontSizes.font20}/> }
                         </Text>
                 </View>

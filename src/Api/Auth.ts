@@ -260,6 +260,16 @@ export const userBalanceApi =  ({ token }:{ token:string })=>{
 }
 
 
+export const userCurrentPlanApi =  ({ token }:{ token:string })=>{
+  return axios.get(`${END_POINT}/apis/v1/user/user-active-plan` , {
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+}
+
+
 export const getCatsPriceApi =  ({ token , currency , data}:{ token:string , currency:string , data:any})=>{
   return axios.post(`${END_POINT}/api/v1/cart/check-cats-prices` ,JSON.stringify(data), {
     headers: {
