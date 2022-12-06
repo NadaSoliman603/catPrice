@@ -250,6 +250,9 @@ export const userUpdatInfApi =  ({ token , data}:{ token:string , data:any})=>{
 }
 
 
+
+
+
 export const userBalanceApi =  ({ token }:{ token:string })=>{
   return axios.get(`${END_POINT}/api/v1/balance/user-balance` , {
     headers: {
@@ -277,6 +280,25 @@ export const getCatsPriceApi =  ({ token , currency , data}:{ token:string , cur
       "Authorization": `Bearer ${token}`,
       "Currency": currency
 
+    },
+  })
+}
+
+
+
+////////////////////////////////__________Test payment__________/////////////////////////////////// 
+// export const PaymentSheetParamsAPI = ()=>{
+//   return axios.post(`http://localhost:3000/payment-sheet` ,  JSON.stringify({}), {
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//   })
+// }
+
+export const PaymentSheetParamsAPI =  ()=>{
+  return axios.get(`http://localhost:3000/payment-sheet` , {
+    headers: {
+      'Content-Type': 'application/json',
     },
   })
 }

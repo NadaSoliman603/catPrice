@@ -1,130 +1,220 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Alert } from 'react-native';
-import { CardForm, StripeProvider } from '@stripe/stripe-react-native';
-import { CardField, useStripe, CardFieldInput, useConfirmPayment, BillingDetails} from '@stripe/stripe-react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import {
+  useStripe,
+  Address,
+  BillingDetails,
+} from '@stripe/stripe-react-native';
+import PaymentScreen from '../Component/PaymentScreen';
+import Button from '../Component/Button';
 import Colors from '../../../styles/colors';
-import { moderateScale } from '../../../styles/ResponsiveDimentions';
-import OutLineButton from '../../../common/OutLineButton';
-import fontSizes from '../../../styles/fontSizes';
+import { API_URL } from '../helper';
+import { PaymentSheetParamsAPI } from '../../../Api/Auth';
+import { Alert } from '../../../types/types';
 
-export function CheckoutScreen() {
-  // const { confirmPayment } = useStripe();
-  const { confirmPayment, loading } = useConfirmPayment();
-  const [saveCard, setSaveCard] = useState(false);
+export default function PaymentsUICustomScreen() {
+  const { initPaymentSheet, presentPaymentSheet, confirmPaymentSheetPayment ,  } =
+    useStripe();
+    console.log(useStripe())
+  const [paymentSheetEnabled, setPaymentSheetEnabled] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<{ image: string; label: string; } | null>(null);
+  const [showAlert , setShowAlert] = useState<boolean>(false)
+  const [alert , setAlert] = useState<Alert>({
+    message:"Sucsses" ,
+     onCancel:()=>null,
+    onConfairm:()=>{},
+    showCancelButton:false,
+    suTitle:undefined,
+    type:"success",
+  })
+
+  const fetchPaymentSheetParams = async () => {
+
+    const { paymentIntent, ephemeralKey, customer } = {
+      paymentIntent: "pi_3MBhhIJPH93PAwz917XcLP8Q_secret_dfkziuThrYquUHpDozr77asHW",
+      ephemeralKey: "ek_test_YWNjdF8xTTUydVpKUEg5M1BBd3o5LDNmTGhCN05DcDR0VFFGZUpqVmZBQmdORUxQV1Y4Z1k_00JuWWiVw3",
+      customer:"cus_MvUydfavML8dKx"
+    }//await response.json();
+    console.log({ paymentIntent, ephemeralKey, customer })
+    return {
+      paymentIntent,
+      ephemeralKey,
+      customer,
+    };
+  };
 
 
-  const checkout = async () => {
-    // 1. fetch Intent Client Secret from backend
-    // const clientSecret = await fetchPaymentIntentClientSecret();
-    // console.log({clientSecret})
-    // 2. Gather customer billing information (ex. email)
+  const initialisePaymentSheet = async () => {
+    setLoading(true);
 
-    const billingDetails: BillingDetails = {
-      email: 'nada.educate@gmail.com',
-      phone: '+201128859098',
-      address: {
-        city: 'Egypt',
-        country: 'US',
-        line1: '',
-        line2: 'Texas',
-        postalCode: '77063',
-      },
-    }; // mocked data for tests
+    try {
+      const { paymentIntent, ephemeralKey, customer } =
+        await fetchPaymentSheetParams();
 
-    // 3. Confirm  fff payment with card details
-    // The rest will be done automatically using webhooks
+      const address: Address = {
+        city: 'San Francisco',
+        country: 'AT',
+        line1: '510 Townsend St.',
+        line2: '123 Street',
+        postalCode: '94102',
+        state: 'California',
+      };
 
 
-   const clientSecret ="pi_3MAxxIJWQWOfli620hyrnnV5_secret_MGBbRpyedWopg6uJEw7uc4xes"
-    const { error, paymentIntent } = await confirmPayment(
-      clientSecret,
-      {
-        paymentMethodType: 'Card',
-        paymentMethodData: {
-          billingDetails,
+      const billingDetails: BillingDetails = {
+        name: 'Jane Doe',
+        email: 'foo@bar.com',
+        phone: '555-555-555',
+        address: address,
+      };
+
+      const { error, paymentOption } = await initPaymentSheet({
+        customerId: customer,
+        customerEphemeralKeySecret: ephemeralKey,
+        paymentIntentClientSecret: paymentIntent,
+        customFlow: true,
+        merchantDisplayName: 'Example Inc.',
+        applePay: {
+          merchantCountryCode: 'US',
         },
-      },
-      {
-        // setupFutureUsage: undefined,
+        style: 'automatic',
+        googlePay: { merchantCountryCode: 'US', testEnv: true },
+        returnURL: 'stripe-example://stripe-redirect',
+        defaultBillingDetails: billingDetails,
+      });
+
+      console.log("paymentInitSheet===>" , { error, paymentOption }) 
+
+      if (!error) {
+        setPaymentSheetEnabled(true);
+      } else {
+        
+        setAlert({ ...alert, message:error.message ,  suTitle:`Error code: ${error.code}` , type:"error"})
+        setShowAlert(true)
+        // Alert.alert(`Error code: ${error.code}`, error.message);
       }
-    );
+      if (paymentOption) {
+        setPaymentMethod(paymentOption);
+      }
+    } catch (error) {
+      console.log('error===>', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const choosePaymentOption = async () => {
+    try {
+      const { error, paymentOption } = await presentPaymentSheet();
+
+      if (error) {
+        setAlert({ ...alert, message:error.message ,  suTitle:`Error code: ${error.code}` , type:"error"})
+        setShowAlert(true)
+        // Alert.alert(`Error code: ${error.code}`, error.message);
+      } else if (paymentOption) {
+        setPaymentMethod({
+          label: paymentOption.label,
+          image: paymentOption.image,
+        });
+  
+        console.log("choosePaymentOption===>" ,  { error, paymentOption }) 
+      } else {
+        setPaymentMethod(null);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+   
+  };
+
+  const onPressBuy = async () => {
+    setLoading(true);
+    const { error } = await confirmPaymentSheetPayment();
 
     if (error) {
-      console.log(error)
-      Alert.alert(`Error code: ${error.code}`, error.message);
-      console.log('Payment confirmation error', error.message);
-      console.log(error)
-    } else if (paymentIntent) {
-      Alert.alert(
-        'Success',
-        `The payment was confirmed successfully! currency: ${paymentIntent.currency}`
-      );
-      console.log('Success from promise', paymentIntent);
+      setAlert({ ...alert, message:error.message ,  suTitle:`Error code: ${error.code}` , type:"error"})
+      setShowAlert(true)
+      // Alert.alert(`Error code: ${error.code}`, error.message);
+    } else {
+      setAlert({ ...alert, message:'The payment was confirmed successfully!' , type:"success"})
+      setShowAlert(true)
+      // Alert.alert('Success', 'The payment was confirmed successfully!');
+      setPaymentSheetEnabled(false);
     }
-  }
+    setLoading(false);
+  };
+
   return (
-    <View style={styles.screen}>
-      <CardField
-        postalCodeEnabled={false}
-        autofocus
-        placeholders={{
-          number: 'xxxx xxxx xxxx xxxx',
-        }}
-        cardStyle={{
-          // backgroundColor: '#FFFFFF',
-          // textColor: '#000000',
-          borderWidth: 1,
-          // backgroundColor: '#FFFFFF',
-          borderColor: Colors.lightGray,
-          borderRadius: 8,
-          // fontSize: 14,
-          // fontFamily: 'Macondo-Regular',
-          // placeholderColor: '#A020F0',
-          // textColor: '#0000ff',
-          
+    // In your app’s checkout, make a network request to the backend and initialize PaymentSheet.
+    // To reduce loading time, make this request before the Checkout button is tapped, e.g. when the screen is loaded.
+      <PaymentScreen onInit={initialisePaymentSheet}>
+        <>
+          <View>
+            <Button
+              variant="primary"
+              loading={loading}
+              title={
+                paymentMethod ? (
+                  <View style={styles.row}>
+                    <Image
+                      source={{
+                        uri: `data:image/png;base64,${paymentMethod.image}`,
+                      }}
+                      style={styles.image}
+                    />
+                    <Text style={styles.text}>{paymentMethod.label}</Text>
+                  </View>
+                ) : (
+                  'Choose payment method'
+                )
+              }
+              disabled={!paymentSheetEnabled}
+              onPress={choosePaymentOption}
+            />
+          </View>
 
-        }}
-        style={{
-          // width: '100%',
-          // height: 250,
-          // marginVertical: 30,
-          // width: '100%',
-          height: 50,
-          marginVertical: 30,
-        }}
-        onCardChange={(cardDetails) => {
-          // console.log('cardDetails', cardDetails);
-        }}
-        onFocus={(focusedField) => {
-          // console.log('focusField', focusedField);
-        }}
-      />
-
-
-      {/* <CardForm  style={styles.cardForm}/> */}
-
-      <OutLineButton textStyle={styles.button} style={{ marginBottom: moderateScale(20) }} title='Pay' outline={true} icon={<></>} onPress={checkout} />
-
-    </View>
+          <View style={styles.section}>
+            <Button
+              variant="primary"
+              loading={loading}
+              disabled={!paymentMethod || !paymentSheetEnabled}
+              title="Buy"
+              onPress={onPressBuy}
+            />
+          </View></>
+      </PaymentScreen>
   );
 }
 
-
 const styles = StyleSheet.create({
-  screen: {
-    backgroundColor: Colors.white,
+  flex: {
     flex: 1,
-    padding:20
   },
-  button: {
-    fontSize: fontSizes.font16,
-    fontWeight: '500',
-    letterSpacing: moderateScale(0.4)
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  cardForm:{
-    width:"90%",
-    height:170
-  }
+  section: {
+    marginTop: 40,
+  },
+  title: {
+    fontSize: 18,
+    marginBottom: 20,
+    fontWeight: 'bold',
+  },
+  paymentMethodTitle: {
+    color: Colors.slate,
+    fontWeight: 'bold',
+  },
+  image: {
+    width: 26,
+    height: 20,
+  },
+  text: {
+    color: Colors.white,
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 12,
+  },
 });
-
-export default CheckoutScreen;

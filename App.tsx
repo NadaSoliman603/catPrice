@@ -43,7 +43,7 @@ console.log({netInfo})
 
   return (<>
     <StripeProvider
-      publishableKey={"pk_live_51JPmWxJWQWOfli62OPuBRu7PWtGD4ZOXZzaDP9gCA0VGNNg8itJbEwbMjqhBJzeryIs0MiLXgfRdfpDOgUgd9sSU00hpcVSsCw"}
+      publishableKey={"pk_test_51M52uZJPH93PAwz93BclTtIrXbuNwDhIdCrnTjd4NqDGM7qfi7IJbKjqGQxfwsLJABHtKZ5CtRhuzdjt6PwNY3fZ00epgcjm8n"}
       merchantIdentifier='merchant.com.catPrice'
     >
       <Provider store={store}>

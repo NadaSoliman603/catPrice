@@ -16,7 +16,8 @@ const Colors = {
     RhodiumGreen:'#198754', // Rhodium green
     platinumBlue:'#3B92C2', // platinum blue
     lightGreen:"#D4FFE2",
-    bg_Error:"#FED7D7"
+    bg_Error:"#FED7D7",
+    slate: '#0A2540',
 
 };
 
