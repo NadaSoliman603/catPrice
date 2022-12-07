@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Pressable, } from 'react-native';
+import { StyleSheet, View, Text, Pressable,Keyboard } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, TextInput } from 'react-native-paper';
 import Colors from '../styles/colors';
 import gStyles, { hp, wp } from '../styles/globalStyle';
 import { moderateScale } from '../styles/ResponsiveDimentions';
@@ -21,14 +21,11 @@ import CustomButtomMeueModal from './AuthModal';
 import useAlert from '../common/useAlertSucsses'
 import { Alert } from '../types/types';
 import CustomAwesomeAlert from './AwesomeAlert';
-type Props = {
-    item: any
-    flatListLoading: boolean;
-    showNoCriditModal: () => void;
-    last:boolean
-}
+import OutLineButton from '../common/OutLineButton';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => {
+type Props = {item: any; flatListLoading: boolean;showNoCriditModal: () => void; last: boolean}
+const CatCard = ({ showNoCriditModal, item, flatListLoading, last }: Props) => {
 
     const navigation = useNavigation<NavigationType>()
     const token = useSelector((state: RootState) => state.Auth.token)
@@ -37,19 +34,38 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
     const [price, setPrice] = useState<null | string>(null)
     const [serverError, setServerError] = useState<{ error: boolean; msg: string }>({ error: false, msg: "" })
     const [brandsModalshow, setBrandModalShow] = useState<boolean>(false)
+    const [informationModal, setInformationModal] = useState<boolean>(false)
+    const [informationModalHight , setinformationModalHight] = useState<number>(50)
+    const [information , setInformation] = useState<string>("")
     //favourits
     const [isFavourit, setIsFavourit] = useState(item?.inFavorite)
     const dispatch = useDispatch()
 
-    const [showAlert , setShowAlert] = useState(false)
-    const [alert, setalert] = useState<Alert>({ 
+    const [showAlert, setShowAlert] = useState(false)
+    const [alert, setalert] = useState<Alert>({
         message: "Please Login",
-        onCancel: () => { setShowAlert(false)  },
-        onConfairm: () => {  dispatch(ShowModal(true)) ;  setShowAlert(false)},
-        showCancelButton:true,
-        type:'login',
-        suTitle:undefined
+        onCancel: () => { setShowAlert(false) },
+        onConfairm: () => { dispatch(ShowModal(true)); setShowAlert(false) },
+        showCancelButton: true,
+        type: 'login',
+        suTitle: undefined
     })
+
+    useEffect(() => {
+
+        const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+            setinformationModalHight(85)
+        });
+        const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+            setinformationModalHight(50)
+        });
+
+        return () => {
+            hideSubscription.remove();
+            showSubscription.remove();
+
+        };
+    }, []);
 
     // ===========================
     //Show Price
@@ -60,40 +76,27 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
 
     const onShowprice = async (productDetails: any) => {
         if (token) {
-            console.log(token, productDetails.catId)
             setOverLayLoading(true)
             const res = await showPriceApi({ catId: productDetails.catId, token: token, currency: user?.defCurrency })
-            console.log(res.data)
             const price = res.data.body?.formattedPrice
             setOverLayLoading(false)
-
-
-            if (res.data?.header?.httpStatusCode === 500) {
-                useAlert({
-                    collback: () => { },
-                    subTitle: "",
-                    success: false,
-                    title: res.data?.header.httpStatus,
-                })
-            }
-
             if (!price) {
-                if (res.data.header.headerMessage === "NO_ACTIVE_PLAN") {
+                if (res.data.header.headerMessage === "NO_CREDIT") {
                     showNoCriditModal()
+                } else if (res.data?.header?.httpStatusCode === 500) {
+                    useAlert({
+                        collback: () => { },
+                        subTitle: "",
+                        success: false,
+                        title: res.data?.header.headerMessage || res.data?.header.httpStatus,
+                    })
                 }
             } else {
-                console.log(res.data.body)
                 const priceText = user.defCurrency + " " + price
                 setPrice(priceText)
             }
 
-        } else {
-            dispatch(ShowModal(true))
-           // setShowAlert(true)
-           // setServerError({ error: true, msg: 'to show Price you have to login' })
-            // showModal()
-            // navigation.navigate('Login')
-        }
+        } else { dispatch(ShowModal(true))  }
     }
 
     const togelebrandsModalshow = (value: boolean) => { setBrandModalShow(value) }
@@ -125,16 +128,16 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
             }
         } else {
             //setShowAlert(true)
-           dispatch(ShowModal(true))
+            dispatch(ShowModal(true))
             //setServerError({ error: true, msg: 'to Add a Product to your favorites please login' })
         }
     }
     if (item.loader) {
         return (
             <View key="loading" style={[styles.flatListEndLoder]}>
-              
-                {flatListLoading &&  <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />}
-                {!flatListLoading  && last && <Text style={{ textAlign:"center" }} >No more search result</Text>}
+
+                {flatListLoading && <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />}
+                {!flatListLoading && last && <Text style={{ textAlign: "center" }} >No more search result</Text>}
             </View>
         )
     }
@@ -153,18 +156,15 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
                                 </Pressable>
                             </View>
                             <Text
-                                style={[gStyles.text_Bold, gStyles.text_black, gStyles.pl_3,
-                                ]}>
+                                style={[gStyles.text_Bold, gStyles.text_black, gStyles.pl_3,]}>
                                 {item?.catSn}
                             </Text>
                         </View>
 
                         <Pressable
-                            style={({ }) => [gStyles.circleBorder, styles.showInfo, gStyles.row, gStyles.center,
-                            ]}>
-                            <Text
-                                style={[gStyles.text_Bold, gStyles.text_black, gStyles.h5, gStyles.text_Primary,
-                                ]}>
+                            onPress={() => { setInformationModal(true) }}
+                            style={({ pressed }) => [gStyles.circleBorder, styles.showInfo, gStyles.row, gStyles.center, { backgroundColor: pressed ? Colors.primaryPresedButton : "transparent" }]}>
+                            <Text style={[gStyles.text_Bold, gStyles.text_black, gStyles.h5, gStyles.text_Primary,]}>
                                 ?
                             </Text>
                         </Pressable>
@@ -173,9 +173,9 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
                         <FastImage source={{ uri: item?.images?.[0]?.fullImageURL }} style={styles.catImg} />
                     </View>
 
-                    <View style={[gStyles.row, gStyles.spaceBetwen]}>
-                        <Pressable onPress={price === null ? () => { onShowprice(item) } : () => { }} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.primaryPresedButton : "#fff" }]}>
-                            <Text style={[gStyles.text_Primary, styles.showPrice, gStyles.text_center, gStyles.text_Bold]}>{price ? price : "Show Price"} </Text>
+                    <View style={[gStyles.row, gStyles.spaceBetwen,]}>
+                        <Pressable onPress={price === null ? () => { onShowprice(item) } : () => { }} style={({ pressed }) => [styles.showPrice, { backgroundColor: pressed ? Colors.primaryPresedButton : "#fff", overflow: "hidden", }]}>
+                            <Text style={[gStyles.text_Primary, gStyles.text_center, gStyles.text_Bold, { fontSize: fontSizes.font16 }]}>{price ? price : "Show Price"} </Text>
                         </Pressable>
 
                         {!favLoading && <Pressable onPress={addToFavourit} style={({ pressed }) => [{ backgroundColor: pressed ? Colors.primaryPresedButton : "#fff" }, styles.favButton]}  >
@@ -191,12 +191,13 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
                 </Pressable>
             </View>
 
-            <CustomButtomMeueModal bgColor='rgba(0, 0, 0, 0.7)' height={40} title="Add to favourites" togleModal={togeleFavouritModalShow} modalVisible={favouritModalShow} setModalVisible={togeleFavouritModalShow}>
+            {/* start favourits modal  */}
+            <CustomButtomMeueModal loading={false} bgColor='rgba(0, 0, 0, 0.7)' height={40} title="Add to favourites" togleModal={togeleFavouritModalShow} modalVisible={favouritModalShow} setModalVisible={togeleFavouritModalShow}>
                 <AddToFavourit setIsFavourit={setIsFavourit} catId={item.catId} cancelModal={() => { setFavouritModalShow(false) }} />
             </CustomButtomMeueModal>
 
 
-            <CustomButtomMeueModal bgColor='rgba(0, 0, 0, 0.7)' height={40} title="Car Brands" togleModal={togelebrandsModalshow} modalVisible={brandsModalshow} setModalVisible={togelebrandsModalshow}>
+            <CustomButtomMeueModal loading={false} bgColor='rgba(0, 0, 0, 0.7)' height={40} title="Car Brands" togleModal={togelebrandsModalshow} modalVisible={brandsModalshow} setModalVisible={togelebrandsModalshow}>
                 <View style={{ padding: moderateScale(6), }}>
                     {item.brands.map((item: any) => {
                         return (
@@ -212,8 +213,40 @@ const CatCard = ({ showNoCriditModal, item, flatListLoading , last }: Props) => 
                     })}
                 </View>
             </CustomButtomMeueModal>
-            <CustomAwesomeAlert showAlert={showAlert} alert={alert}/>
+            {/* end  favourits modal  */}
 
+
+            {/* start information modal */}
+            <CustomButtomMeueModal loading={false} bgColor='rgba(0, 0, 0, 0.7)' height={informationModalHight} title="Information" togleModal={(value) => { setInformationModal(value) }} modalVisible={informationModal} setModalVisible={setInformationModal}>
+                <View style={{ padding: moderateScale(6), }}>
+                    {item.brands.map((item: any) => {
+                        return (
+                            <View key={item.brandId} style={{flex:1}} >
+                               <ScrollView>
+                               <TextInput
+                                    mode="outlined"
+                                    placeholder='Type anything to ask....'
+                                    label="Type anything to ask...."
+                                    value={information}
+                                    onChangeText={text => { setInformation(text)}}
+                                    numberOfLines={5}
+                                    multiline={true} 
+                                    outlineColor={"#eee"}
+                                    selectionColor={Colors.bg}
+                                    style={{ 
+                                        backgroundColor:Colors.white
+                                     }}
+                                />
+                                <OutLineButton textStyle={{}} title="Send" icon={<Text></Text>} onPress={() => { }} outline={true} style={{ margin: 0, padding: 0, marginVertical: moderateScale(10) }} />
+                               </ScrollView>
+                            </View>
+                        )
+                    })}
+                </View>
+            </CustomButtomMeueModal>
+            {/* end information modal */}
+
+            <CustomAwesomeAlert showAlert={showAlert} alert={alert} />
         </>
     );
 }
@@ -277,11 +310,14 @@ const styles = StyleSheet.create({
     },
     showPrice: {
         borderWidth: moderateScale(0.5),
-        width: wp(70),
+        width: wp(72),
         ...gStyles.center,
         padding: moderateScale(3),
         borderColor: Colors.primary,
-        borderRadius: moderateScale(3)
+        borderRadius: moderateScale(3),
+        height: hp(6),
+
+
     },
     favButton: {
         borderWidth: moderateScale(0.5),
@@ -290,6 +326,7 @@ const styles = StyleSheet.create({
         padding: moderateScale(3),
         borderColor: "#ccc",
         borderRadius: moderateScale(3),
+        height: hp(6),
         // shadowColor: "#000",
         // shadowOffset: {
         //     width: 0,
@@ -309,10 +346,19 @@ const styles = StyleSheet.create({
         // alignSelf: 'center',
     },
     brandName: {
-        justifyContent: "center", alignContent: "center", alignItems: "center", alignSelf: "center",
+        justifyContent: "center",
+        alignContent: "center",
+        alignItems: "center",
+        alignSelf: "center",
         fontWeight: "500",
         color: Colors.textBlack
-    }
+    },
+    input: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+    },
 });
 
 export default CatCard;

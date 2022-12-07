@@ -120,19 +120,19 @@ const ProductDetails = (props: Props) => {
             setOverLayLoading(false)
             setServerError({ error: false, msg: '' })
 
-            if (res.data?.header?.httpStatusCode === 500){
-                useAlert({
-                    collback:()=>{},
-                    subTitle:"",
-                    success:false,
-                    title:res.data?.header.httpStatus ,
-                })
-            }
+            
 
             if (!price) {
-                if (res.data.header.headerMessage === "NO_ACTIVE_PLAN") {
+                if (res.data.header.headerMessage === "NO_CREDIT") {
                     //navigation.navigate('CreditsSearchStack')
                     setNoCriditModalVisible(true)
+                }else if (res.data?.header?.httpStatusCode === 500){
+                    useAlert({
+                        collback:()=>{},
+                        subTitle:"",
+                        success:false,
+                        title:res.data?.header.httpStatus ,
+                    })
                 }
 
             } else {
@@ -299,7 +299,7 @@ const ProductDetails = (props: Props) => {
                                         <View style={[gStyles.row]} key={item.brandId}>
                                             <Text style={[gStyles.text_Primary, { textAlign: "right" }]}>{item.makerName} </Text>
                                             <View style={[gStyles.circle, { borderWidth: 1, padding: 2, borderColor: "#eee" }]}>
-                                                <AppImage imgWidth={moderateScale(4)} style={{ padding: moderateScale(3) }} uri={item.makerImage} />
+                                                <AppImage maxheight={undefined} imgWidth={moderateScale(4)} style={{ padding: moderateScale(3) }} uri={item.makerImage} />
                                             </View>
                                         </View>
                                     ))}
@@ -369,13 +369,13 @@ const ProductDetails = (props: Props) => {
             </ButtomMeueModal>
 
             {/* start no cridit modal */}
-            <CustomButtomMeueModal bgColor='rgba(0, 0, 0, 0.6)' height={65} title="out of credits" togleModal={togleNoCriditModal} modalVisible={noCriditmodalVisible} setModalVisible={togleNoCriditModal}>
+            <CustomButtomMeueModal loading={false} bgColor='rgba(0, 0, 0, 0.6)' height={65} title="out of credits" togleModal={togleNoCriditModal} modalVisible={noCriditmodalVisible} setModalVisible={togleNoCriditModal}>
                 <OutOfCridit cancelNoCriditeModal={() => { setNoCriditModalVisible(false) }} />
             </CustomButtomMeueModal>
             {/* end no cridit modal */}
 
             {/* start Favourits modal */}
-            <CustomButtomMeueModal bgColor='rgba(0, 0, 0, 0.6)' height={40} title="Add to favourites" togleModal={togeleFavouritModalShow} modalVisible={favouritModalShow} setModalVisible={togeleFavouritModalShow}>
+            <CustomButtomMeueModal loading={false} bgColor='rgba(0, 0, 0, 0.6)' height={40} title="Add to favourites" togleModal={togeleFavouritModalShow} modalVisible={favouritModalShow} setModalVisible={togeleFavouritModalShow}>
                 <AddToFavourit setIsFavourit={setIsFavourit} catId={productDetails.catId} cancelModal={() => { setFavouritModalShow(false) }} />
             </CustomButtomMeueModal>
             {/* end Favourits modal */}

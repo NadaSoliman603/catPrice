@@ -107,7 +107,7 @@ const SearchResults = () => {
                 }}
             />}
 
-            <ButtomMeueModal bgColor='rgba(0, 0, 0, 0.6)' height={65} title="out of credits" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={togleModal}>
+            <ButtomMeueModal loading={loading} bgColor='rgba(0, 0, 0, 0.6)' height={65} title="out of credits" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={togleModal}>
                 <OutOfCridit cancelNoCriditeModal={() => { setModalVisible(false) }} />
             </ButtomMeueModal>
         </View>

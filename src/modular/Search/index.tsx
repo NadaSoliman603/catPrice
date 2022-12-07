@@ -170,7 +170,7 @@ const Search = (props: Props) => {
                         {showOutoComplete && <View style={[styles.outoCompletContainer ,{maxHeight:maxHeight}]}>
                             {search.length < 3 && <Text style={[gStyles.h6, gStyles.text_center]}>for autocomplete you must at least write 3 characters</Text>}
                             {loadingOutoComplete && <ActivityIndicator color={Colors.primaryPresedButton} size="small" style={[gStyles.p_2]} />}
-                            {outoCompletData === null && <NoFoundData title='No Srearch Result'/>}
+                            {outoCompletData === null && search.length >=3 && <NoFoundData title='No Srearch Result'/>}
                             <FlatList
                                 data={outoCompletData}
                                 renderItem={({ item }) => <AoutoCompletCard key={item.catId} onPress={(item) => {

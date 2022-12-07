@@ -6,7 +6,7 @@ import imgs from '../../assets/images';
 import OutLineButton from '../../common/OutLineButton';
 import Colors from '../../styles/colors';
 import fontSizes from '../../styles/fontSizes';
-import gStyles from '../../styles/globalStyle';
+import gStyles, { hp } from '../../styles/globalStyle';
 import { moderateScale } from '../../styles/ResponsiveDimentions';
 import { NavigationType } from '../../types/navigationTypes';
 type Props = {
@@ -39,12 +39,12 @@ const styles = StyleSheet.create({
         alignContent: "center",
         // alignItems:"center",
         paddingHorizontal: moderateScale(6),
-        paddingTop:moderateScale(6)
+        paddingVertical:moderateScale(6)
 
     },
     img: {
         width: moderateScale(120),
-        height: moderateScale(80)
+        height: hp(23)
 
     },
     title:{

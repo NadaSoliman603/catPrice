@@ -2,26 +2,28 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { moderateScale } from '../../../../styles/ResponsiveDimentions';
-import BayerListCart from '../../components/BayerListCart';
+import BuyersListCart from '../../components/BuyersListCart';
 type Props = {}
 
-const BayerList = (props:Props) => {
+const BuyersList = (props:Props) => {
     return (
-        <ScrollView style={styles.screen}>
-            <BayerListCart />
-            <BayerListCart />
-            <BayerListCart />
-            <BayerListCart />
+        <View style={{ flex:1 }}>
+            <ScrollView style={styles.screen}>
+            <BuyersListCart />
+            <BuyersListCart />
+            <BuyersListCart />
+            <BuyersListCart />
         </ScrollView>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
 screen:{
-    flex:1,
+    //flex:1,
     backgroundColor:"#fff",
     padding:moderateScale(6)
 }
 });
 
-export default BayerList;
+export default BuyersList;

@@ -61,7 +61,13 @@ const lang = {
     "credit": "Vehicle Credit",
     "phone": "Phone Number",
     "isLogin":"Have you Loged in?",
-    "aboutus":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer bibendum rhoncus lectus at maximus. Fusce porttitor placerat auctor. Donec nec rhoncus dui. Sed maximus eu lorem et fringilla. Quisque feugiat interdum orci non sagittis. Nam mauris justo, bibendum faucibus purus a, eleifend rutrum velit. Nunc mi urna, commodo vitae dolor id, dictum tincidunt sem. Pellentesque eu feugiat felis. Integer dapibus efficitur tortor sit amet finibus. Donec vitae leo sit amet diam hendrerit ornare. Morbi ornare, lacus a suscipit efficitur, enim tortor egestas enim, nec ultricies nisi dui a eros. Ut scelerisque luctus ante, ac rutrum justo malesuada non. Quisque a magna nulla. Etiam maximus sollicitudin risus, luctus auctor tortor semper eget. Sed velit sapien, tincidunt non justo vitae, scelerisque congue odio.Donec nec massa ante. Pellentesque sem metus, volutpat id eleifend vitae, commodo eu elit. Mauris elementum varius hendrerit. Nulla et mauris tortor. "
+////////////////////////////________nada_______////////////////////////////////////////////
+    "Orders":"Orders",
+    "History" : "History",
+    "Search" :"Search",
+    "Credits" : "Credits",
+    "Favourites" :"Favourites",
+
 }
 
 export default lang

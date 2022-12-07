@@ -14,7 +14,7 @@ import fontSizes from '../../styles/fontSizes';
 import gStyles, { wp } from '../../styles/globalStyle';
 import { moderateScale } from '../../styles/ResponsiveDimentions';
 import { NavigationType } from '../../types/navigationTypes';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
 import OverLayLoading from '../../common/OverLayLoading';
 import useNotLogin from '../../common/useNotLogin';
 import useAlert from '../../common/useAlertSucsses';
@@ -190,7 +190,7 @@ const Favourites = (props: Props) => {
                     ))}
 
                     <Button textStyle={[gStyles.text_White, gStyles.text_center]} style={[styles.button]} onPress={() => setShowcreateCollectionModal(true)} title={"Create Collection"}
-                        icon={<AntDesign name='pluscircle' color={Colors.white} size={moderateScale(6.5)} style={{ paddingLeft: moderateScale(3) }} />}
+                        icon={<Entypo name='circle-with-plus' color={Colors.white} size={moderateScale(7)} style={{ paddingLeft: moderateScale(3) }} />}
                     />
                     {/* {favouritCollectionData !== null && favouritCollectionData.length === 0 && <NoFoundData title='No Favorite Collection Found' />} */}
                     {loading && <ActivityIndicator color={Colors.primaryPresedButton} size="small" />}

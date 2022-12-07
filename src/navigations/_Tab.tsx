@@ -31,7 +31,7 @@ import ForgetPassword from '../modular/Auth/screens/ForgetPassword';
 import OTPVeritfication from '../modular/Auth/screens/OTPVeritfication';
 import ProductDetails from '../modular/Products/Screens/ProductDetails';
 import OrderCompleted from '../modular/Cart/screens/OrderCompleted';
-import BayerList from '../modular/Cart/screens/BayerList';
+import BuyersList from '../modular/Cart/screens/BuyersList';
 import CountryScreen from '../modular/Profile/Screens/CountryScreen';
 import CurrencyScreen from '../modular/Profile/Screens/CurrencyScreen';
 import LanguageScreen from '../modular/Profile/Screens/LanguageScreen';
@@ -150,7 +150,7 @@ const AppStack = () => {
             <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' /> }} name="History" component={History} />
             <Stack.Screen options={{ title: "Home", headerRight: () => <CartIcon navigationScreen='default' /> }} name="HomeScreen" component={Home} />
             <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
-            <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
+            <Stack.Screen options={{ headerShown: true }} name="BuyersList" component={BuyersList} />
             <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
 
         </Stack.Navigator>
@@ -199,7 +199,7 @@ const OrderStack = () => {
     return (<Stack.Navigator screenOptions={stackOption} initialRouteName='OrderList'>
         <Stack.Screen options={{ headerShown: true, animationDuration: 0, headerTitleAlign: "center", }} name="OrderList" component={OrderList} />
         <Stack.Screen options={{ headerShown: true, title: "Order Completed", headerRight: () => <CartIcon navigationScreen='OrderList' />, headerLeft: () => <BackBotton /> }} name="OrderCompleted" component={OrderCompleted} />
-        <Stack.Screen options={{ headerShown: true, title: "Bayers List", headerRight: () => <CartIcon navigationScreen='OrderList' />, headerLeft: () => <BackBotton /> }} name="BayerList" component={BayerList} />
+        <Stack.Screen options={{ headerShown: true, title: "Bayers List", headerRight: () => <CartIcon navigationScreen='OrderList' />, headerLeft: () => <BackBotton /> }} name="BuyersList" component={BuyersList} />
     </Stack.Navigator>)
 }
 

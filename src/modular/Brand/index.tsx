@@ -101,7 +101,7 @@ const Brand = (props: Props) => {
                                         backgroundColor: pressed ? Colors.primaryPresedButton : Colors.white
                                     }, styles.brandContainer, gStyles.center]}>
                                         {/* <FastImage source={{ uri: item.makerImage }} style={styles.brandImag} /> */}
-                                        <AppImage imgWidth={moderateScale(30)} uri={item.makerImage} style={styles.brandImag} />
+                                        <AppImage   maxheight= {hp(12)} imgWidth={moderateScale(30)} uri={item.makerImage} style={styles.brandImag} />
 
                                     </Pressable>
                                     <Text style={[gStyles.text_black, gStyles.selfCenter]}>{item.makerName}</Text>

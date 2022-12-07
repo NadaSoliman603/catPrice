@@ -5,11 +5,13 @@ import { ActivityIndicator } from 'react-native-paper';
 import { getCatsbyBrandApi } from '../../Api/Auth';
 import MainView from '../../common/MainView';
 import NoFoundData from '../../common/NoDataFound';
+import ButtomMeueModal from '../../components/AuthModal';
 import CatCard from '../../components/CatCard';
 import Colors from '../../styles/colors';
 import gStyles, { hp, wp } from '../../styles/globalStyle';
 import { moderateScale } from '../../styles/ResponsiveDimentions';
 import { NavigationType, RootStack } from '../../types/navigationTypes';
+import OutOfCridit from '../Search/OutOfCridit';
 type Props = {}
 
 type ScreenRouteProp = RouteProp<RootStack, 'BrandsCats'>;
@@ -26,28 +28,28 @@ const BrandsCats = (props: Props) => {
 
     const [search, setSearch] = useState<string>('');
 
-       //no Cirdits
-       const [modalVisible , setModalVisible ] = useState<boolean>(false)
-       const togleModal = (show:boolean)=>{setModalVisible(show)}
+    //no Cirdits
+    const [modalVisible, setModalVisible] = useState<boolean>(false)
+    const togleModal = (show: boolean) => { setModalVisible(show) }
 
     const brand = route.params?.catId
     //=====================
     //get Brand Data
     //=====================
     const getBrandData = async ({ brand, limit }: { brand: string; limit: string }) => {
-       console.log("kkk")
+        console.log("kkk")
         try {
-            if(+limit === 10 )setLoading(true)
-            if(+limit > 10 && +limit < 40)setFlatLisloading(true)
+            if (+limit === 10) setLoading(true)
+            if (+limit > 10 && +limit < 40) setFlatLisloading(true)
             const res = await getCatsbyBrandApi({ brand: brand, limit: limit.toString() });
             const catsData = res.data.body;
-           //setFlatLisloading(false) 
-            if (catsData.length < 10) setFlatLisloading(false) 
+            //setFlatLisloading(false) 
+            if (catsData.length < 10) setFlatLisloading(false)
             if (catsData.length === 0) { setNoSearchResult(true) } else { setNoSearchResult(false) }
             if (mount) {
                 setCats(catsData);
-                if(+limit === 10 )setLoading(false)
-                if(+limit > 10 && +limit < 40)setFlatLisloading(false)
+                if (+limit === 10) setLoading(false)
+                if (+limit > 10 && +limit < 40) setFlatLisloading(false)
             }
         } catch (error) {
             console.log(error);
@@ -60,7 +62,7 @@ const BrandsCats = (props: Props) => {
         navigation.setOptions({
             headerTitle: brand,
         });
-        if(limit <= 30){
+        if (limit <= 30) {
             getBrandData({ brand: brand, limit: limit.toString() });
 
         }
@@ -70,28 +72,32 @@ const BrandsCats = (props: Props) => {
 
 
     return (
-        <MainView data={[{}]} loading={false} overLayLoading={false} style={[]}>
+        <>
+            <MainView data={[{}]} loading={false} overLayLoading={false} style={[]}>
 
-            <View>
-                <Text style={[gStyles.text_black,]}>Show All Cats from <Text style={[gStyles.text_Primary, gStyles.text_Bold]}>{route.params.catId}</Text></Text>
+                <View>
+                    <Text style={[gStyles.text_black,]}>Show All Cats from <Text style={[gStyles.text_Primary, gStyles.text_Bold]}>{route.params.catId}</Text></Text>
 
-                {loading && <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />}
+                    {loading && <ActivityIndicator color={Colors.primary} size="small" style={[gStyles.p_2]} />}
 
-                {noSearchResult && <NoFoundData title={'No data found'} />}
+                    {noSearchResult && <NoFoundData title={'No data found'} />}
 
-                {cats.length > 0 && <FlatList
-                    data={[...cats, { loader: true, catId: "loading123" }]}
-                    renderItem={({ item }) => {
-                        
-                        return (<CatCard last={false} showNoCriditModal={()=>{true}} item={item} flatListLoading={flatListLoading} />)
-                    }}
-                    keyExtractor={item => item?.catId}
-                    onEndReached={() => {
-                      setLimit(limit + 10)
-                    }}
-                />}
-            </View>
-        </MainView>
+                    {cats.length > 0 && <FlatList
+                        data={[...cats, { loader: true, catId: "loading123" }]}
+                        renderItem={({ item }) => {
+
+                            return (<CatCard  last={false} showNoCriditModal={() => { setModalVisible(true) }} item={item} flatListLoading={flatListLoading} />)
+                        }}
+                        keyExtractor={item => item?.catId}
+                        onEndReached={() => {
+                            setLimit(limit + 10)
+                        }}
+                    />}
+                </View>
+            </MainView>
+            <ButtomMeueModal loading={loading} bgColor='rgba(0, 0, 0, 0.6)' height={65} title="out of credits" togleModal={togleModal} modalVisible={modalVisible} setModalVisible={togleModal}>
+                <OutOfCridit cancelNoCriditeModal={() => { setModalVisible(false) }} />
+            </ButtomMeueModal></>
     );
 }
 const styles = StyleSheet.create({

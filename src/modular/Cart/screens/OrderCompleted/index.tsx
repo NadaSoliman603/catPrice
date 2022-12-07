@@ -16,7 +16,7 @@ const OrderCompleted = (props: Props) => {
     const navigation = useNavigation<NavigationType>()
     const route = useRoute<ScreenRouteProp>()
     const showBuyerList = () => {
-        navigation.navigate("BayerList")
+        navigation.navigate("BuyersList")
     }
     // const dispatch = useDispatch()
     // React.useEffect(()=>{

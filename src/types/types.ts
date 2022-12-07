@@ -72,7 +72,7 @@ export type Alert = { message: string;
      onCancel: () => void | null;
      onConfairm: () => void;
      showCancelButton: boolean;
-     type: "delete" | "success" | "error" |"warning" |"login";
+     type: "delete" | "success" | "error" |"warning" |"login" |"payment";
      suTitle:string | undefined
 
 }

@@ -24,8 +24,8 @@ const CustomAwesomeAlert = ({ alert, showAlert }: Props) => {
             showCancelButton={alert.showCancelButton}
             showConfirmButton={true}
             cancelText="cancel"
-            confirmText="    ok    "
-            confirmButtonColor={Colors.primary}
+            confirmText= {alert.type === "payment" ? "    buy    ":"    okay    "
+}            confirmButtonColor={alert.type === "payment" ? Colors.slate:Colors.primary}
             cancelButtonColor={Colors.error}
             onCancelPressed={alert.onCancel}
             onConfirmPressed={alert.onConfairm}

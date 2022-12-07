@@ -31,7 +31,7 @@ import ForgetPassword from '../modular/Auth/screens/ForgetPassword';
 import OTPVeritfication from '../modular/Auth/screens/OTPVeritfication';
 import ProductDetails from '../modular/Products/Screens/ProductDetails';
 import OrderCompleted from '../modular/Cart/screens/OrderCompleted';
-import BayerList from '../modular/Cart/screens/BayerList';
+import BuyersList from '../modular/Cart/screens/BuyersList';
 import CountryScreen from '../modular/Profile/Screens/CountryScreen';
 import CurrencyScreen from '../modular/Profile/Screens/CurrencyScreen';
 import LanguageScreen from '../modular/Profile/Screens/LanguageScreen';
@@ -50,6 +50,7 @@ import FavouriteCollectionDetails from '../modular/Favourites/FavouriteCollectio
 import CheckoutScreen from '../modular/Cridits/screens/Checkout';
 import CurrentPlan from '../modular/Profile/Screens/CurrentPlan';
 import Changepassword from '../modular/Profile/Screens/Changepassword';
+import UserManual from '../modular/UserManual';
 
 const Tab = createBottomTabNavigator();
 
@@ -141,12 +142,12 @@ const AppStack = () => {
             <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Privacy Policy" }} name="Privacy" component={Privacy} />
             <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' /> }} name="History" component={History} />
             <Stack.Screen options={{ headerShown: false, }} name="OrderStack" component={OrderStack} />
-            <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
+            <Stack.Screen options={{ headerShown: true }} name="BuyersList" component={BuyersList} />
             <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
             <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' />, title: "Cridits" }} name="CreditsSearchStack" component={CreditsScreen} />
             <Stack.Screen options={{ title: "Credits", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="CreditsScreen" component={CreditsScreen} />
-
             <Stack.Screen options={{ title: "Favourites", headerShown: true, headerLeft: () => <BackBotton /> }} name="FavouriteCollectionDetails" component={FavouriteCollectionDetails} />
+            <Stack.Screen options={{ title: "User Manual", headerShown: true, headerLeft: () => <BackBotton /> }} name="UserManual" component={UserManual} />
 
         </Stack.Navigator>
     )
@@ -167,7 +168,7 @@ const FavouritsStack = () => {
             <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Privacy Policy" }} name="Privacy" component={Privacy} />
             <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' /> }} name="History" component={History} />
             <Stack.Screen options={{ headerShown: false, }} name="OrderStack" component={OrderStack} />
-            <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
+            <Stack.Screen options={{ headerShown: true }} name="BuyersList" component={BuyersList} />
             <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' />, title: "Cridits" }} name="CreditsSearchStack" component={CreditsScreen} />
             <Stack.Screen options={{ title: "Credits", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="CreditsScreen" component={CreditsScreen} />
             {/* <Stack.Screen options={{ title: "Search", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="Search" component={Search} /> */}
@@ -187,7 +188,7 @@ const BrandStack = () => {
         <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Privacy Policy" }} name="Privacy" component={Privacy} />
         <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' /> }} name="History" component={History} />
         <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
-        <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
+        <Stack.Screen options={{ headerShown: true }} name="BuyersList" component={BuyersList} />
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
         <Stack.Screen options={{ title: "Product Details", headerRight: () => <CartIcon navigationScreen='default' />, headerLeft: () => <BackBotton /> }} name="ProductDetails" component={ProductDetails} />
         <Stack.Screen options={{ title: "Credits", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="CreditsScreen" component={CreditsScreen} />
@@ -214,7 +215,7 @@ const BrofileStack = () => {
         <Stack.Screen options={{ headerShown: true, headerLeft: () => <BackBotton />, title: "Privacy Policy" }} name="Privacy" component={Privacy} />
         <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' /> }} name="History" component={History} />
         <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
-        <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
+        <Stack.Screen options={{ headerShown: true }} name="BuyersList" component={BuyersList} />
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
         <Stack.Screen options={{ title: "Favourites", headerShown: true, headerLeft: () => <BackBotton /> }} name="FavouriteCollectionDetails" component={FavouriteCollectionDetails} />
         <Stack.Screen options={{ title: "Current Plan", headerShown: true, headerLeft: () => <BackBotton /> }} name="CurrentPlan" component={CurrentPlan} />
@@ -240,7 +241,7 @@ const SearchStack = () => {
         <Stack.Screen options={{ title: "Home", headerRight: () => <CartIcon navigationScreen='default' /> }} name="HomeScreen" component={Home} />
         <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
 
-        <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
+        <Stack.Screen options={{ headerShown: true }} name="BuyersList" component={BuyersList} />
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
         <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' />, title: "Cridits" }} name="CreditsSearchStack" component={CreditsScreen} />
         <Stack.Screen options={{ title: "Credits", headerShown: true, headerRight: () => <CartIcon navigationScreen='default' /> }} name="CreditsScreen" component={CreditsScreen} />
@@ -260,7 +261,7 @@ const OrderStack = () => {
     return (<Stack.Navigator screenOptions={{ ...stackOption, freezeOnBlur: false, }} initialRouteName='OrderList'>
         <Stack.Screen options={{ freezeOnBlur: false, headerShown: true, animationDuration: 0, headerTitleAlign: "center", title: "Order List", }} name="OrderList" component={OrderList} />
         <Stack.Screen options={{ headerShown: true, title: "Order Completed", headerRight: () => <CartIcon navigationScreen='OrderList' />, headerLeft: () => <BackBotton /> }} name="OrderCompleted" component={OrderCompleted} />
-        <Stack.Screen options={{ headerShown: true, title: "Bayers List", headerRight: () => <CartIcon navigationScreen='OrderList' />, headerLeft: () => <BackBotton /> }} name="BayerList" component={BayerList} />
+        <Stack.Screen options={{ headerShown: true, title: "Bayers List", headerRight: () => <CartIcon navigationScreen='OrderList' />, headerLeft: () => <BackBotton /> }} name="BuyersList" component={BuyersList} />
     </Stack.Navigator>)
 }
 
@@ -276,7 +277,7 @@ const Credits = () => {
         <Stack.Screen options={{ headerRight: () => <CartIcon navigationScreen='default' /> }} name="History" component={History} />
         <Stack.Screen options={{ title: "Home", headerRight: () => <CartIcon navigationScreen='default' /> }} name="HomeScreen" component={Home} />
         <Stack.Screen options={{ headerShown: false }} name="OrderStack" component={OrderStack} />
-        <Stack.Screen options={{ headerShown: true }} name="BayerList" component={BayerList} />
+        <Stack.Screen options={{ headerShown: true }} name="BuyersList" component={BuyersList} />
         <Stack.Screen options={{ headerLeft: () => <BackBotton /> }} name="Favourites" component={Favourites} />
         <Stack.Screen options={{ freezeOnBlur: false, headerShown: true, animationDuration: 0, headerTitleAlign: "center", title: "Order List", }} name="OrderList" component={OrderList} />
         <Stack.Screen options={{ title: "Favourites", headerShown: true, headerLeft: () => <BackBotton /> }} name="FavouriteCollectionDetails" component={FavouriteCollectionDetails} />

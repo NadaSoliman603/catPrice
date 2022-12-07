@@ -21,7 +21,7 @@ export type RootStack = {
     BrandsCats: { catId: string };
     ProductDetails: { catID: string };
     OrderCompleted: {orderNo:string};
-    BayerList: undefined;
+    BuyersList: undefined;
     ProfileScreen: undefined;
     CountryScreen: undefined;
     CurrencyScreen: undefined;
@@ -41,7 +41,8 @@ export type RootStack = {
     FavouriteCollectionDetails:{id:string},
     CheckoutScreen:{plan:Plan},
     CurrentPlan:undefined;
-    Changepassword:undefined
+    Changepassword:undefined;
+    UserManual:undefined
 };
 
 

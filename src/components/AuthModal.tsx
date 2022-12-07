@@ -52,7 +52,7 @@ const ButtomMeueModal = ({ bgColor, height, modalVisible, togleModal, setModalVi
                           
                             {/* <View style={styles.menuIcon}></View> */}
 
-                            <View style={[gStyles.row, gStyles.spaceBetwen, { paddingHorizontal: moderateScale(5), paddingVertical: 10, }]}>
+                            <View style={[gStyles.row, gStyles.spaceBetwen, { paddingHorizontal: moderateScale(5), paddingVertical: moderateScale(5), }]}>
                                 <View style={[{ width: "90%" }]}>
                                     <Text style={[gStyles.h3, gStyles.text_Bold, gStyles.text_center]}>{title}</Text>
 
@@ -63,9 +63,11 @@ const ButtomMeueModal = ({ bgColor, height, modalVisible, togleModal, setModalVi
 
                             </View>
                             {loading && <OverLayLoading />}
+                            <View style={{ flex: 1}}>
                             <ScrollView style={{ flex: 1}}>
                                 {children}
                             </ScrollView>
+                            </View>
                         </View>
                     </View>
             </Modal>

@@ -8,7 +8,7 @@ import { moderateScale } from '../../../styles/ResponsiveDimentions';
 import KeyValue from './KeyValue';
 type Props = {}
 
-const BayerListCart = (props: Props) => {
+const BuyersListCart = (props: Props) => {
     const imgUri = "https://img.freepik.com/free-photo/handsome-confident-smiling-man-with-hands-crossed-chest_176420-18743.jpg?w=2000"
     return (
         <View style={styles.screen}>
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default BayerListCart;
+export default BuyersListCart;

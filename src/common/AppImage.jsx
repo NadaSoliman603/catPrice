@@ -7,7 +7,7 @@ import { moderateScale } from '../styles/ResponsiveDimentions'
 import History from '../modular/History'
 
 
-const AppImage = ({uri , style , imgWidth }) => {
+const AppImage = ({uri , style , imgWidth , maxheight }) => {
     const [imgHeight , setimgHeight]= useState(imgWidth)
  
     useEffect(() => {
@@ -32,7 +32,7 @@ const AppImage = ({uri , style , imgWidth }) => {
     return (
        <>
         {/* {console.log(imgHeight)} */}
-        <FastImage source={{ uri: uri }}  resizeMode='contain' style={[style , {height:imgHeight , width:imgWidth}]} />
+        <FastImage source={{ uri: uri }}  resizeMode='contain' style={[style , {height:imgHeight , width:imgWidth , maxHeight:maxheight}]} />
         </>
     )
 }

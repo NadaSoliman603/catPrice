@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NavigationType } from '../types/navigationTypes';
 import BackHeader from '../common/BackHeader';
 import OutLineButton from '../common/OutLineButton';
+import { ScrollView } from 'react-native-gesture-handler';
 type Props = {}
 
 const OnBoarding3 = (props: Props) => {
@@ -18,30 +19,29 @@ const OnBoarding3 = (props: Props) => {
 
     return (
         <View style={styles.screen}>
-            <View style={{ alignItems: "center", }}>
-                <BackHeader onBack={()=>{navigation.goBack()}}title=""/>
-                <Text style={styles.header}>Quick, Easy & Reliable</Text>
-                {/* <Text style={styles.subTitle}>we update the prices every 2 hours </Text> */}
-                <Text style={styles.subTitle}> 
-                <Text style={[gStyles.text_Primary , gStyles.text_Bold]}>Cat Price </Text>
-                 ensures the usability to be easy and secure to provide you the best Cat market experience.
-                </Text>
-                <FastImage resizeMode="contain" style={styles.image} source={imgs.onBoarding3} />
-            </View>
+            <ScrollView>
+                <View style={{ alignItems: "center", }}>
+                    <BackHeader onBack={() => { navigation.goBack() }} title="" />
+                    <Text style={styles.header}>Quick, Easy & Reliable</Text>
+                    {/* <Text style={styles.subTitle}>we update the prices every 2 hours </Text> */}
+                    <Text style={styles.subTitle}>
+                        <Text style={[gStyles.text_Primary, gStyles.text_Bold]}>Cat Price </Text>
+                        ensures the usability to be easy and secure to provide you the best Cat market experience.
+                    </Text>
+                    <FastImage resizeMode="contain" style={styles.image} source={imgs.onBoarding3} />
+                </View>
 
 
 
 
-            <View style={styles.footerContainer}>
-            <OutLineButton textStyle={{}} title='Let’s Go!' style={{}} icon={<Text></Text>} onPress={() => {
-                // props.cancelNoCriditeModal()
-                navigation.navigate('Home') 
-                }} outline={true} />
+                <View style={styles.footerContainer}>
+                    <OutLineButton textStyle={{}} title='Let’s Go!' style={{}} icon={<Text></Text>} onPress={() => {
+                        // props.cancelNoCriditeModal()
+                        navigation.navigate('Home')
+                    }} outline={true} />
 
-            </View>
-
-
-
+                </View>
+            </ScrollView>
         </View>
     );
 }
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     footerContainer: {
         width: "100%",
         alignSelf: "flex-end",
-        paddingBottom:moderateScale(3)
+        paddingBottom: moderateScale(3)
 
     }
 });

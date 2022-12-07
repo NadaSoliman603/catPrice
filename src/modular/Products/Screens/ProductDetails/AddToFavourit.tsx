@@ -8,7 +8,7 @@ import Colors from '../../../../styles/colors';
 import fontSizes from '../../../../styles/fontSizes';
 import { moderateScale } from '../../../../styles/ResponsiveDimentions';
 import CustomButtomMeueModal from '../../../../components/AuthModal';
-import gStyles from '../../../../styles/globalStyle';
+import gStyles, { hp } from '../../../../styles/globalStyle';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Label } from '../../../../types/types';
 import DropdownItem from '../../../../components/DropdownItem';
@@ -178,9 +178,9 @@ const AddToFavourit = (props: Props) => {
                 <Pressable onPress={() => { faveCollectionData.length ? setSllectionModal(true) : setaddNewFaveModal(true) }} style={({ pressed }) => [{
                     backgroundColor: pressed ? "#eee" : "#fff",
                     width: "100%",
-                    
-
-                }, gStyles.row, gStyles.spaceBetwen, gStyles.p_6, gStyles.border,]}  >
+                    height:hp(7),
+                    padding: hp(1.5),
+                     }, gStyles.row, gStyles.spaceBetwen,gStyles.border,]}  >
 
                     <Text style={[gStyles.h4, { color: "#444" }]}>{favColection !== null ? favColection.collectionName : name}</Text>
                     <AntDesign color={Colors.primary} name={"down"} size={fontSizes.font14} />
@@ -204,7 +204,7 @@ const AddToFavourit = (props: Props) => {
 
 
             {/* start sellect Collection modal */}
-            <CustomButtomMeueModal bgColor='rgba(0, 0, 0, 0.0)' height={40} title="Select Favourit Collection" togleModal={togleFavModal} modalVisible={selectionodal} setModalVisible={togleFavModal}>
+            <CustomButtomMeueModal loading={loading}  bgColor='rgba(0, 0, 0, 0.0)' height={40} title="Select Favourit Collection" togleModal={togleFavModal} modalVisible={selectionodal} setModalVisible={togleFavModal}>
                 <View style={styles.screen}>
                     <StatusBar animated={false} backgroundColor='rgba(0, 0, 0, 0.6)' />
                     {faveCollectionData.map((item: any) => <DropdownItem key={item?.collectionId} onChange={onValueChange} item={item} checked={item?.collectionId === favColection?.collectionId} />)}
@@ -215,7 +215,7 @@ const AddToFavourit = (props: Props) => {
 
 
             {/* start add new Collection modal */}
-            <CustomButtomMeueModal bgColor='rgba(0, 0, 0, 0.0)' height={modalHeight} title="Create Favourit Collection" togleModal={togelAddNewFaveModal} modalVisible={addNewFaveModal} setModalVisible={togelAddNewFaveModal}>
+            <CustomButtomMeueModal loading={loading}  bgColor='rgba(0, 0, 0, 0.0)' height={modalHeight} title="Create Favourit Collection" togleModal={togelAddNewFaveModal} modalVisible={addNewFaveModal} setModalVisible={togelAddNewFaveModal}>
                 <>
                     <ScrollView style={styles.screen}>
                         <StatusBar animated={false} backgroundColor='rgba(0, 0, 0, 0.6)' />
@@ -237,7 +237,7 @@ const AddToFavourit = (props: Props) => {
                         {collectionNameValidationError !== null && <Error message={collectionNameValidationError} />}
                         <OutLineButton textStyle={{}} title="Add" icon={<Text></Text>} onPress={handleSubmit(onSaveCollection)} outline={true} style={{ margin: 0, padding: 0, marginVertical: moderateScale(10) }} />
                     </ScrollView>
-                    {loading && <OverLayLoading />}
+                    {/* {loading && <OverLayLoading />} */}
                 </>
             </CustomButtomMeueModal>
             {/* start add new Collection modal */}
